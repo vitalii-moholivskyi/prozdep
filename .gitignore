@@ -1,5 +1,14 @@
 .project
 .settings/
-target/
 .classpath
 .metadata
+
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Maven
+log/
+target/

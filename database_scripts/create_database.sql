@@ -93,6 +93,7 @@ CREATE TABLE postgraduate(
   scientist_id INT,
   topic VARCHAR(255) NOT NULL,
   start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
   protection_date DATE NOT NULL,
   teacher_id INT,
   PRIMARY KEY(department_id, scientist_id),

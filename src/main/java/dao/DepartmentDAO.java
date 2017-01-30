@@ -1,15 +1,27 @@
 package dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import entity.Department;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class DepartmentDAO implements IDAOGeneric<Department> {
+
+	private final static String SELECT_ALL = "SELECT * FROM department";
+
+	private final DepartmentMapper departmentMapper = new DepartmentMapper();
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return jdbcTemplate.query(SELECT_ALL, departmentMapper);
 	}
 
 	@Override
@@ -36,6 +48,17 @@ public class DepartmentDAO implements IDAOGeneric<Department> {
 		
 	}
 
+	private class DepartmentMapper implements RowMapper<Department>{
+
+		@Override
+		public Department mapRow(ResultSet rs, int i) throws SQLException {
+			Department department = new Department();
+			department.setId(rs.getInt("id"));
+			department.setName(rs.getString("name"));
+			department.setPhone(rs.getString("phone"));
+			return department;
+		}
+	}
 	
 
 }

@@ -13,7 +13,10 @@
 		<java.version>1.8</java.version>
 		<com.zenjava>8.1.2</com.zenjava>
 		<spring.version>4.3.5.RELEASE</spring.version>
+		<mysql.version>6.0.5</mysql.version>
+		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
 		<rx.java>1.2.5</rx.java>
+		<junit.version>4.12</junit.version>
 		<lombok>1.16.12</lombok>
 	</properties>
 
@@ -58,6 +61,34 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- MySql Database connector -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+		<!-- Library which implements Database Connection Pooling -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons-dbcp2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- Lombok which allows to reduce amount of boilerplate code -->
 		<dependency>

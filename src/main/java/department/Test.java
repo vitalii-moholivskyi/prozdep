@@ -38,7 +38,7 @@ public class Test extends Application {
 		service.f();
 		
 		
-		// enable annotation processing first in compiler options!
+		//enable annotation processing first in compiler options!
 		LombokTest lombok = new LombokTest(1);
 		System.out.println(lombok.getField());
 	}
