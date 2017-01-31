@@ -18,6 +18,7 @@
 		<rx.java>1.2.5</rx.java>
 		<junit.version>4.12</junit.version>
 		<lombok>1.16.12</lombok>
+		<hibernate.version>5.2.6.Final</hibernate.version>
 	</properties>
 
 	<build>
@@ -77,6 +78,18 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
+		</dependency>
+		<!-- Hibernate -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 		<!-- Library which implements Database Connection Pooling -->
 		<dependency>

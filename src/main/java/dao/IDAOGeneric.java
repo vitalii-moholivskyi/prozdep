@@ -2,15 +2,15 @@ package dao;
 
 import java.util.List;
 
-interface IDAOGeneric<T> {
+public interface IDAOGeneric<T>{
 
 	List<T> findAll();
 
 	T find(int id);
 
-	T insert(T dep);
+	void insert(T entity);
 
-	T update(T dep);
+	void update(T entity);
 
-	void remove(T dep);
+	void remove(T entity);
 }

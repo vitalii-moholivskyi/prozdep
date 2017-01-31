@@ -13,8 +13,8 @@ public class Postgraduate extends Scientist{
     private Date protectionDate;
 
     public Postgraduate() {}
-    public Postgraduate(int id, String name, String phone, int departmentId, String topic, Date startDate, Date endDate, Date protectionDate) {
-        super(id, name, phone);
+    public Postgraduate(String name, String phone, int departmentId, String topic, Date startDate, Date endDate, Date protectionDate) {
+        super(name, phone);
         this.topic = topic;
         this.startDate = startDate;
         this.endDate = endDate;
