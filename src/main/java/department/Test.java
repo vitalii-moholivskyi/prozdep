@@ -30,11 +30,14 @@ public class Test extends Application {
 		BorderPane root = FXMLLoader.load(getClass().getResource("/view/main.fxml"));
 		Tab _tabList = FXMLLoader.load(getClass().getResource("/view/partials/_listTab.fxml"));
 		Tab _tabCreateMaster = FXMLLoader.load(getClass().getResource("/view/partials/_createMasterTab.fxml"));
+		Tab _tabCreatePostgraduate = FXMLLoader.load(getClass().getResource("/view/partials/_createPostgraduateTab.fxml"));
 		TabPane contentData = (TabPane) root.lookup("#contentPane");
 		_tabList.setText("Список");
-		_tabCreateMaster.setText("Створити");
+		_tabCreateMaster.setText("Створити магістра");
+		_tabCreatePostgraduate.setText("Створити аспіранта");
 		contentData.getTabs().add(_tabList);
 		contentData.getTabs().add(_tabCreateMaster);
+		contentData.getTabs().add(_tabCreatePostgraduate);
 		Scene scene = new Scene(root, 800, 600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -46,7 +49,7 @@ public class Test extends Application {
 		
 		service.f();
 		
-		
+
 		//enable annotation processing first in compiler options!
 		LombokTest lombok = new LombokTest(1);
 		System.out.println(lombok.getField());
