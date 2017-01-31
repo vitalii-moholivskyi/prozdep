@@ -6,40 +6,42 @@
 <?import javafx.scene.layout.*?>
 
 
-<BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <ToolBar minHeight="40.0" minWidth="640.0" BorderPane.alignment="CENTER">
-        <items>
-            <MenuButton mnemonicParsing="false" text="Люди">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Викладачі" />
-                <MenuItem mnemonicParsing="false" text="Аспіранти" />
-              </items>
-            </MenuButton>
-            <Button mnemonicParsing="false" text="Наукові теми" />
-          <Button mnemonicParsing="false" text="Наукові роботи" />
-            <Button mnemonicParsing="false" text="Пошук" />
-            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-            <Button mnemonicParsing="false" text="Налаштування">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Button>
-        </items>
-      </ToolBar>
-   </top>
-   <bottom>
-      <ToolBar minHeight="20.0" BorderPane.alignment="CENTER">
-         <items>
-            <ProgressBar prefHeight="9.0" prefWidth="200.0" progress="0.0" />
-         </items>
-      </ToolBar>
-   </bottom>
-   <center>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
-         <children>
-            <TabPane fx:id="contentPane" layoutX="-6.0" layoutY="34.0" tabClosingPolicy="UNAVAILABLE" />
-         </children>
-      </VBox>
-   </center>
+<BorderPane fx:id="viewRoot" fx:controller="department.ui.controller.MainController" prefHeight="200.0" prefWidth="200.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <ToolBar minHeight="40.0" minWidth="640.0" BorderPane.alignment="CENTER">
+            <items>
+                <MenuButton mnemonicParsing="false" text="Люди">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Викладачі"/>
+                        <MenuItem mnemonicParsing="false" text="Аспіранти"/>
+                    </items>
+                </MenuButton>
+                <Button mnemonicParsing="false" text="Наукові теми"/>
+                <Button mnemonicParsing="false" text="Наукові роботи"/>
+                <Button mnemonicParsing="false" text="Пошук"/>
+                <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0"/>
+                <Button mnemonicParsing="false" text="Налаштування">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </Button>
+            </items>
+        </ToolBar>
+    </top>
+    <bottom>
+        <ToolBar minHeight="20.0" BorderPane.alignment="CENTER">
+            <items>
+                <ProgressBar prefHeight="9.0" prefWidth="200.0" progress="0.0"/>
+            </items>
+        </ToolBar>
+    </bottom>
+    <center>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+              minWidth="-Infinity" BorderPane.alignment="CENTER">
+            <children>
+                <TabPane fx:id="contentPane" layoutX="-6.0" layoutY="34.0" tabClosingPolicy="UNAVAILABLE"/>
+            </children>
+        </VBox>
+    </center>
 </BorderPane>

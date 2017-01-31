@@ -37,7 +37,7 @@
 					<artifactId>javafx-maven-plugin</artifactId>
 					<version>${com.zenjava}</version>
 					<configuration>
-						<mainClass>department.Test</mainClass>
+						<mainClass>department.Runner</mainClass>
 					</configuration>
 				</plugin>
 			</plugins>
