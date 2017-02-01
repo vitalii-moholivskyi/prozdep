@@ -25,7 +25,7 @@ public interface IMasterModel {
      * @param limit  max number to fetch, inclusive
      * @throws IllegalArgumentException if offset < 0 or limit < 0
      */
-    @NotNull
+    @NotNull(message = "Null is not allowed")
     Observable<Collection<? extends Master>> fetchMasters(@Min(0) long offset, @Min(0) long limit);
 
     /**

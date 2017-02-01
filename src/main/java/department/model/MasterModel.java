@@ -7,6 +7,7 @@ import rx.Observable;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -21,7 +22,9 @@ public class MasterModel implements IMasterModel {
 
     @Override
     public Observable<Collection<? extends Master>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
-        return null;
+        return Observable.just(Arrays.asList(new Master("Max", "Oliynick"),
+                new Master("Kolya", "Nevmer"),
+                new Master("Roman", "Nevmer")));
     }
 
     @Override

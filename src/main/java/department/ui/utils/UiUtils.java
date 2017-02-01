@@ -31,7 +31,7 @@ public final class UiUtils {
     }
 
     public static FXMLLoader newLoader(String filePath) {
-        return UiUtils.newLoader(filePath, null);
+        return UiUtils.newLoader(filePath, (ResourceBundle) null);
     }
 
     public static FXMLLoader newLoader(String filePath, ResourceBundle bundle) {
@@ -40,6 +40,19 @@ public final class UiUtils {
         val loader = new FXMLLoader(UiUtils.class.getResource(filePath), bundle);
 
         loader.setControllerFactory(DEFAULT_CALLBACK);
+        return loader;
+    }
+
+    public static FXMLLoader newLoader(String filePath, Class<?> controller) {
+        return UiUtils.newLoader(filePath, controller, null);
+    }
+
+    public static FXMLLoader newLoader(String filePath, Class<?> controller, ResourceBundle bundle) {
+        Objects.requireNonNull(filePath, "path to a file wasn't specified!");
+
+        val loader = new FXMLLoader(UiUtils.class.getResource(filePath), bundle);
+
+        loader.setController(Injector.getInstance().getContext().getBean(controller));
         return loader;
     }
 

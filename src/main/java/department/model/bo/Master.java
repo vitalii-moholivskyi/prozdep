@@ -8,6 +8,9 @@ import lombok.Value;
 @Value
 public class Master {
 
+    String firstName;
+    String lastName;
+
     static class A {
 
         private final int a;
