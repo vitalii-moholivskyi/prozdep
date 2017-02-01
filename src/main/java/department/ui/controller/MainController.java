@@ -1,9 +1,11 @@
 package department.ui.controller;
 
+import department.model.IMasterModel;
 import department.utils.RxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -18,7 +20,9 @@ public final class MainController {
     @FXML
     private Parent viewRoot;
 
-    public MainController() {
+    @Autowired
+    public MainController(IMasterModel model) {
+        //   model.fetchMasters(null, -1, -1);
     }
 
     @FXML
@@ -27,9 +31,8 @@ public final class MainController {
         // set window title
         RxUtils.fromProperty(viewRoot.sceneProperty())
                 .filter(scene -> scene != null)
-                .take(1)
                 .flatMap(scene -> RxUtils.fromProperty(scene.windowProperty()))
-                .filter(window -> window != null)
+                .filter(window -> window != null && window instanceof Stage)
                 .take(1)
                 .map(window -> (Stage) window)
                 .subscribe(stage -> stage.setTitle("Department"));
