@@ -65,7 +65,7 @@ CREATE TABLE teacher(
   department_id INT,
   scientist_id INT,
   position VARCHAR(255) NOT NULL,
-  degree VARCHAR(255) NOT NULL,
+  degree VARCHAR(255),
   start_date DATE NOT NULL,
   PRIMARY KEY(department_id, scientist_id),
   FOREIGN KEY (department_id)
@@ -102,3 +102,9 @@ CREATE TABLE postgraduate(
   FOREIGN KEY (scientist_id)
         REFERENCES scientist(id)
 );
+
+/*Needed to separate test data from real one*/
+ALTER TABLE department AUTO_INCREMENT=101;
+ALTER TABLE scientist AUTO_INCREMENT=1001;
+ALTER TABLE topic AUTO_INCREMENT=1001;
+ALTER TABLE paper AUTO_INCREMENT=1001;
