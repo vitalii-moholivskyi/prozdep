@@ -1,16 +1,13 @@
 package department.ui.controller;
 
-import department.di.Injector;
 import department.model.IMasterModel;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +26,16 @@ import java.util.logging.Level;
 @Log
 public final class MainController {
 
-    private static final String MASTERS_TAB_ID = "id_masters";
+    private static final String MASTERS_VIEW_TAB_ID = "id_view_masters";
+    private static final String MASTERS_CREATE_TAB_ID = "id_create_masters";
 
     @FXML
     private Parent viewRoot;
-
     @FXML
     private TabPane contentTabPane;
 
     @FXML
     private Button viewMasterButton;
-
     @FXML
     private ProgressBar progressBar;
 
@@ -74,37 +70,46 @@ public final class MainController {
     }
 
     @FXML
+    private void onCreateMaster() {
+        loadTab(MainController.MASTERS_CREATE_TAB_ID, "Create master",
+                "/view/partials/_createMasterTab.fxml", CreateMasterTabController.class);
+    }
+
+    @FXML
     private void onViewMaster() {
+        loadTab(MainController.MASTERS_VIEW_TAB_ID, "Masters",
+                "/view/partials/_listTab.fxml", MasterTabController.class);
+    }
 
-        for (val tab : contentTabPane.getTabs()) {
-            if (!TextUtils.isEmpty(tab.getId())
-                    && tab.getId().equals(MainController.MASTERS_TAB_ID)) {
-                // trying to open a new tab again, skip
-                return;
-            }
-        }
+    private void loadTab(String tabId, String title, String filePath, Class<?> controller) {
 
-        val loader = new FXMLLoader(UiUtils.class.getResource("/view/partials/_listTab.fxml"));
+        if (hasTabWithId(tabId)) return;
 
-        loader.setControllerFactory(new Callback<Class<?>, Object>() {
-            @Override
-            public Object call(Class<?> param) {
-                return Injector.getInstance().getContext().getBean(MasterTabController.class);
-            }
-        });
-
-        //val loader = UiUtils.newLoader("/view/partials/_listTab.fxml");
+        val loader = UiUtils.newLoader(filePath, controller);
 
         try {
 
             final Tab tab = loader.load();
 
-            tab.setId(MainController.MASTERS_TAB_ID);
-            tab.setText("Masters");
+            tab.setId(tabId);
+            tab.setText(title);
             contentTabPane.getTabs().add(tab);
         } catch (final IOException e) {
-            log.log(Level.SEVERE, "Failed to open master tab", e);
+            log.log(Level.SEVERE, String.format("Failed to open %s tab", title), e);
         }
+    }
+
+    private boolean hasTabWithId(String tabId) {
+
+        for (val tab : contentTabPane.getTabs()) {
+            if (!TextUtils.isEmpty(tab.getId())
+                    && tab.getId().equalsIgnoreCase(tabId)) {
+                // trying to open a new tab again, skip
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

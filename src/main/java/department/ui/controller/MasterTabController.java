@@ -3,11 +3,7 @@ package department.ui.controller;
 import department.model.IMasterModel;
 import department.model.bo.Master;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,13 +16,10 @@ import java.util.logging.Level;
  */
 @Log
 @Controller
-public class MasterTabController extends ListTabController {
+public final class MasterTabController extends ListTabController<Master> {
 
     private final IMasterModel model;
     private final MainController mainController;
-
-    @FXML
-    private TableView<Master> tableView;
 
     @Autowired
     public MasterTabController(IMasterModel model, MainController mainController) {
@@ -36,12 +29,6 @@ public class MasterTabController extends ListTabController {
 
     @Override
     protected void doInitialize() {
-        pagination.currentPageIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-            }
-        });
 
         final TableColumn<Master, String> firstNameCol = new TableColumn<>("First Name"),
                 lastNameCol = new TableColumn<>("Last Name");

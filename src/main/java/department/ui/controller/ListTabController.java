@@ -2,16 +2,17 @@ package department.ui.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.TableView;
 
 /**
  * Created by Максим on 2/1/2017.
  */
-public abstract class ListTabController {
+public abstract class ListTabController<T> {
 
-    protected static final int RESULTS_PER_PAGE = 30;
+    protected static final int              RESULTS_PER_PAGE = 30;
 
-    @FXML
-    protected Pagination pagination;
+    @FXML protected TableView<T>            tableView;
+    @FXML protected Pagination              pagination;
 
     public ListTabController() {
     }

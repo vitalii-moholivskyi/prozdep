@@ -11,6 +11,7 @@
         <items>
             <MenuButton mnemonicParsing="false" text="Створити">
               <items>
+                  <MenuItem mnemonicParsing="false" text="Магістр" onAction="#onCreateMaster"/>
                 <MenuItem mnemonicParsing="false" text="Викладач" />
                 <MenuItem mnemonicParsing="false" text="Аспірант" />
                   <MenuItem mnemonicParsing="false" text="Наукова тема" />

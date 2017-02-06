@@ -30,10 +30,18 @@ public final class UiUtils {
         throw new IllegalStateException("shouldn't be called");
     }
 
+    /**
+     * creates loader which loads ui and controller by
+     * class which is defined in corresponding fxml file
+     */
     public static FXMLLoader newLoader(String filePath) {
         return UiUtils.newLoader(filePath, (ResourceBundle) null);
     }
 
+    /**
+     * creates loader which loads ui and controller by class which is defined
+     * in corresponding fxml file
+     */
     public static FXMLLoader newLoader(String filePath, ResourceBundle bundle) {
         Objects.requireNonNull(filePath, "path to a file wasn't specified!");
 
@@ -43,16 +51,22 @@ public final class UiUtils {
         return loader;
     }
 
+    /**
+     * creates loader which loads ui and controller; This method will load and attach specified controller
+     */
     public static FXMLLoader newLoader(String filePath, Class<?> controller) {
         return UiUtils.newLoader(filePath, controller, null);
     }
 
+    /**
+     * creates loader which loads ui and controller; This method will load and attach specified controller
+     */
     public static FXMLLoader newLoader(String filePath, Class<?> controller, ResourceBundle bundle) {
         Objects.requireNonNull(filePath, "path to a file wasn't specified!");
 
         val loader = new FXMLLoader(UiUtils.class.getResource(filePath), bundle);
 
-        loader.setController(Injector.getInstance().getContext().getBean(controller));
+        loader.setControllerFactory(cl -> Injector.getInstance().getContext().getBean(controller));
         return loader;
     }
 
