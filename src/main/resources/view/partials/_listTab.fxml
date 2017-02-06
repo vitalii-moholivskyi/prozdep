@@ -54,7 +54,7 @@
                     </items>
                   </ToolBar>
                   <TableView fx:id="tableView" />
-                  <Pagination />
+                  <Pagination fx:id="pagination" />
                </children>
             </VBox>
          </children>

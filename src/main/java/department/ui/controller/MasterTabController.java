@@ -3,14 +3,16 @@ package department.ui.controller;
 import department.model.IMasterModel;
 import department.model.bo.Master;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import lombok.extern.java.Log;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.Collection;
 import java.util.logging.Level;
 
 /**
@@ -21,29 +23,52 @@ import java.util.logging.Level;
 public class MasterTabController extends ListTabController {
 
     private final IMasterModel model;
+    private final MainController mainController;
 
     @FXML
     private TableView<Master> tableView;
 
     @Autowired
-    public MasterTabController(IMasterModel model) {
+    public MasterTabController(IMasterModel model, MainController mainController) {
         this.model = model;
+        this.mainController = mainController;
     }
 
-    @FXML
-    private void initialize() {
+    @Override
+    protected void doInitialize() {
+        pagination.currentPageIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 
-        val firstNameCol = new TableColumn<Master, String>("First Name");
-        val lastNameCol = new TableColumn<Master, String>("Last Name");
+            }
+        });
+
+        final TableColumn<Master, String> firstNameCol = new TableColumn<>("First Name"),
+                lastNameCol = new TableColumn<>("Last Name");
 
         firstNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getFirstName()));
         lastNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getLastName()));
-
+        // setup table columns and content
         tableView.getColumns().addAll(firstNameCol, lastNameCol);
+        fetchMasters(0, ListTabController.RESULTS_PER_PAGE);
+    }
 
-        model.fetchMasters(0, ListTabController.RESULTS_PER_PAGE)
-                .subscribe(masters -> tableView.getItems().addAll(masters),
+    @Override
+    protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        fetchMasters(newIndex * ListTabController.RESULTS_PER_PAGE, ListTabController.RESULTS_PER_PAGE);
+    }
+
+    private void fetchMasters(long offset, long limit) {
+        model.fetchMasters(offset, limit)
+                .doOnSubscribe(mainController::showProgressDialog)
+                .doOnTerminate(mainController::hideProgressDialog)
+                .subscribe(this::setTableContent,
                         th -> /*todo redo*/log.log(Level.WARNING, "Failed to fetch masters", th));
+    }
+
+
+    private void setTableContent(Collection<? extends Master> masters) {
+        tableView.getItems().setAll(masters);
     }
 
 }

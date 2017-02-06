@@ -47,7 +47,7 @@
    <bottom>
       <ToolBar minHeight="20.0" BorderPane.alignment="CENTER">
          <items>
-            <ProgressBar prefHeight="9.0" prefWidth="200.0" progress="0.0" />
+            <ProgressBar fx:id="progressBar" prefHeight="9.0" prefWidth="200.0" progress="0.0" />
          </items>
       </ToolBar>
    </bottom>

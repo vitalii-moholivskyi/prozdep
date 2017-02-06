@@ -8,9 +8,7 @@ import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.extern.java.Log;
@@ -42,9 +40,20 @@ public final class MainController {
     @FXML
     private Button viewMasterButton;
 
+    @FXML
+    private ProgressBar progressBar;
+
     @Autowired
     public MainController(IMasterModel model) {
         //   model.fetchMasters(null, -1, -1);
+    }
+
+    public void showProgressDialog() {
+        progressBar.setVisible(true);
+    }
+
+    public void hideProgressDialog() {
+        progressBar.setVisible(false);
     }
 
     @FXML
@@ -59,6 +68,8 @@ public final class MainController {
                 .map(window -> (Stage) window)
                 .subscribe(stage -> stage.setTitle("Department"));
 
+        progressBar.setVisible(false);
+        progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         contentTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
     }
 
