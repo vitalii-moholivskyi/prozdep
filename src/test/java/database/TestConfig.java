@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 /**
  * Created by mogo on 1/29/17.
  */
-@ComponentScan("dao")
+@ComponentScan("department.dao")
 @PropertySource("properties/jdbc.properties")
 @Configuration
 public class TestConfig{
