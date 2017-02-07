@@ -6,23 +6,40 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 public class Master extends Scientist{
 
     private String topic;
     private Date startDate;
     private Date endDate;
-    private Department department;
     private Teacher teacher;
+    private Department department;
 
     public Master() {}
-    public Master(String name, String phone, String topic, Date startDate, Date endDate, Department department, Teacher teacher) {
+    public Master(int id) { super(id); }
+    public Master(int id, String topic, Date startDate, Date endDate, Teacher teacher, Department department) {
+        super(id);
+        this.topic = topic;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.teacher = teacher;
+        this.department = department;
+    }
+
+    public Master(String name, String phone, String topic, Date startDate, Date endDate, Teacher teacher, Department department) {
         super(name, phone);
         this.topic = topic;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.department = department;
         this.teacher = teacher;
+        this.department = department;
+    }
+    public Master(int id, String name, String phone, String topic, Date startDate, Date endDate, Teacher teacher, Department department) {
+        super(id, name, phone);
+        this.topic = topic;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.teacher = teacher;
+        this.department = department;
     }
 
     @Override

@@ -18,8 +18,8 @@ INSERT INTO scientist VALUES(8,'Приходько Софія Олегівна',
 INSERT INTO scientist VALUES(9,'Добрийдень Марта Сергіївна', '(050) 982-11-38');
 INSERT INTO scientist VALUES(10,'Черепашенко Вікторія Тимофіївна', '(095) 912-19-98');
 
-INSERT INTO teacher VALUES(1, 1, 'Професор', 'Доктор філософії', '2000-01-31');
-INSERT INTO teacher VALUES(1, 2, 'Доцент', 'Доцент', '2000-01-31');
+INSERT INTO teacher VALUES(1, 'Професор', 'Доктор філософії', '2000-01-31',  1);
+INSERT INTO teacher VALUES(2, 'Доцент', 'Доцент', '2000-01-31', 1);
 
 
 /*Scientist for department of Mathematics ids 101 - 200*/

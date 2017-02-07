@@ -2,7 +2,9 @@ package database;
 
 import dao.DepartmentDAO;
 import dao.IDAOGeneric;
+import dao.TeacherDAO;
 import entity.*;
+import javafx.geometry.Pos;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,15 @@ public class DaoTestSuit {
 
     @Autowired
     private IDAOGeneric<Topic> topicDAO;
+
+    @Autowired
+    private IDAOGeneric<Teacher> teacherDAO;
+
+    @Autowired
+    private IDAOGeneric<Master> masterDAO;
+
+    @Autowired
+    private IDAOGeneric<Postgraduate> postgraduateDAO;
 
     @Test
     public void testDepartmentDao() {
@@ -116,5 +127,84 @@ public class DaoTestSuit {
         topicDAO.remove(topic);
         System.out.println("Find after delete:" + topicDAO.find(topic.getId()));
     }
+
+    @Test
+    public void testTeacherDao(){
+        Teacher teacher = new Teacher(4,
+                "Доцент",
+                "Доцент",
+                DateUtil.getDate("31.09.2020"), new Department(2));
+
+        System.out.println("Before insert:" + teacher);
+        teacherDAO.insert(teacher);
+        System.out.println("Find after insert:" + teacherDAO.find(teacher.getId()));
+        System.out.println("Find All:" + teacherDAO.findAll());
+
+        teacher.setDegree("New Доцент");
+        teacher.setPosition("New Доцент");
+        teacher.setStartDate(DateUtil.getDate("31.09.2021"));
+        teacher.getDepartment().setId(1);
+        teacherDAO.update(teacher);
+        System.out.println("Find after update:" + teacherDAO.find(teacher.getId()));
+
+        System.out.println("Eager find:" + teacherDAO.find(teacher.getId(), true));
+
+        teacherDAO.remove(teacher);
+        System.out.println("Find after delete:" + teacherDAO.find(teacher.getId()));
+    }
+    @Test
+    public void testPostgraduateDao(){
+        Postgraduate postgraduate = new Postgraduate(3,
+                "Haskell як релігія",
+                DateUtil.getDate("31.09.2000"),
+                DateUtil.getDate("31.09.2010"),
+                DateUtil.getDate("31.10.2010"),
+                new Teacher(2),
+                new Department(2));
+
+        System.out.println("Before insert:" + postgraduate);
+        postgraduateDAO.insert(postgraduate);
+        System.out.println("Find after insert:" + postgraduateDAO.find(postgraduate.getId()));
+        System.out.println("Find All:" + postgraduateDAO.findAll());
+
+        postgraduate.setTopic("New Haskell як релігія");
+        postgraduate.setStartDate(DateUtil.getDate("31.09.2010"));
+        postgraduate.setEndDate(DateUtil.getDate("31.09.2020"));
+        postgraduate.setProtectionDate(DateUtil.getDate("31.10.2020"));
+        postgraduate.setTeacher(new Teacher(1));
+        postgraduate.getDepartment().setId(1);
+        postgraduateDAO.update(postgraduate);
+        System.out.println("Find after update:" + postgraduateDAO.find(postgraduate.getId()));
+
+        System.out.println("Eager find:" + postgraduateDAO.find(postgraduate.getId(), true));
+
+        postgraduateDAO.remove(postgraduate);
+        System.out.println("Find after delete:" + postgraduateDAO.find(postgraduate.getId()));
+    }
+    @Test
+    public void testMasterDao(){
+        Master master = new Master(6,
+                "Haskell як релігія", DateUtil.getDate("31.09.2000"),
+                DateUtil.getDate("31.09.2010"), new Teacher(2), new Department(2));
+
+        System.out.println("Before insert:" + master);
+        masterDAO.insert(master);
+        System.out.println("Find after insert:" + masterDAO.find(master.getId()));
+        System.out.println("Find All:" + masterDAO.findAll());
+
+        master.setTopic("New Haskell як релігія");
+        master.setStartDate(DateUtil.getDate("31.09.2010"));
+        master.setEndDate(DateUtil.getDate("31.09.2020"));
+        master.setTeacher(new Teacher(1));
+        master.getDepartment().setId(1);
+        masterDAO.update(master);
+        System.out.println("Find after update:" + masterDAO.find(master.getId()));
+
+        System.out.println("Eager find:" + masterDAO.find(master.getId(), true));
+
+        masterDAO.remove(master);
+        System.out.println("Find after delete:" + masterDAO.find(master.getId()));
+    }
+
 
 }

@@ -22,6 +22,13 @@ public class Teacher extends Scientist{
         this.startDate = startDate;
         this.department = department;
     }
+    public Teacher(int id, String position, String degree, Date startDate, Department department) {
+        super(id);
+        this.position = position;
+        this.degree = degree;
+        this.startDate = startDate;
+        this.department = department;
+    }
     public Teacher(String name, String phone, String position, String degree, Date startDate, Department department) {
         super(name, phone);
         this.position = position;

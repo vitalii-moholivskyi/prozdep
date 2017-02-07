@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 public class Postgraduate extends Scientist{
 
     private String topic;
@@ -18,7 +17,16 @@ public class Postgraduate extends Scientist{
     private Teacher teacher;
 
     public Postgraduate() {}
-    public Postgraduate(String name, String phone, int departmentId, String topic, Date startDate, Date endDate, Date protectionDate , Department department, Teacher teacher) {
+    public Postgraduate(int id, String topic, Date startDate, Date endDate, Date protectionDate , Teacher teacher,  Department department) {
+        super(id);
+        this.topic = topic;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.protectionDate = protectionDate;
+        this.department = department;
+        this.teacher = teacher;
+    }
+    public Postgraduate(String name, String phone, String topic, Date startDate, Date endDate, Date protectionDate , Teacher teacher, Department department) {
         super(name, phone);
         this.topic = topic;
         this.startDate = startDate;
