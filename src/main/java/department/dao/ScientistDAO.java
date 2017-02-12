@@ -14,7 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ScrientistDAO implements IDAOGeneric<Scientist>{
+public class ScientistDAO implements IDAOGeneric<Scientist>{
 
     private final static String FIND_ALL = "SELECT * FROM scientist;";
     private final static String FIND = "SELECT * FROM scientist WHERE id=?;";
