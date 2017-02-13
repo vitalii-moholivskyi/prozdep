@@ -1,14 +1,18 @@
 package department.ui.controller;
 
 import department.model.IMasterModel;
-import department.model.bo.Master;
-import javafx.beans.property.SimpleStringProperty;
+import department.model.bo.MasterViewModel;
+import department.utils.RxUtils;
+import department.utils.TextUtils;
 import javafx.scene.control.TableColumn;
 import lombok.extern.java.Log;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.functions.Func1;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
 
 /**
@@ -16,10 +20,16 @@ import java.util.logging.Level;
  */
 @Log
 @Controller
-public final class MasterTabController extends ListTabController<Master> {
+public final class MasterTabController extends ListTabController<MasterViewModel> {
 
     private final IMasterModel model;
     private final MainController mainController;
+
+    private static final Func1<? super String, ? extends String> NULLABLE_FLD_MAPPER =
+            str -> TextUtils.isEmpty(str) ? "N/a" : str;
+
+    private static final Func1<? super Date, ? extends String> DATE_FLD_MAPPER =
+            date -> date == null ? "N/a" : date.toString();
 
     @Autowired
     public MasterTabController(IMasterModel model, MainController mainController) {
@@ -30,13 +40,25 @@ public final class MasterTabController extends ListTabController<Master> {
     @Override
     protected void doInitialize() {
 
-        final TableColumn<Master, String> firstNameCol = new TableColumn<>("First Name"),
-                lastNameCol = new TableColumn<>("Last Name");
+        final TableColumn<MasterViewModel, String> firstNameCol = new TableColumn<>("Ім'я"),
+                phoneCol = new TableColumn<>("Телефон"), degreeCol = new TableColumn<>("Ступінь"),
+                topicCol = new TableColumn<>("Тема"), startDateCol = new TableColumn<>("Вступ"),
+                endDateCol = new TableColumn<>("Випуск");
 
-        firstNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getFirstName()));
-        lastNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getLastName()));
+        firstNameCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getFirstNameObs()));
+        phoneCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getPhoneObs().map(NULLABLE_FLD_MAPPER)));
+        degreeCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDegreeObs().map(NULLABLE_FLD_MAPPER)));
+        topicCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getTopicObs().map(NULLABLE_FLD_MAPPER)));
+        startDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getStartDateObs().map(DATE_FLD_MAPPER)));
+        endDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getEndDateObs().map(DATE_FLD_MAPPER)));
         // setup table columns and content
-        tableView.getColumns().addAll(firstNameCol, lastNameCol);
+        tableView.getColumns().addAll(firstNameCol, degreeCol, phoneCol, topicCol, startDateCol, endDateCol);
+
+        val size = tableView.getColumns().size();
+
+        for (val column : tableView.getColumns()) {
+            column.prefWidthProperty().bind(tableView.widthProperty().divide(size));
+        }
         fetchMasters(0, ListTabController.RESULTS_PER_PAGE);
     }
 
@@ -53,8 +75,7 @@ public final class MasterTabController extends ListTabController<Master> {
                         th -> /*todo redo*/log.log(Level.WARNING, "Failed to fetch masters", th));
     }
 
-
-    private void setTableContent(Collection<? extends Master> masters) {
+    private void setTableContent(Collection<? extends MasterViewModel> masters) {
         tableView.getItems().setAll(masters);
     }
 

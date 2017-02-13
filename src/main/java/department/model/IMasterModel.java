@@ -1,6 +1,6 @@
 package department.model;
 
-import department.model.bo.Master;
+import department.model.bo.MasterViewModel;
 import department.model.form.MasterForm;
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
@@ -26,7 +26,7 @@ public interface IMasterModel {
      * @throws IllegalArgumentException if offset < 0 or limit < 0
      */
     @NotNull(message = "Null is not allowed")
-    Observable<Collection<? extends Master>> fetchMasters(@Min(0) long offset, @Min(0) long limit);
+    Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit);
 
     /**
      * Fetches masters by user query asynchronously
@@ -38,8 +38,8 @@ public interface IMasterModel {
      * @throws NullPointerException     if query is null
      */
     @NotNull
-    Observable<Collection<? extends Master>> fetchMasters(@NotNull(message = "query cannot be null") String query,
-                                                @Min(0) long offset, @Min(0) long limit);
+    Observable<Collection<? extends MasterViewModel>> fetchMasters(@NotNull(message = "query cannot be null") String query,
+                                                                   @Min(0) long offset, @Min(0) long limit);
 
     /**
      * Updates master asynchronously
@@ -50,7 +50,7 @@ public interface IMasterModel {
      * @throws NullPointerException     if form is null
      */
     @NotNull
-    Observable<? extends Master> update(@NotNull(message = "form cannot be null") MasterForm form);
+    Observable<? extends MasterViewModel> update(@NotNull(message = "form cannot be null") MasterForm form);
 
     // add other methods below...
 }
