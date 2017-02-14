@@ -1,6 +1,6 @@
 package department.dao;
 
-import department.entity.Department;
+import department.model.bo.Department;
 
 /**
  * Created by mogo on 2/12/17.

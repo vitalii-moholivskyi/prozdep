@@ -1,9 +1,6 @@
 package department.dao;
-import department.entity.Department;
-import department.entity.Paper;
-import department.entity.Scientist;
-import department.entity.Topic;
-import javafx.scene.Scene;
+
+import department.model.bo.Topic;
 
 import java.util.List;
 
@@ -12,8 +9,13 @@ import java.util.List;
  */
 public interface ITopicDAO extends IDAOGeneric<Topic> {
 
-    List<Topic> getTopicsByChiefScientist(Scientist scientist);
-    List<Topic> getTopicsByDepartment(Department department);
-    List<Topic> getTopicsByScientist(Scientist scientist);
-    List<Topic> getTopicsByPapper(Paper paper);
+    List<Topic> getTopicsByChiefScientistId(int scientistId);
+    List<Topic> getTopicsByDepartmentId(int departmentId);
+    List<Topic> getTopicsByScientistId(int scientistId);
+    List<Topic> getTopicsByPapperId(int paperId);
+
+    List<Topic> getTopicsByChiefScientistId(int scientistId, boolean isEager);
+    List<Topic> getTopicsByDepartmentId(int departmentId, boolean isEager);
+    List<Topic> getTopicsByScientistId(int scientistId, boolean isEager);
+    List<Topic> getTopicsByPapperId(int paperId, boolean isEager);
 }

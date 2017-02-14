@@ -1,7 +1,6 @@
 package department.dao;
 
-import department.entity.*;
-
+import department.model.bo.*;
 import java.util.List;
 
 /**
@@ -9,9 +8,13 @@ import java.util.List;
  */
 public interface IPostgraduateDAO extends IDAOGeneric<Postgraduate>{
 
-    List<Postgraduate> getPostgraduatesByDepertment(Department department);
-    List<Postgraduate> getPostgraduatesByTeacher(Teacher teacher);
-    List<Postgraduate> getPostgraduatesByTopic(Topic topic);
-    List<Postgraduate> getPostgraduatesByPaper(Paper paper);
+    List<Postgraduate> getPostgraduatesByDepertmentId(int departmentId);
+    List<Postgraduate> getPostgraduatesByTeacherId(int teacherId);
+    List<Postgraduate> getPostgraduatesByTopicId(int topicId);
+    List<Postgraduate> getPostgraduatesByPaperId(int paperId);
 
+    List<Postgraduate> getPostgraduatesByDepertment(int departmentId, boolean isEager);
+    List<Postgraduate> getPostgraduatesByTeacher(int teacherId, boolean isEager);
+    List<Postgraduate> getPostgraduatesByTopic(int topicId, boolean isEager);
+    List<Postgraduate> getPostgraduatesByPaper(int paperId, boolean isEager);
 }

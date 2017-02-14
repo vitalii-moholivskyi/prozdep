@@ -1,20 +1,16 @@
 package database;
 
-import department.dao.DepartmentDAO;
-import department.dao.IDAOGeneric;
-import department.dao.TeacherDAO;
+import department.dao.*;
 import department.entity.*;
-import javafx.geometry.Pos;
-import department.dao.DepartmentDAO;
+import department.model.bo.Paper;
+import department.model.bo.Postgraduate;
+import department.model.bo.Topic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import util.DateUtil;
-
-import java.util.Date;
 
 /**
  * Created by mogo on 1/29/17.
@@ -24,23 +20,23 @@ import java.util.Date;
 public class DaoTestSuit {
 
     @Autowired
-    private IDAOGeneric<Department> departmentDAO;
+    private IDepartmentDAO departmentDAO;
     @Autowired
-    private IDAOGeneric<Scientist> scientistDAO;
+    private IScientistDAO scientistDAO;
     @Autowired
-    private IDAOGeneric<Paper> paperDAO;
+    private IPaperDAO paperDAO;
 
     @Autowired
-    private IDAOGeneric<Topic> topicDAO;
+    private ITopicDAO topicDAO;
 
     @Autowired
-    private IDAOGeneric<Teacher> teacherDAO;
+    private ITeacherDAO teacherDAO;
 
     @Autowired
-    private IDAOGeneric<Master> masterDAO;
+    private IMasterDAO masterDAO;
 
     @Autowired
-    private IDAOGeneric<Postgraduate> postgraduateDAO;
+    private IPostgraduateDAO postgraduateDAO;
 
     @Test
     public void testDepartmentDao() {

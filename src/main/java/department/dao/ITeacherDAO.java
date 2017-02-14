@@ -1,9 +1,6 @@
 package department.dao;
 
-import department.entity.Department;
-import department.entity.Paper;
-import department.entity.Teacher;
-import department.entity.Topic;
+import department.model.bo.Teacher;
 
 import java.util.List;
 
@@ -12,8 +9,12 @@ import java.util.List;
  */
 public interface ITeacherDAO extends IDAOGeneric<Teacher>{
 
-    List<Teacher> getTeachersByDepertment(Department department);
-    List<Teacher> getTeachersByTopic(Topic topic);
-    List<Teacher> getTeachersByPaper(Paper paper);
+    List<Teacher> getTeachersByDepertmentId(int department);
+    List<Teacher> getTeachersByTopicId(int topic);
+    List<Teacher> getTeachersByPaperId(int paper);
+
+    List<Teacher> getTeachersByDepertmentId(int department, boolean isEager);
+    List<Teacher> getTeachersByTopicId(int topic, boolean isEager);
+    List<Teacher> getTeachersByPaperId(int paper, boolean isEager);
 
 }

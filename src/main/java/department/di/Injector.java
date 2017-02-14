@@ -1,6 +1,8 @@
 package department.di;
 
+import department.config.MainConfig;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Objects;
@@ -12,11 +14,12 @@ public final class Injector {
 
     private static Injector instance;
 
-    private ApplicationContext context;
+    private AnnotationConfigApplicationContext context;
 
     private Injector(String filePath) {
         Objects.requireNonNull(filePath, "path to context file wasn't specified");
-        this.context = new ClassPathXmlApplicationContext(filePath);
+        //this.context = new ClassPathXmlApplicationContext(filePath);
+        this.context = new AnnotationConfigApplicationContext(MainConfig.class);
     }
 
     public static Injector initialize(String filePath) {

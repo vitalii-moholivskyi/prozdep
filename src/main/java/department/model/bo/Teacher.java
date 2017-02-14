@@ -1,8 +1,6 @@
 package department.model.bo;
 
 import java.util.Date;
-
-import department.model.bo.Department;
 import lombok.Value;
 
 @Value

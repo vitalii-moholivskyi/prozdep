@@ -1,10 +1,6 @@
 package department.dao;
 
-import department.entity.Department;
-import department.entity.Paper;
-import department.entity.Master;
-import department.entity.Teacher;
-import department.entity.Topic;
+import department.model.bo.Master;
 
 import java.util.List;
 
@@ -13,9 +9,14 @@ import java.util.List;
  */
 public interface IMasterDAO extends IDAOGeneric<Master>{
 
-    List<Master> getMastersByDepertment(Department department);
-    List<Master> getMastersByTeacher(Teacher teacher);
-    List<Master> getMastersByTopic(Topic topic);
-    List<Master> getMastersByPaper(Paper paper);
+    List<Master> findMastersByDepartmentId(int departmentId, boolean isEager);
+    List<Master> findMastersByTeacherId(int teacherId, boolean isEager);
+    List<Master> findMastersByTopicId(int topicId, boolean isEager);
+    List<Master> findMastersByPaperId(int paperId, boolean isEager);
+
+    List<Master> findMastersByDepartmentId(int departmentId);
+    List<Master> findMastersByTeacherId(int teacherId);
+    List<Master> findMastersByTopicId(int topicId);
+    List<Master> findMastersByPaperId(int paperId);
 
 }

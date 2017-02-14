@@ -1,9 +1,8 @@
 package department.dao;
 
-import department.entity.Department;
-import department.entity.Paper;
-import department.entity.Scientist;
-import department.entity.Topic;
+import department.model.bo.Department;
+import department.model.bo.Paper;
+import department.model.bo.Topic;
 
 import java.util.List;
 
@@ -12,8 +11,12 @@ import java.util.List;
  */
 public interface IPaperDAO extends IDAOGeneric<Paper>{
 
-    List<Paper> getPapersByDepartment(Department department);
-    List<Paper> getPapersByScientist(Scientist scientist);
-    List<Paper> getPapersByTopic(Topic topic);
+    List<Paper> getPapersByDepartmentId(int departmentId, boolean isEager);
+    List<Paper> getPapersByScientistId(int scientistId, boolean isEager);
+    List<Paper> getPapersByTopicId(int topicId, boolean isEager);
+
+    List<Paper> getPapersByDepartmentId(int departmentId);
+    List<Paper> getPapersByScientistId(int scientistId);
+    List<Paper> getPapersByTopicId(int topicId);
 
 }

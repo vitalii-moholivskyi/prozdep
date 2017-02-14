@@ -5,9 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import department.entity.Department;
-import department.entity.Teacher;
-import department.entity.Topic;
+import department.model.bo.Department;
+import department.model.bo.Topic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

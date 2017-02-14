@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import department.entity.Department;
+import department.model.bo.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DepartmentDAO implements IDAOGeneric<Department> {
+public class DepartmentDAO implements IDepartmentDAO {
 
 	private final static String FIND_ALL = "SELECT * FROM department;";
 	private final static String FIND = "SELECT * FROM department WHERE id=?;";
