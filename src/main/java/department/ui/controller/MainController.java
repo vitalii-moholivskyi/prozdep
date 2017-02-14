@@ -6,6 +6,7 @@ import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
@@ -27,6 +28,8 @@ import java.util.logging.Level;
 public final class MainController {
 
     private static final String MASTERS_VIEW_TAB_ID = "id_view_masters";
+    private static final String TEACHERS_VIEW_TAB_ID = "id_view_teachers";
+    private static final String POSTGRADUATES_VIEW_TAB_ID = "id_view_postgraduates";
     private static final String MASTERS_CREATE_TAB_ID = "id_create_masters";
 
     @FXML
@@ -71,14 +74,39 @@ public final class MainController {
 
     @FXML
     private void onCreateMaster() {
-        loadTab(MainController.MASTERS_CREATE_TAB_ID, "Create master",
-                "/view/partials/_formMaster.fxml", CreateMasterTabController.class);
+
+        Stage stage = new Stage();
+
+        val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml", CreateMasterTabController.class);
+        try {
+            stage.setScene(new Scene(loader.load()));
+            stage.centerOnScreen();
+            stage.show();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //loadTab(MainController.MASTERS_CREATE_TAB_ID, "Create master",
+          //      "/view/partials/_formMaster.fxml", CreateMasterTabController.class);
     }
 
     @FXML
     private void onViewMaster() {
-        loadTab(MainController.MASTERS_VIEW_TAB_ID, "Masters",
+        loadTab(MainController.MASTERS_VIEW_TAB_ID, "Магістри",
                 "/view/partials/_listTemplate.fxml", MasterTabController.class);
+    }
+
+    @FXML
+    private void onViewTeacher() {
+        loadTab(MainController.TEACHERS_VIEW_TAB_ID, "Викладачі",
+                "/view/partials/_listTemplate.fxml", TeacherTabController.class);
+    }
+
+    @FXML
+    private void onViewPostgraduate() {
+        loadTab(MainController.POSTGRADUATES_VIEW_TAB_ID, "Аспіранти",
+                "/view/partials/_listTemplate.fxml", PostgraduateTabController.class);
     }
 
     private void loadTab(String tabId, String title, String filePath, Class<?> controller) {
@@ -88,11 +116,9 @@ public final class MainController {
         val loader = UiUtils.newLoader(filePath, controller);
 
         try {
-
-            final Tab tab = loader.load();
+            val tab = new Tab(title, loader.load());
 
             tab.setId(tabId);
-            tab.setText(title);
             contentTabPane.getTabs().add(tab);
         } catch (final IOException e) {
             log.log(Level.SEVERE, String.format("Failed to open %s tab", title), e);

@@ -22,9 +22,9 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Переглянути">
                   <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onCreateMaster" text="Магістри" />
-                      <MenuItem mnemonicParsing="false" text="Викладачі" />
-                      <MenuItem mnemonicParsing="false" text="Аспіранти" />
+                        <MenuItem mnemonicParsing="false" onAction="#onViewMaster" text="Магістри" />
+                      <MenuItem mnemonicParsing="false" text="Викладачі" onAction="#onViewTeacher"/>
+                      <MenuItem mnemonicParsing="false" text="Аспіранти" onAction="#onViewPostgraduate"/>
                         <MenuItem mnemonicParsing="false" text="Наукові теми" />
                         <MenuItem mnemonicParsing="false" text="Наукові роботи" />
                   </items>
