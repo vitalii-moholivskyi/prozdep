@@ -108,7 +108,7 @@ public class MasterDAO implements IMasterDAO{
         return (masters.isEmpty()) ? null : masters.get(0);
     }
 
-    public void insert(Master master) {
+    public Master insert(Master master) {
         Object [] values = {
                 master.getId(),
                 master.getTopic(),
@@ -118,6 +118,7 @@ public class MasterDAO implements IMasterDAO{
                 master.getDepartment().getId()
         };
         jdbcTemplate.update(INSERT, values);
+        return master;
     }
 
     public void update(Master master) {

@@ -14,7 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ScientistDAO implements IDAOGeneric<Scientist>{
+public class ScientistDAO implements IScientistDAO{
 
     private final static String FIND_ALL = "SELECT * FROM scientist;";
     private final static String FIND = "SELECT * FROM scientist WHERE id=?;";
@@ -42,7 +42,7 @@ public class ScientistDAO implements IDAOGeneric<Scientist>{
     }
 
     @Override
-    public void insert(Scientist scientist) {
+    public Scientist insert(Scientist scientist) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT, new String[] {"id"});
@@ -50,7 +50,7 @@ public class ScientistDAO implements IDAOGeneric<Scientist>{
             ps.setString(2, scientist.getPhone());
             return ps;
         },keyHolder);
-        scientist.setId(keyHolder.getKey().intValue());
+        return scientist.toBuilder().id(keyHolder.getKey().intValue()).build();
     }
 
     @Override
@@ -71,11 +71,17 @@ public class ScientistDAO implements IDAOGeneric<Scientist>{
     private class ScientistMapper implements RowMapper<Scientist>{
         @Override
         public Scientist mapRow(ResultSet rs, int rn) throws SQLException {
-            Scientist scientist = new Scientist();
+            /*Scientist scientist = new Scientist();
             scientist.setId(rs.getInt("id"));
             scientist.setName(rs.getString("name"));
             scientist.setPhone(rs.getString("phone"));
-            return scientist;
+            return scientist;*/
+            return Scientist
+                    .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .phone(rs.getString("phone"))
+                    .build();
         }
     }
 

@@ -12,7 +12,7 @@ public interface IDAOGeneric<T> {
 
 	T find(int id, boolean isEager);
 
-	void insert(T entity);
+	T insert(T entity);
 
 	void update(T entity);
 

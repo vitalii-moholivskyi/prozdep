@@ -6,6 +6,7 @@ import java.util.List;
 
 import department.model.bo.Department;
 import department.model.bo.Postgraduate;
+import department.model.bo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -92,7 +93,7 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
         }
     }
 
-    public void insert(Postgraduate postgraduate) {
+    public Postgraduate insert(Postgraduate postgraduate) {
         Object [] values = {
                 postgraduate.getId(),
                 postgraduate.getTopic(),
@@ -103,6 +104,7 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
                 postgraduate.getDepartment().getId()
         };
         jdbcTemplate.update(INSERT, values);
+        return postgraduate;
     }
 
     public void update(Postgraduate postgraduate) {
@@ -127,7 +129,7 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
     private final class PostgraduateMapper implements RowMapper<Postgraduate> {
         @Override
         public Postgraduate mapRow(ResultSet rs, int i) throws SQLException {
-            Postgraduate postgraduate = new Postgraduate();
+            /*Postgraduate postgraduate = new Postgraduate();
             postgraduate.setId(rs.getInt("scientist_id"));
             postgraduate.setName(rs.getString("name"));
             postgraduate.setPhone(rs.getString("phone"));
@@ -137,7 +139,25 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
             postgraduate.setProtectionDate(rs.getDate("protection_date"));
             postgraduate.setTeacher(new Teacher(rs.getInt("teacher_id")));
             postgraduate.setDepartment(new Department(rs.getInt("department_id")));
-            return postgraduate;
+            return postgraduate;*/
+            return Postgraduate
+                    .builder()
+                    .id(rs.getInt("scientist_id"))
+                    .name(rs.getString("name"))
+                    .phone(rs.getString("phone"))
+                    .topic(rs.getString("topic"))
+                    .startDate(rs.getDate("start_date"))
+                    .endDate(rs.getDate("end_date"))
+                    .protectionDate(rs.getDate("protection_date"))
+                    .teacher(Teacher
+                            .builder()
+                            .id(rs.getInt("teacher_id"))
+                            .build())
+                    .department(Department
+                            .builder()
+                            .id(rs.getInt("department_id"))
+                            .build())
+                    .build();
         }
     }
 
@@ -145,7 +165,7 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
 
         @Override
         public Postgraduate mapRow(ResultSet rs, int i) throws SQLException {
-            Postgraduate postgraduate = new Postgraduate();
+            /*Postgraduate postgraduate = new Postgraduate();
             postgraduate.setId(rs.getInt("postgraduate_id"));
             postgraduate.setName(rs.getString("postgraduate_name"));
             postgraduate.setPhone(rs.getString("postgraduate_phone"));
@@ -171,7 +191,36 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
                     rs.getString("department_name"),
                     rs.getString("department_phone")));
 
-            return postgraduate;
+            return postgraduate;*/
+            return Postgraduate
+                    .builder()
+                    .id(rs.getInt("postgraduate_id"))
+                    .name(rs.getString("postgraduate_name"))
+                    .phone(rs.getString("postgraduate_phone"))
+                    .topic(rs.getString("postgraduate_topic"))
+                    .startDate(rs.getDate("postgraduate_start_date"))
+                    .endDate(rs.getDate("postgraduate_end_date"))
+                    .protectionDate(rs.getDate("postgraduate_protection_date"))
+                    .teacher(Teacher
+                            .builder()
+                            .id(rs.getInt("teacher_id"))
+                            .name(rs.getString("teacher_name"))
+                            .phone(rs.getString("teacher_phone"))
+                            .position(rs.getString("teacher_position"))
+                            .degree(rs.getString("teacher_degree"))
+                            .startDate(rs.getDate("teacher_start_date"))
+                            .department(Department
+                                    .builder()
+                                    .id(rs.getInt("teacher_department_id"))
+                                    .build())
+                            .build())
+                    .department(Department
+                            .builder()
+                            .id(rs.getInt("department_id"))
+                            .name(rs.getString("department_name"))
+                            .phone(rs.getString("department_phone"))
+                            .build())
+                    .build();
         }
     }
 

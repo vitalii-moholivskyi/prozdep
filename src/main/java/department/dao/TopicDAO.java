@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import department.model.bo.Department;
+import department.model.bo.Teacher;
 import department.model.bo.Topic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -83,7 +84,7 @@ public class TopicDAO implements IDAOGeneric<Topic>{
     }
 
     @Override
-    public void insert(Topic topic) {
+    public Topic insert(Topic topic) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT,
@@ -96,7 +97,7 @@ public class TopicDAO implements IDAOGeneric<Topic>{
             ps.setInt(6, topic.getChiefScientist().getId());
             return ps;
         },keyHolder);
-        topic.setId(keyHolder.getKey().intValue());
+        return topic.toBuilder().id(keyHolder.getKey().intValue()).build();
     }
 
     @Override
@@ -121,7 +122,7 @@ public class TopicDAO implements IDAOGeneric<Topic>{
     private class TopicMapper implements RowMapper<Topic>{
         @Override
         public Topic mapRow(ResultSet rs, int i) throws SQLException {
-            Topic topic = new Topic();
+            /*Topic topic = new Topic();
             topic.setId(rs.getInt("id"));
             topic.setName(rs.getString("name"));
             topic.setCliect(rs.getString("client"));
@@ -129,14 +130,24 @@ public class TopicDAO implements IDAOGeneric<Topic>{
             topic.setEndDate(rs.getDate("end_date"));
             topic.setDepartment(new Department(rs.getInt("department_id")));
             topic.setChiefScientist(new Teacher(rs.getInt("chief_scientist_id")));
-            return topic;
+            return topic;*/
+            return Topic
+                    .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .cliect(rs.getString("client"))
+                        .startDate(rs.getDate("start_date"))
+                        .endDate(rs.getDate("end_date"))
+                        .department(Department.builder().id(rs.getInt("department_id")).build())
+                        .chiefScientist(Teacher.builder().id(rs.getInt("chief_scientist_id")).build())
+                    .build();
         }
     }
 
     private class EagerTopicMapper implements RowMapper<Topic>{
         @Override
         public Topic mapRow(ResultSet rs, int i) throws SQLException {
-            Topic topic = new Topic();
+           /*Topic topic = new Topic();
             topic.setId(rs.getInt("topic_id"));
             topic.setName(rs.getString("topic_name"));
             topic.setCliect(rs.getString("topic_start_date"));
@@ -158,7 +169,30 @@ public class TopicDAO implements IDAOGeneric<Topic>{
                     rs.getDate("teacher_start_date"),
                     department
                     ));
-            return topic;
+            return topic;*/
+            return Topic
+                    .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .cliect(rs.getString("client"))
+                        .startDate(rs.getDate("start_date"))
+                        .endDate(rs.getDate("end_date"))
+                        .department(Department
+                                .builder()
+                                    .id(rs.getInt("department_id"))
+                                    .name(rs.getString("department_name"))
+                                    .phone(rs.getString("department_phone"))
+                                .build())
+                        .chiefScientist(Teacher
+                                .builder()
+                                    .id(rs.getInt("teacher_id"))
+                                    .name(rs.getString("teacher_name"))
+                                    .phone(rs.getString("teacher_phone"))
+                                    .position(rs.getString("teacher_position"))
+                                    .degree(rs.getString("teacher_degree"))
+                                    .startDate(rs.getDate("teacher_start_date"))
+                                .build())
+                    .build();
         }
     }
 

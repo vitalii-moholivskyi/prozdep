@@ -43,7 +43,7 @@ public class DepartmentDAO implements IDepartmentDAO {
 	}
 
 	@Override
-	public void insert(Department dep) {
+	public Department insert(Department dep) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(connection -> {
 			PreparedStatement ps = connection.prepareStatement(INSERT, new String[] {"id"});
@@ -51,7 +51,7 @@ public class DepartmentDAO implements IDepartmentDAO {
 			ps.setString(2, dep.getPhone());
 			return ps;
 		},keyHolder);
-		dep.setId(keyHolder.getKey().intValue());
+		return dep.toBuilder().id(keyHolder.getKey().intValue()).build();
 	}
 
 	@Override
@@ -73,11 +73,17 @@ public class DepartmentDAO implements IDepartmentDAO {
 
 		@Override
 		public Department mapRow(ResultSet rs, int i) throws SQLException {
-			Department department = new Department();
+			/*Department department = new Department();
 			department.setId(rs.getInt("id"));
 			department.setName(rs.getString("name"));
 			department.setPhone(rs.getString("phone"));
-			return department;
+			return department;*/
+			return Department
+					.builder()
+						.id(rs.getInt("id"))
+						.name(rs.getString("name"))
+						.phone(rs.getString("phone"))
+					.build();
 		}
 	}
 

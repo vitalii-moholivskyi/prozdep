@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import department.model.bo.Department;
+import department.model.bo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -78,7 +79,7 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
         }
     }
 
-    public void insert(Teacher teacher) {
+    public Teacher insert(Teacher teacher) {
         Object [] values = {
                 teacher.getId(),
                 teacher.getPosition(),
@@ -87,6 +88,7 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
                 teacher.getDepartment().getId()
         };
         jdbcTemplate.update(INSERT, values);
+        return teacher;
     }
 
     public void update(Teacher teacher) {
@@ -109,7 +111,7 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
     private class TeacherMapper implements RowMapper<Teacher>{
         @Override
         public Teacher mapRow(ResultSet rs, int i) throws SQLException {
-            Teacher teacher = new Teacher();
+            /*Teacher teacher = new Teacher();
             teacher.setId(rs.getInt("scientist_id"));
             teacher.setName(rs.getString("name"));
             teacher.setPhone(rs.getString("phone"));
@@ -117,14 +119,27 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
             teacher.setPosition(rs.getString("position"));
             teacher.setDegree(rs.getString("degree"));
             teacher.setStartDate(rs.getDate("start_date"));
-            return teacher;
+            return teacher;*/
+            return Teacher
+                    .builder()
+                        .id(rs.getInt("scientist_id"))
+                        .name(rs.getString("name"))
+                        .phone(rs.getString("phone"))
+                        .position(rs.getString("position"))
+                        .degree(rs.getString("degree"))
+                        .startDate(rs.getDate("start_date"))
+                    .department(Department
+                            .builder()
+                                .id(rs.getInt("department_id"))
+                            .build())
+                    .build();
         }
     }
 
     private class EagerTeacherMapper implements RowMapper<Teacher>{
         @Override
         public Teacher mapRow(ResultSet rs, int i) throws SQLException {
-            Teacher teacher = new Teacher();
+            /*Teacher teacher = new Teacher();
             teacher.setId(rs.getInt("teacher_id"));
             teacher.setName(rs.getString("teacher_name"));
             teacher.setPhone(rs.getString("teacher_phone"));
@@ -135,7 +150,22 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
             teacher.setPosition(rs.getString("teacher_position"));
             teacher.setDegree(rs.getString("teacher_degree"));
             teacher.setStartDate(rs.getDate("teacher_start_date"));
-            return teacher;
+            return teacher;*/
+            return Teacher
+                    .builder()
+                        .id(rs.getInt("teacher_id"))
+                        .name(rs.getString("teacher_name"))
+                        .phone(rs.getString("teacher_phone"))
+                        .position(rs.getString("teacher_position"))
+                        .degree(rs.getString("teacher_degree"))
+                        .startDate(rs.getDate("teacher_start_date"))
+                    .department(Department
+                            .builder()
+                                .id(rs.getInt("department_id"))
+                                .name(rs.getString("department_name"))
+                                .phone(rs.getString("department_phone"))
+                            .build())
+                    .build();
         }
     }
 

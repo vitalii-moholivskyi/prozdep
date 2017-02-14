@@ -1,6 +1,6 @@
 package department.model;
 
-import department.entity.Department;
+import department.model.bo.Department;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;

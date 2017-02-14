@@ -1,10 +1,7 @@
 package database;
 
 import department.dao.*;
-import department.entity.*;
-import department.model.bo.Paper;
-import department.model.bo.Postgraduate;
-import department.model.bo.Topic;
+import department.model.bo.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +15,19 @@ import util.DateUtil;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class DaoTestSuit {
-
+/*
     @Autowired
     private IDepartmentDAO departmentDAO;
     @Autowired
     private IScientistDAO scientistDAO;
     @Autowired
     private IPaperDAO paperDAO;
-
     @Autowired
     private ITopicDAO topicDAO;
-
     @Autowired
     private ITeacherDAO teacherDAO;
-
     @Autowired
     private IMasterDAO masterDAO;
-
     @Autowired
     private IPostgraduateDAO postgraduateDAO;
 
@@ -201,7 +194,7 @@ public class DaoTestSuit {
 
         masterDAO.remove(master);
         System.out.println("Find after delete:" + masterDAO.find(master.getId()));
-    }
+    }*/
 
 
 }

@@ -43,7 +43,7 @@ public class PaperDAO implements IDAOGeneric<Paper>{
     }
 
     @Override
-    public void insert(Paper paper) {
+    public Paper insert(Paper paper) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT,
@@ -53,7 +53,7 @@ public class PaperDAO implements IDAOGeneric<Paper>{
             ps.setInt(3, paper.getYear());
             return ps;
         },keyHolder);
-        paper.setId(keyHolder.getKey().intValue());
+        return paper.toBuilder().id(keyHolder.getKey().intValue()).build();
     }
 
     @Override
@@ -75,12 +75,18 @@ public class PaperDAO implements IDAOGeneric<Paper>{
     private class PaperMapper implements RowMapper<Paper> {
         @Override
         public Paper mapRow(ResultSet rs, int rn) throws SQLException {
-            Paper paper = new Paper();
+            /*Paper paper = new Paper();
             paper.setId(rs.getInt("id"));
             paper.setName(rs.getString("name"));
             paper.setType(rs.getString("type"));
-            paper.setYear(rs.getInt("year"));
-            return paper;
+            paper.setYear(rs.getInt("year"));*/
+            return Paper
+                    .builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .type(rs.getString("type"))
+                        .year(rs.getInt("year"))
+                    .build();
         }
     }
 
