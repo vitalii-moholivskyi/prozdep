@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import util.DateUtil;
 
 @Repository
-public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
+public class PostgraduateDAO implements IPostgraduateDAO{
 
     private final static String FIND_ALL = "SELECT * " +
             "FROM postgraduate p " +
@@ -124,6 +124,46 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
         jdbcTemplate.update(REMOVE, new Object[]{
                 postgraduate.getId()
         });
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByDepertmentId(int departmentId) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByTeacherId(int teacherId) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByTopicId(int topicId) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByPaperId(int paperId) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByDepertment(int departmentId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByTeacher(int teacherId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByTopic(int topicId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Postgraduate> getPostgraduatesByPaper(int paperId, boolean isEager) {
+        return null;
     }
 
     private final class PostgraduateMapper implements RowMapper<Postgraduate> {

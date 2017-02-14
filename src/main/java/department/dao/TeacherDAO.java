@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import util.DateUtil;
 
 @Repository
-public class TeacherDAO implements IDAOGeneric<Teacher>{
+public class TeacherDAO implements ITeacherDAO{
 
     private final static String FIND_ALL = "SELECT * " +
             "FROM teacher t " +
@@ -106,6 +106,36 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
         jdbcTemplate.update(REMOVE, new Object[]{
                 teacher.getId()
         });
+    }
+
+    @Override
+    public List<Teacher> getTeachersByDepertmentId(int department) {
+        return null;
+    }
+
+    @Override
+    public List<Teacher> getTeachersByTopicId(int topic) {
+        return null;
+    }
+
+    @Override
+    public List<Teacher> getTeachersByPaperId(int paper) {
+        return null;
+    }
+
+    @Override
+    public List<Teacher> getTeachersByDepertmentId(int department, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Teacher> getTeachersByTopicId(int topic, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Teacher> getTeachersByPaperId(int paper, boolean isEager) {
+        return null;
     }
 
     private class TeacherMapper implements RowMapper<Teacher>{

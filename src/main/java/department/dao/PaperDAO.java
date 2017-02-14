@@ -14,7 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PaperDAO implements IDAOGeneric<Paper>{
+public class PaperDAO implements IPaperDAO{
 
     private final static String FIND_ALL = "SELECT * FROM paper;";
     private final static String FIND = "SELECT * FROM paper WHERE id=?;";
@@ -70,6 +70,36 @@ public class PaperDAO implements IDAOGeneric<Paper>{
     @Override
     public void remove(Paper paper) {
         jdbcTemplate.update(REMOVE, paper.getId());
+    }
+
+    @Override
+    public List<Paper> getPapersByDepartmentId(int departmentId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Paper> getPapersByScientistId(int scientistId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Paper> getPapersByTopicId(int topicId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Paper> getPapersByDepartmentId(int departmentId) {
+        return null;
+    }
+
+    @Override
+    public List<Paper> getPapersByScientistId(int scientistId) {
+        return null;
+    }
+
+    @Override
+    public List<Paper> getPapersByTopicId(int topicId) {
+        return null;
     }
 
     private class PaperMapper implements RowMapper<Paper> {

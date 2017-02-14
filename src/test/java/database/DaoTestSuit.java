@@ -15,7 +15,7 @@ import util.DateUtil;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class DaoTestSuit {
-/*
+
     @Autowired
     private IDepartmentDAO departmentDAO;
     @Autowired
@@ -30,7 +30,7 @@ public class DaoTestSuit {
     private IMasterDAO masterDAO;
     @Autowired
     private IPostgraduateDAO postgraduateDAO;
-
+/*
     @Test
     public void testDepartmentDao() {
         Department department = new Department("Super", "+380");

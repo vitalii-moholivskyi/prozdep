@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import util.DateUtil;
 
 @Repository
-public class TopicDAO implements IDAOGeneric<Topic>{
+public class TopicDAO implements ITopicDAO{
 
     private final static String FIND_ALL = "SELECT * FROM topic;";
     private final static String FIND = "SELECT * FROM topic WHERE id=?;";
@@ -117,6 +117,46 @@ public class TopicDAO implements IDAOGeneric<Topic>{
     @Override
     public void remove(Topic topic) {
         jdbcTemplate.update(REMOVE, topic.getId());
+    }
+
+    @Override
+    public List<Topic> getTopicsByChiefScientistId(int scientistId) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByDepartmentId(int departmentId) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByScientistId(int scientistId) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByPapperId(int paperId) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByChiefScientistId(int scientistId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByDepartmentId(int departmentId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByScientistId(int scientistId, boolean isEager) {
+        return null;
+    }
+
+    @Override
+    public List<Topic> getTopicsByPapperId(int paperId, boolean isEager) {
+        return null;
     }
 
     private class TopicMapper implements RowMapper<Topic>{
