@@ -72,13 +72,13 @@ public final class MainController {
     @FXML
     private void onCreateMaster() {
         loadTab(MainController.MASTERS_CREATE_TAB_ID, "Create master",
-                "/view/partials/_createMasterTab.fxml", CreateMasterTabController.class);
+                "/view/partials/_formMaster.fxml", CreateMasterTabController.class);
     }
 
     @FXML
     private void onViewMaster() {
         loadTab(MainController.MASTERS_VIEW_TAB_ID, "Masters",
-                "/view/partials/_listTab.fxml", MasterTabController.class);
+                "/view/partials/_listTemplate.fxml", MasterTabController.class);
     }
 
     private void loadTab(String tabId, String title, String filePath, Class<?> controller) {
