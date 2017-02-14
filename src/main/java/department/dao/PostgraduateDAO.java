@@ -177,4 +177,10 @@ public class PostgraduateDAO implements IDAOGeneric<Postgraduate>{
         }
     }
 
+	@Override
+	public List<Postgraduate> findAll(long limit, long offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

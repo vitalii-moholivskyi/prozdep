@@ -81,4 +81,10 @@ public class DepartmentDAO implements IDAOGeneric<Department> {
 		}
 	}
 
+	@Override
+	public List<Department> findAll(long limit, long offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

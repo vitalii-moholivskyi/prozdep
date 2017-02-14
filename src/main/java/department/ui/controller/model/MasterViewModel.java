@@ -1,4 +1,4 @@
-package department.model.bo;
+package department.ui.controller.model;
 
 import department.utils.Preconditions;
 import lombok.AccessLevel;

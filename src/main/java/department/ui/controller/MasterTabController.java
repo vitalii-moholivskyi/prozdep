@@ -1,7 +1,7 @@
 package department.ui.controller;
 
 import department.model.IMasterModel;
-import department.model.bo.MasterViewModel;
+import department.ui.controller.model.MasterViewModel;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.scene.control.TableColumn;
