@@ -162,4 +162,10 @@ public class TopicDAO implements IDAOGeneric<Topic>{
             return topic;
         }
     }
+
+	@Override
+	public List<Topic> findAll(long limit, long offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

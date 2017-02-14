@@ -50,7 +50,10 @@ public interface IMasterModel {
      * @throws NullPointerException     if form is null
      */
     @NotNull
-    Observable<? extends Master> update(@NotNull(message = "form cannot be null") MasterForm form);
+    Observable<? extends Master> create(@NotNull(message = "form cannot be null") MasterForm form);
+
+	Observable<? extends Master> update(Master master);
+
 
     // add other methods below...
 }

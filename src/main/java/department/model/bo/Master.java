@@ -1,56 +1,23 @@
 package department.model.bo;
 
+import java.util.Date;
+
+import department.model.bo.Department;
+import department.model.bo.Teacher;
 import lombok.Value;
 
-/**
- * Created by Максим on 2/1/2017.
- */
 @Value
+@lombok.Builder(toBuilder=true)
 public class Master {
 
-    String firstName;
-    String lastName;
-
-    static class A {
-
-        private final int a;
-
-        A(int a) {
-            this.a = a;
-        }
-
-        A(Builder b) {
-            this.a = b.a;
-        }
-
-        static class Builder {
-
-            private int a;
-
-            Builder(A a) {
-                setA(a.a);
-            }
-
-            public int getA() {
-                return a;
-            }
-
-            public Builder setA(int a) {
-                this.a = a;
-                return this;
-            }
-
-            A build() {
-                return new A(this);
-            }
-
-        }
-
-    }
-
-    {
-        A a = new A(1);
-        A b = new A.Builder(a).setA(12).setA(32).build();
-    }
+	private Integer id;
+    private String name;
+    private String phone;
+    
+	private String topic;
+    private Date startDate;
+    private Date endDate;
+    private Teacher teacher;
+    private Department department;
 
 }

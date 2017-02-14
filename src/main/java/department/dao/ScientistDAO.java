@@ -78,4 +78,10 @@ public class ScientistDAO implements IDAOGeneric<Scientist>{
             return scientist;
         }
     }
+
+	@Override
+	public List<Scientist> findAll(long limit, long offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

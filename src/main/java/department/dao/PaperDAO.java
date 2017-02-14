@@ -84,4 +84,10 @@ public class PaperDAO implements IDAOGeneric<Paper>{
             return paper;
         }
     }
+
+	@Override
+	public List<Paper> findAll(long limit, long offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

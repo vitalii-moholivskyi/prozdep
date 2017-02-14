@@ -143,4 +143,10 @@ public class TeacherDAO implements IDAOGeneric<Teacher>{
             return teacher;
         }
     }
+
+	@Override
+	public List<Teacher> findAll(long limit, long offset) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

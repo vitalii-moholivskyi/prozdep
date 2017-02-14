@@ -33,8 +33,8 @@ public final class MasterTabController extends ListTabController<Master> {
         final TableColumn<Master, String> firstNameCol = new TableColumn<>("First Name"),
                 lastNameCol = new TableColumn<>("Last Name");
 
-        firstNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getFirstName()));
-        lastNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getLastName()));
+        firstNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getName()));
+        lastNameCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getName()));
         // setup table columns and content
         tableView.getColumns().addAll(firstNameCol, lastNameCol);
         fetchMasters(0, ListTabController.RESULTS_PER_PAGE);
