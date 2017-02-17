@@ -204,4 +204,9 @@ public class TeacherDAO implements ITeacherDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int count() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
 }

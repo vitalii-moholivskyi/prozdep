@@ -57,6 +57,8 @@ public interface IMasterModel {
     @NotNull
 	Observable<? extends MasterViewModel> update(@NotNull(message = "form cannot be null") MasterUpdateForm master);
 
+	Observable<? extends Integer> count();
+
 
     // add other methods below...
 }

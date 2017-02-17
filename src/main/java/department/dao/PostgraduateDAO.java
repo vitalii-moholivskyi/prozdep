@@ -269,5 +269,10 @@ public class PostgraduateDAO implements IPostgraduateDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int count() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
 
 }

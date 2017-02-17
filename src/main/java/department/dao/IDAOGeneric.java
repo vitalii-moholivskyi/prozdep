@@ -7,6 +7,8 @@ public interface IDAOGeneric<T> {
 	List<T> findAll(long limit, long offset);
 
 	List<T> findAll();
+	
+	int count();
 
 	T find(int id);
 

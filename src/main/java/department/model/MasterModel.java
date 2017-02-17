@@ -1,6 +1,6 @@
 package department.model;
 
-import department.dao.IDAOGeneric;
+import department.dao.IMasterDAO;
 import department.model.bo.Department;
 import department.model.bo.Master;
 import department.model.bo.Teacher;
@@ -23,7 +23,7 @@ import java.util.Collection;
 public class MasterModel implements IMasterModel {
 
 	@Autowired
-	IDAOGeneric<Master> masterDao;
+	IMasterDAO masterDao;
 
 	@Override
 	public Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
@@ -89,4 +89,16 @@ public class MasterModel implements IMasterModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
 	}
 
+	@Override
+	public Observable<? extends Integer> count() {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Integer>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(masterDao.count());
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+	}
 }

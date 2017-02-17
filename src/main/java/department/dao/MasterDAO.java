@@ -250,4 +250,10 @@ public class MasterDAO implements IMasterDAO{
 		return Arrays.asList(Master.builder().build(), Master.builder().build());
 	}
 
+	@Override
+	public int count() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
+
 }
