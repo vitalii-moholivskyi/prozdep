@@ -1,8 +1,9 @@
 package department.model;
 
-import department.model.bo.Master;
 import department.ui.controller.model.MasterViewModel;
-import department.model.form.MasterForm;
+import department.model.form.MasterCreateForm;
+import department.model.form.MasterUpdateForm;
+
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
 
@@ -51,9 +52,10 @@ public interface IMasterModel {
      * @throws NullPointerException     if form is null
      */
     @NotNull
-    Observable<? extends MasterViewModel> create(@NotNull(message = "form cannot be null") MasterForm form);
-
-	Observable<? extends MasterViewModel> update(Master master);
+    Observable<? extends MasterViewModel> create(@NotNull(message = "form cannot be null") MasterCreateForm form);
+    
+    @NotNull
+	Observable<? extends MasterViewModel> update(@NotNull(message = "form cannot be null") MasterUpdateForm master);
 
 
     // add other methods below...

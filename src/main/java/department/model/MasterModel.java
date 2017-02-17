@@ -1,8 +1,11 @@
 package department.model;
 
 import department.dao.IDAOGeneric;
+import department.model.bo.Department;
 import department.model.bo.Master;
-import department.model.form.MasterForm;
+import department.model.bo.Teacher;
+import department.model.form.MasterCreateForm;
+import department.model.form.MasterUpdateForm;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.utils.FxSchedulers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,83 +33,83 @@ public class MasterModel implements IMasterModel {
 	 */
 	// }
 
-    @Override
-    public Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
-        return Observable.defer(() ->
-                Observable.create((Observable.OnSubscribe<Collection<? extends MasterViewModel>>) sub -> {
+	@Override
+	public Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
+		return Observable
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends MasterViewModel>>) sub -> {
 
-                    sub.onStart();
-                    try {
-                        Thread.sleep(3000L);
-                        /*sub.onNext(Arrays.asList(
-                                new MasterViewModel("Max", "Oliynick"),
-                                new MasterViewModel("Kolya", "Nevmer"),
-                                new MasterViewModel("Roman", "Nevmer")
-                        ));*/
-                    } catch (InterruptedException e) {
-                        sub.onError(e);
-                    } finally {
-                        sub.onCompleted();
-                    }
-                }))
-                .observeOn(FxSchedulers.platform())
-                .subscribeOn(Schedulers.newThread());
-    }
+					sub.onStart();
+					try {
+						Thread.sleep(3000L);
+						/*
+						 * sub.onNext(Arrays.asList( new MasterViewModel("Max",
+						 * "Oliynick"), new MasterViewModel("Kolya", "Nevmer"),
+						 * new MasterViewModel("Roman", "Nevmer") ));
+						 */
+					} catch (InterruptedException e) {
+						sub.onError(e);
+					} finally {
+						sub.onCompleted();
+					}
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+	}
 
 	@Override
 	public Observable<Collection<? extends MasterViewModel>> fetchMasters(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends MasterViewModel>>) sub -> {
+		return Observable
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends MasterViewModel>>) sub -> {
 
-			sub.onStart();
-			try {
-				Thread.sleep(3000L);
-				//sub.onNext(masterDao.findAll(limit, offset)); map here
-			} catch (InterruptedException e) {
-				sub.onError(e);
-			} finally {
-				sub.onCompleted();
-			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+					sub.onStart();
+					try {
+						Thread.sleep(3000L);
+						// sub.onNext(masterDao.findAll(limit, offset)); map
+						// here
+					} catch (InterruptedException e) {
+						sub.onError(e);
+					} finally {
+						sub.onCompleted();
+					}
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 		// return null;
 	}
 
 	@Override
-	public Observable<? extends MasterViewModel> create(@NotNull(message = "form cannot be null") MasterForm form) {
+	public Observable<? extends MasterViewModel> create(
+			@NotNull(message = "form cannot be null") MasterCreateForm form) {
 
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends MasterViewModel>) sub -> {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
 			sub.onStart();
 			try {
-				Master master = Master.builder().teacher(form.getTeacher()).department(form.getDepartment())
-						.endDate(form.getEndDate()).startDate(form.getStartDate()).topic(form.getTopic())
-						.name(form.getName()).phone(form.getPhone()).build();
-				masterDao.update(master);
-				Thread.sleep(3000L);
-				//sub.onNext(master); map here
-			} catch (InterruptedException e) {
-				sub.onError(e);
+				sub.onNext(masterDao.insert(Master.builder().teacher(Teacher.builder().id(form.getTeacher()).build())
+						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
+						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
+						.phone(form.getPhone()).build()));
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
 	}
 
 	@Override
-	public Observable<? extends MasterViewModel> update(@NotNull(message = "form cannot be null") Master master) {
-
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends MasterViewModel>) sub -> {
+	public Observable<? extends MasterViewModel> update(MasterUpdateForm form) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
 			sub.onStart();
 			try {
+				Master master = Master.builder().id(form.getId())
+						.teacher(Teacher.builder().id(form.getTeacher()).build())
+						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
+						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
+						.phone(form.getPhone()).build();
 				masterDao.update(master);
-				Thread.sleep(3000L);
-				//sub.onNext(master); map here
-			} catch (InterruptedException e) {
-				sub.onError(e);
+				sub.onNext(master);
+				// sub.onNext(master); map here
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
 	}
+
 }
