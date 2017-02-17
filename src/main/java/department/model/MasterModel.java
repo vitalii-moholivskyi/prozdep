@@ -8,6 +8,8 @@ import department.model.form.MasterCreateForm;
 import department.model.form.MasterUpdateForm;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.utils.FxSchedulers;
+import lombok.val;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import rx.Observable;
@@ -17,61 +19,37 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
-/**
- * Created by Максим on 2/1/2017.
- */
 @Repository
 public class MasterModel implements IMasterModel {
 
 	@Autowired
 	IDAOGeneric<Master> masterDao;
-	// {
-	// Observable.defer(() -> dao.getAll).subscribeOn(Schedulers.newThread());
-	/*
-	 * Arrays.asList(new Master("Max", "Oliynick"), new Master("Kolya",
-	 * "Nevmer"), new Master("Roman", "Nevmer"))
-	 */
-	// }
 
 	@Override
 	public Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
-		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends MasterViewModel>>) sub -> {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Master>>) sub -> {
 
-					sub.onStart();
-					try {
-						Thread.sleep(3000L);
-						/*
-						 * sub.onNext(Arrays.asList( new MasterViewModel("Max",
-						 * "Oliynick"), new MasterViewModel("Kolya", "Nevmer"),
-						 * new MasterViewModel("Roman", "Nevmer") ));
-						 */
-					} catch (InterruptedException e) {
-						sub.onError(e);
-					} finally {
-						sub.onCompleted();
-					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+			sub.onStart();
+			try {
+				sub.onNext(masterDao.findAll(limit, offset));
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
 	}
 
 	@Override
 	public Observable<Collection<? extends MasterViewModel>> fetchMasters(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit) {
-		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends MasterViewModel>>) sub -> {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Master>>) sub -> {
 
-					sub.onStart();
-					try {
-						Thread.sleep(3000L);
-						// sub.onNext(masterDao.findAll(limit, offset)); map
-						// here
-					} catch (InterruptedException e) {
-						sub.onError(e);
-					} finally {
-						sub.onCompleted();
-					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
-		// return null;
+			sub.onStart();
+			try {
+				sub.onNext(masterDao.findAll(limit, offset));
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
 	}
 
 	@Override
@@ -98,14 +76,13 @@ public class MasterModel implements IMasterModel {
 
 			sub.onStart();
 			try {
-				Master master = Master.builder().id(form.getId())
+				val master = Master.builder().id(form.getId())
 						.teacher(Teacher.builder().id(form.getTeacher()).build())
 						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
 						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
 						.phone(form.getPhone()).build();
 				masterDao.update(master);
 				sub.onNext(master);
-				// sub.onNext(master); map here
 			} finally {
 				sub.onCompleted();
 			}
