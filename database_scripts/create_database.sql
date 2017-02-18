@@ -1,3 +1,12 @@
+/*
+drop database sy8rv4z72np7snjg;
+create database sy8rv4z72np7snjg;
+use sy8rv4z72np7snjg;
+
+source /home/mogo/w/4course/prozdep/database_scripts/create_database.sql
+source /home/mogo/w/4course/prozdep/database_scripts/insert_test_data.sql
+*/
+
 CREATE TABLE department(
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -8,6 +17,52 @@ CREATE TABLE scientist(
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   phone VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE teacher(
+  scientist_id INT,
+  position VARCHAR(255) NOT NULL,
+  degree VARCHAR(255),
+  start_date DATE NOT NULL,
+  department_id INT,
+  PRIMARY KEY(scientist_id),
+  FOREIGN KEY (scientist_id)
+  REFERENCES scientist(id),
+  FOREIGN KEY (department_id)
+  REFERENCES department(id)
+);
+
+CREATE TABLE master(
+  scientist_id INT,
+  topic VARCHAR(255) NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  teacher_id INT,
+  department_id INT,
+  PRIMARY KEY(scientist_id),
+  FOREIGN KEY (scientist_id)
+  REFERENCES scientist(id),
+  FOREIGN KEY (teacher_id)
+  REFERENCES teacher(scientist_id),
+  FOREIGN KEY (department_id)
+  REFERENCES department(id)
+);
+
+CREATE TABLE postgraduate(
+  scientist_id INT,
+  topic VARCHAR(255) NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  protection_date DATE NOT NULL,
+  teacher_id INT,
+  department_id INT,
+  PRIMARY KEY(scientist_id),
+  FOREIGN KEY (scientist_id)
+  REFERENCES scientist(id),
+  FOREIGN KEY (teacher_id)
+  REFERENCES teacher(scientist_id),
+  FOREIGN KEY (department_id)
+  REFERENCES department(id)
 );
 
 CREATE TABLE topic(
@@ -21,7 +76,7 @@ CREATE TABLE topic(
   FOREIGN KEY (department_id)
         REFERENCES department(id),
   FOREIGN KEY (chief_scientist_id)
-        REFERENCES scientist(id)
+        REFERENCES teacher(scientist_id)
 );
 
 CREATE TABLE paper(
@@ -59,52 +114,6 @@ CREATE TABLE scientist_paper(
         REFERENCES scientist(id),
   FOREIGN KEY (paper_id)
         REFERENCES paper(id)
-);
-
-CREATE TABLE teacher(
-  scientist_id INT,
-  position VARCHAR(255) NOT NULL,
-  degree VARCHAR(255),
-  start_date DATE NOT NULL,
-  department_id INT,
-  PRIMARY KEY(scientist_id),
-  FOREIGN KEY (scientist_id)
-        REFERENCES scientist(id),
-  FOREIGN KEY (department_id)
-        REFERENCES department(id)
-);
-
-CREATE TABLE master(
-  scientist_id INT,
-  topic VARCHAR(255) NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  teacher_id INT,
-  department_id INT,
-  PRIMARY KEY(scientist_id),
-  FOREIGN KEY (scientist_id)
-      REFERENCES scientist(id),
-  FOREIGN KEY (teacher_id)
-        REFERENCES teacher(scientist_id),
-  FOREIGN KEY (department_id)
-        REFERENCES department(id)
-);
-
-CREATE TABLE postgraduate(
-  scientist_id INT,
-  topic VARCHAR(255) NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  protection_date DATE NOT NULL,
-  teacher_id INT,
-  department_id INT,
-  PRIMARY KEY(scientist_id),
-  FOREIGN KEY (scientist_id)
-        REFERENCES scientist(id),
-  FOREIGN KEY (teacher_id)
-        REFERENCES teacher(scientist_id),
-  FOREIGN KEY (department_id)
-        REFERENCES department(id)
 );
 
 /*Needed to separate test data from real one*/
