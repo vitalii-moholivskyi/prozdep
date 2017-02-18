@@ -1,5 +1,6 @@
 package department;
 
+import department.config.MainConfig;
 import department.di.Injector;
 import department.ui.utils.UiUtils;
 import javafx.application.Application;
@@ -16,7 +17,7 @@ public final class Runner extends Application {
 	public void start(final Stage primaryStage) throws Exception {
 		// loads and initializes application
 		// context from specified XML file
-		Injector.initialize("appContext.xml");
+		Injector.initialize(MainConfig.class);
 		// load first view to show and setup primary stage
 		primaryStage.setScene(new Scene(UiUtils.newLoader("/view/main.fxml").load()));
 		primaryStage.show();

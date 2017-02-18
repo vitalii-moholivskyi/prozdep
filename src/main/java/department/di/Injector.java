@@ -16,18 +16,18 @@ public final class Injector {
 
     private AnnotationConfigApplicationContext context;
 
-    private Injector(String filePath) {
-        Objects.requireNonNull(filePath, "path to context file wasn't specified");
+    private Injector(Class configClass) {
+        Objects.requireNonNull(configClass, "config class wasn't specified");
         //this.context = new ClassPathXmlApplicationContext(filePath);
-        this.context = new AnnotationConfigApplicationContext(MainConfig.class);
+        this.context = new AnnotationConfigApplicationContext(configClass);
     }
 
-    public static Injector initialize(String filePath) {
+    public static Injector initialize(Class configClass) {
         Injector local = instance;
 
         if (local == null) {
             synchronized (Injector.class) {
-                Injector.instance = local = new Injector(filePath);
+                Injector.instance = local = new Injector(configClass);
             }
         }
         return local;
