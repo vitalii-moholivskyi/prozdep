@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
 import department.model.bo.Scientist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,6 +35,10 @@ public class ScientistDAO implements IScientistDAO{
         return jdbcTemplate.query(FIND_ALL, scientistMapper);
     }
 
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
 
     @Override
     public List<Scientist> findAll(long limit, long offset) {
@@ -43,8 +46,15 @@ public class ScientistDAO implements IScientistDAO{
     }
 
     @Override
-    public int count() {
-        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    public int count(String name) {
+        // TODO
+        return count();
+    }
+
+    @Override
+    public List<Scientist> findAll(String name, long limit, long offset) {
+        // TODO
+        return findAll(limit, offset);
     }
 
     @Override

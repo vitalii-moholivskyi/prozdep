@@ -43,6 +43,18 @@ public class DepartmentDAO implements IDepartmentDAO {
 	}
 
 	@Override
+	public int count(String name) {
+		// TODO
+		return count();
+	}
+
+	@Override
+	public List<Department> findAll(String name, long limit, long offset) {
+		// TODO
+		return findAll(limit, offset);
+	}
+
+	@Override
 	public int count() {
 		return jdbcTemplate.queryForObject(COUNT, Integer.class);
 	}

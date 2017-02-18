@@ -73,13 +73,25 @@ public class TopicDAO implements ITopicDAO{
     }
 
     @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
+
+    @Override
     public List<Topic> findAll(long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, topicMapper);
     }
 
     @Override
-    public int count() {
-        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    public int count(String name) {
+        // TODO
+        return count();
+    }
+
+    @Override
+    public List<Topic> findAll(String name, long limit, long offset) {
+        // TODO
+        return findAll(limit, offset);
     }
 
     @Override

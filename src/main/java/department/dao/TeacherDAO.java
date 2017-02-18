@@ -72,12 +72,25 @@ public class TeacherDAO implements ITeacherDAO{
     }
 
     @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
+
+    @Override
     public List<Teacher> findAll(long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, teacherMapper);
     }
+
     @Override
-    public int count() {
-        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    public int count(String name) {
+        // TODO
+        return count();
+    }
+
+    @Override
+    public List<Teacher> findAll(String name, long limit, long offset) {
+        // TODO
+        return findAll(limit, offset);
     }
 
     @Override

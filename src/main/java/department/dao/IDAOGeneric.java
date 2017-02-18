@@ -5,8 +5,12 @@ import java.util.List;
 public interface IDAOGeneric<T> {
 
 	List<T> findAll();
-	List<T> findAll(long limit, long offset);
+
 	int count();
+	List<T> findAll(long limit, long offset);
+
+	int count(String name);
+	List<T> findAll(String name, long limit, long offset);
 
 	T find(int id);
 	T find(int id, boolean isEager);
