@@ -50,7 +50,7 @@
                         </StackPane>
                     </items>
                 </ToolBar>
-                <TableView fx:id="tableView" />
+                <TableView fx:id="tableView" fixedCellSize="25.0" />
                 <Pagination fx:id="pagination" />
             </children>
         </VBox>
