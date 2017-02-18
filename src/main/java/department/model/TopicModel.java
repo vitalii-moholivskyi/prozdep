@@ -17,6 +17,7 @@ import department.model.bo.Teacher;
 import department.model.bo.Topic;
 import department.model.form.TopicCreateForm;
 import department.model.form.TopicUpdateForm;
+import department.model.mapper.TopicMapper;
 import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
@@ -44,7 +45,7 @@ public class TopicModel implements ITopicModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TopicMapper::toViewModel);
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class TopicModel implements ITopicModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TopicMapper::toViewModel);
 	}
 
 	@Override
@@ -77,7 +78,7 @@ public class TopicModel implements ITopicModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TopicMapper::toViewModel);
 	}
 
 	@Override
@@ -102,7 +103,6 @@ public class TopicModel implements ITopicModel {
 			model.setStartDate(result.getStartDate());
 			model.setName(result.getName());
 			model.setEndDate(result.getEndDate());
-			model.setClient(result.getClient());
 		} , errCallback::call);
 	}
 
@@ -116,7 +116,7 @@ public class TopicModel implements ITopicModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 
 }

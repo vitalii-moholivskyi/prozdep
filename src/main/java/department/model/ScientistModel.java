@@ -15,6 +15,7 @@ import department.dao.IScientistDAO;
 import department.model.bo.Scientist;
 import department.model.form.ScientistCreateForm;
 import department.model.form.ScientistUpdateForm;
+import department.model.mapper.ScientistMapper;
 import department.ui.controller.model.ScientistViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
@@ -44,7 +45,7 @@ public class ScientistModel implements IScientistModel {
 					} finally {
 						sub.onCompleted();
 					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(ScientistMapper::toViewModel);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class ScientistModel implements IScientistModel {
 					} finally {
 						sub.onCompleted();
 					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(ScientistMapper::toViewModel);
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class ScientistModel implements IScientistModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(ScientistMapper::toViewModel);
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class ScientistModel implements IScientistModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 
 }

@@ -15,6 +15,7 @@ import department.dao.IPaperDAO;
 import department.model.bo.Paper;
 import department.model.form.PaperCreateForm;
 import department.model.form.PaperUpdateForm;
+import department.model.mapper.PaperMapper;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
@@ -42,7 +43,7 @@ public class PaperModel implements IPaperModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PaperMapper::toViewModel);
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class PaperModel implements IPaperModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PaperMapper::toViewModel);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class PaperModel implements IPaperModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PaperMapper::toViewModel);
 	}
 
 	@Override
@@ -105,7 +106,7 @@ public class PaperModel implements IPaperModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 
 }
