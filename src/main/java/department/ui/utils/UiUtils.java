@@ -1,13 +1,16 @@
 package department.ui.utils;
 
 import department.di.Injector;
+import department.utils.TextUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.util.Callback;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
 import lombok.val;
+import rx.functions.Func1;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -17,6 +20,12 @@ import java.util.ResourceBundle;
 @Value
 @Getter(value = AccessLevel.NONE)
 public final class UiUtils {
+
+    public static final Func1<? super String, ? extends String> NULLABLE_FLD_MAPPER =
+            str -> TextUtils.isEmpty(str) ? "N/a" : str;
+
+    public static final Func1<? super Date, ? extends String> DATE_FLD_MAPPER =
+            date -> date == null ? "N/a" : date.toString();
 
     /**
      * default callback which takes controllers from app context as beans
