@@ -1,12 +1,5 @@
 package department.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-
-import department.model.bo.Paper;
-import department.model.bo.Topic;
 import department.model.bo.Department;
 import department.model.bo.Master;
 import department.model.bo.Teacher;
@@ -15,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import util.DateUtil;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class MasterDAO implements IMasterDAO{
@@ -247,7 +244,7 @@ public class MasterDAO implements IMasterDAO{
 	@Override
 	public List<Master> findAll(long limit, long offset) {
 		// TODO Auto-generated method stub
-		return Arrays.asList(Master.builder().build(), Master.builder().build());
+		return findAll();//Arrays.asList(Master.builder().build(), Master.builder().build());
 	}
 
 }

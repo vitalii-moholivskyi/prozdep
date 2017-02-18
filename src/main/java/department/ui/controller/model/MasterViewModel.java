@@ -21,7 +21,6 @@ public class MasterViewModel {
     int teacherId;
     BehaviorSubject<String> firstName;
     BehaviorSubject<String> phone;
-    BehaviorSubject<String> degree;
     BehaviorSubject<Date> startDate;
     BehaviorSubject<Date> endDate;
     BehaviorSubject<String> topic;
@@ -36,7 +35,6 @@ public class MasterViewModel {
 
         @NonFinal int teacherId;
         @NonFinal String phone;
-        @NonFinal String degree;
         @NonFinal Date endDate;
         @NonFinal String topic;
 
@@ -54,11 +52,6 @@ public class MasterViewModel {
 
         public Builder setPhone(String phone) {
             this.phone = phone;
-            return this;
-        }
-
-        public Builder setDegree(String degree) {
-            this.degree = degree;
             return this;
         }
 
@@ -83,7 +76,6 @@ public class MasterViewModel {
         this.teacherId = builder.getTeacherId();
         this.firstName = BehaviorSubject.create(builder.getFirstName());
         this.phone = BehaviorSubject.create(builder.getPhone());
-        this.degree = BehaviorSubject.create(builder.getDegree());
         this.startDate = BehaviorSubject.create(builder.getStartDate());
         this.endDate = BehaviorSubject.create(builder.getEndDate());
         this.topic = BehaviorSubject.create(builder.getTopic());
@@ -97,16 +89,32 @@ public class MasterViewModel {
         return teacherId;
     }
 
+    public String getFirstName() {
+        return firstName.getValue();
+    }
+
+    public String getPhone() {
+        return phone.getValue();
+    }
+
+    public Date getStartDate() {
+        return startDate.getValue();
+    }
+
+    public Date getEndDate() {
+        return endDate.getValue();
+    }
+
+    public String getTopic() {
+        return topic.getValue();
+    }
+
     public Observable<String> getFirstNameObs() {
         return firstName.asObservable();
     }
 
     public Observable<String> getPhoneObs() {
         return phone.asObservable();
-    }
-
-    public Observable<String> getDegreeObs() {
-        return degree.asObservable();
     }
 
     public Observable<Date> getStartDateObs() {

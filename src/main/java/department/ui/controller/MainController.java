@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.util.TreeMap;
 import java.util.logging.Level;
 
 /**
@@ -32,27 +33,70 @@ public final class MainController {
     private static final String POSTGRADUATES_VIEW_TAB_ID = "id_view_postgraduates";
     private static final String MASTERS_CREATE_TAB_ID = "id_create_masters";
 
-    @FXML
-    private Parent viewRoot;
-    @FXML
-    private TabPane contentTabPane;
+    private static long idGenerator;
 
-    @FXML
-    private Button viewMasterButton;
-    @FXML
-    private ProgressBar progressBar;
+    @FXML private Parent viewRoot;
+    @FXML private TabPane contentTabPane;
+
+    @FXML private ProgressBar progressBar;
+    @FXML private Label progressMessageLabel;
+    @FXML private Label errorMessageLabel;
+
+    private final TreeMap<Long, String> idToProgressMsg;
+    private final TreeMap<Long, String> idToErrMsg;
 
     @Autowired
     public MainController(IMasterModel model) {
-        //   model.fetchMasters(null, -1, -1);
+        idToProgressMsg = new TreeMap<>();
+        idToErrMsg = new TreeMap<>();
     }
 
-    public void showProgressDialog() {
+    public long showProgress(String message) {
+        progressMessageLabel.setVisible(true);
+        progressMessageLabel.setText(message);
         progressBar.setVisible(true);
+        idToProgressMsg.put(idGenerator, message);
+        return idGenerator++;
     }
 
-    public void hideProgressDialog() {
+    public void hideProgress() {
         progressBar.setVisible(false);
+        progressMessageLabel.setVisible(false);
+        idToProgressMsg.clear();
+    }
+
+    public void hideProgress(long id) {
+
+        if(idToProgressMsg.remove(id) != null) {
+            if(idToProgressMsg.isEmpty()) {
+                hideProgress();
+            } else {
+                progressMessageLabel.setText(idToProgressMsg.get(idToProgressMsg.keySet().iterator().next()));
+            }
+        }
+    }
+
+    public long showError(String message) {
+        errorMessageLabel.setVisible(true);
+        errorMessageLabel.setText(message);
+        idToErrMsg.put(idGenerator, message);
+        return idGenerator++;
+    }
+
+    public void hideError() {
+        errorMessageLabel.setVisible(false);
+        idToErrMsg.clear();
+    }
+
+    public void hideError(long id) {
+
+        if(idToErrMsg.remove(id) != null) {
+            if(idToErrMsg.isEmpty()) {
+                hideError();
+            } else {
+                errorMessageLabel.setText(idToErrMsg.get(idToErrMsg.keySet().iterator().next()));
+            }
+        }
     }
 
     @FXML
