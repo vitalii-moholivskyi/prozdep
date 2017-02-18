@@ -2,6 +2,7 @@ package department.ui.controller;
 
 import department.model.IMasterModel;
 import department.ui.controller.model.MasterViewModel;
+import department.ui.utils.FxSchedulers;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.scene.control.TableColumn;
@@ -9,10 +10,12 @@ import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.Observable;
 import rx.functions.Func1;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -41,18 +44,16 @@ public final class MasterTabController extends ListTabController<MasterViewModel
     protected void doInitialize() {
 
         final TableColumn<MasterViewModel, String> firstNameCol = new TableColumn<>("Ім'я"),
-                phoneCol = new TableColumn<>("Телефон"), degreeCol = new TableColumn<>("Ступінь"),
-                topicCol = new TableColumn<>("Тема"), startDateCol = new TableColumn<>("Вступ"),
-                endDateCol = new TableColumn<>("Випуск");
+                phoneCol = new TableColumn<>("Телефон"), topicCol = new TableColumn<>("Тема"),
+                startDateCol = new TableColumn<>("Вступ"), endDateCol = new TableColumn<>("Випуск");
 
         firstNameCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getFirstNameObs()));
         phoneCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getPhoneObs().map(NULLABLE_FLD_MAPPER)));
-        degreeCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDegreeObs().map(NULLABLE_FLD_MAPPER)));
         topicCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getTopicObs().map(NULLABLE_FLD_MAPPER)));
         startDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getStartDateObs().map(DATE_FLD_MAPPER)));
         endDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getEndDateObs().map(DATE_FLD_MAPPER)));
         // setup table columns and content
-        tableView.getColumns().addAll(firstNameCol, degreeCol, phoneCol, topicCol, startDateCol, endDateCol);
+        tableView.getColumns().addAll(firstNameCol, phoneCol, topicCol, startDateCol, endDateCol);
 
         val size = tableView.getColumns().size();
 
@@ -68,11 +69,22 @@ public final class MasterTabController extends ListTabController<MasterViewModel
     }
 
     private void fetchMasters(long offset, long limit) {
+        val toastId = mainController.showProgress("Loading masters...");
+
         model.fetchMasters(offset, limit)
-                .doOnSubscribe(mainController::showProgressDialog)
-                .doOnTerminate(mainController::hideProgressDialog)
+                .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent,
-                        th -> /*todo redo*/log.log(Level.WARNING, "Failed to fetch masters", th));
+                        th -> {
+                            val errId = mainController.showError("Failed to retrieve master list... Try again later");
+
+                            log.log(Level.WARNING, "Failed to fetch masters", th);
+                            Observable.defer(() -> Observable.just(null))
+                                    .delay(2, TimeUnit.SECONDS)
+                                    .observeOn(FxSchedulers.platform())
+                                    .doOnNext(obj -> mainController.hideError(errId))
+                                    .subscribe();
+                        }
+                );
     }
 
     private void setTableContent(Collection<? extends MasterViewModel> masters) {

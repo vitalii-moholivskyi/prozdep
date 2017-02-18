@@ -18,10 +18,9 @@ import java.util.Date;
 public class MasterViewModel {
 
     int id;
-    int teacherId;
+    BehaviorSubject<Integer> teacherId;
     BehaviorSubject<String> firstName;
     BehaviorSubject<String> phone;
-    BehaviorSubject<String> degree;
     BehaviorSubject<Date> startDate;
     BehaviorSubject<Date> endDate;
     BehaviorSubject<String> topic;
@@ -36,12 +35,11 @@ public class MasterViewModel {
 
         @NonFinal int teacherId;
         @NonFinal String phone;
-        @NonFinal String degree;
         @NonFinal Date endDate;
         @NonFinal String topic;
 
         public Builder(int id, String firstName, Date startDate) {
-            Preconditions.checkArgument(id > 0, "id > 0");
+            Preconditions.checkArgument(id > 0, "id <= 0");
             this.id = id;
             this.firstName = Preconditions.notNull(firstName);
             this.startDate = Preconditions.notNull(startDate);
@@ -54,11 +52,6 @@ public class MasterViewModel {
 
         public Builder setPhone(String phone) {
             this.phone = phone;
-            return this;
-        }
-
-        public Builder setDegree(String degree) {
-            this.degree = degree;
             return this;
         }
 
@@ -80,10 +73,9 @@ public class MasterViewModel {
 
     private MasterViewModel(Builder builder) {
         this.id = builder.getId();
-        this.teacherId = builder.getTeacherId();
+        this.teacherId = BehaviorSubject.create(builder.getTeacherId());
         this.firstName = BehaviorSubject.create(builder.getFirstName());
         this.phone = BehaviorSubject.create(builder.getPhone());
-        this.degree = BehaviorSubject.create(builder.getDegree());
         this.startDate = BehaviorSubject.create(builder.getStartDate());
         this.endDate = BehaviorSubject.create(builder.getEndDate());
         this.topic = BehaviorSubject.create(builder.getTopic());
@@ -93,8 +85,52 @@ public class MasterViewModel {
         return id;
     }
 
+    public void setTeacherId(int id) {
+        this.teacherId.onNext(id);
+    }
+
     public int getTeacherId() {
-        return teacherId;
+        return teacherId.getValue();
+    }
+
+    public String getFirstName() {
+        return firstName.getValue();
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName.onNext(firstName);
+    }
+
+    public String getPhone() {
+        return phone.getValue();
+    }
+
+    public void setPhone(String phone) {
+        this.phone.onNext(phone);
+    }
+
+    public Date getStartDate() {
+        return startDate.getValue();
+    }
+
+    public void setStartDate(Date start) {
+        this.startDate.onNext(start);
+    }
+
+    public Date getEndDate() {
+        return endDate.getValue();
+    }
+
+    public void setEndDate(Date end) {
+        this.endDate.onNext(end);
+    }
+
+    public String getTopic() {
+        return topic.getValue();
+    }
+
+    public void setTopic(String topic) {
+        this.topic.onNext(topic);
     }
 
     public Observable<String> getFirstNameObs() {
@@ -103,10 +139,6 @@ public class MasterViewModel {
 
     public Observable<String> getPhoneObs() {
         return phone.asObservable();
-    }
-
-    public Observable<String> getDegreeObs() {
-        return degree.asObservable();
     }
 
     public Observable<Date> getStartDateObs() {

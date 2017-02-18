@@ -6,13 +6,14 @@ import department.model.bo.Master;
 import department.model.bo.Teacher;
 import department.model.form.MasterCreateForm;
 import department.model.form.MasterUpdateForm;
+import department.model.mapper.MasterMapper;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import javax.validation.constraints.Min;
@@ -35,7 +36,7 @@ public class MasterModel implements IMasterModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(MasterMapper::toViewModel);
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class MasterModel implements IMasterModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(MasterMapper::toViewModel);
 	}
 
 	@Override
@@ -67,29 +68,38 @@ public class MasterModel implements IMasterModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(MasterMapper::toViewModel);
 	}
 
-	@Override
-	public Observable<? extends MasterViewModel> update(MasterUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
+    @Override
+    public void update(@NotNull(message = "form cannot be null") MasterUpdateForm form,
+                       @NotNull(message = "model cannot be null") MasterViewModel model,
+                       @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback) {
+        Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
-			sub.onStart();
-			try {
-				val master = Master.builder().id(form.getId())
-						.teacher(Teacher.builder().id(form.getTeacher()).build())
-						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
-						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
-						.phone(form.getPhone()).build();
-				masterDao.update(master);
-				sub.onNext(master);
-			} finally {
-				sub.onCompleted();
-			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
-	}
+            sub.onStart();
+            try {
+                val master = Master.builder().id(form.getId())
+                        .teacher(Teacher.builder().id(form.getTeacher()).build())
+                        .department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
+                        .startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
+                        .phone(form.getPhone()).build();
+                masterDao.update(master);
+                sub.onNext(master);
+            } finally {
+                sub.onCompleted();
+            }
+        })).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
+            model.setTeacherId(result.getTeacher().getId());
+            model.setFirstName(result.getName());
+            model.setPhone(result.getPhone());
+            model.setTopic(result.getTopic());
+            model.setEndDate(result.getEndDate());
+            model.setStartDate(result.getStartDate());
+        }, errCallback::call);
+    }
 
-	@Override
+    @Override
 	public Observable<? extends Integer> count() {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Integer>) sub -> {
 
@@ -99,6 +109,6 @@ public class MasterModel implements IMasterModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 }

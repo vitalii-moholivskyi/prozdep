@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
+<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
    <top>
       <ToolBar minHeight="40.0" minWidth="640.0" BorderPane.alignment="CENTER">
         <items>
@@ -23,8 +32,8 @@
                 <Menu mnemonicParsing="false" text="Переглянути">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#onViewMaster" text="Магістри" />
-                      <MenuItem mnemonicParsing="false" text="Викладачі" onAction="#onViewTeacher"/>
-                      <MenuItem mnemonicParsing="false" text="Аспіранти" onAction="#onViewPostgraduate"/>
+                      <MenuItem mnemonicParsing="false" onAction="#onViewTeacher" text="Викладачі" />
+                      <MenuItem mnemonicParsing="false" onAction="#onViewPostgraduate" text="Аспіранти" />
                         <MenuItem mnemonicParsing="false" text="Наукові теми" />
                         <MenuItem mnemonicParsing="false" text="Наукові роботи" />
                   </items>
@@ -64,6 +73,8 @@
       <ToolBar minHeight="20.0" BorderPane.alignment="CENTER">
          <items>
             <ProgressBar fx:id="progressBar" prefHeight="9.0" prefWidth="200.0" progress="0.0" />
+            <Label fx:id="progressMessageLabel" />
+            <Label fx:id="errorMessageLabel" layoutX="215.0" layoutY="10.0" />
          </items>
       </ToolBar>
    </bottom>
