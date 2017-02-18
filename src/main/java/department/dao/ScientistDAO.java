@@ -17,6 +17,11 @@ import org.springframework.stereotype.Repository;
 public class ScientistDAO implements IScientistDAO{
 
     private final static String FIND_ALL = "SELECT * FROM scientist;";
+    private final static String COUNT = "SELECT COUNT(*) FROM scientist;";
+    private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+            "FROM scientist " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
     private final static String FIND = "SELECT * FROM scientist WHERE id=?;";
     private final static String INSERT = "INSERT INTO scientist (id, name, phone) VALUES(DEFAULT,?,?);";
     private final static String UPDATE = "UPDATE scientist SET name=?, phone=? WHERE id = ?;";
@@ -31,11 +36,23 @@ public class ScientistDAO implements IScientistDAO{
         return jdbcTemplate.query(FIND_ALL, scientistMapper);
     }
 
+
+    @Override
+    public List<Scientist> findAll(long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, scientistMapper);
+    }
+
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
+
     @Override
     public Scientist find(int id) {
         List<Scientist> scientists = jdbcTemplate.query(FIND, new Object[]{id}, scientistMapper);
         return (scientists.isEmpty()) ? null : scientists.get(0);
     }
+
     @Override
     public Scientist find(int id, boolean isEager) {
         return find(id);
@@ -85,14 +102,4 @@ public class ScientistDAO implements IScientistDAO{
         }
     }
 
-	@Override
-	public List<Scientist> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public int count() {
-		// TODO Auto-generated method stub
-		return 5;
-	}
 }

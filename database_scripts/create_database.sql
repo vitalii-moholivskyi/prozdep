@@ -5,6 +5,7 @@ use sy8rv4z72np7snjg;
 
 source /home/mogo/w/4course/prozdep/database_scripts/create_database.sql
 source /home/mogo/w/4course/prozdep/database_scripts/insert_test_data.sql
+
 */
 
 CREATE TABLE department(

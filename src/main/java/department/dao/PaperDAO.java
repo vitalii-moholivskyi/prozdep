@@ -17,6 +17,11 @@ import org.springframework.stereotype.Repository;
 public class PaperDAO implements IPaperDAO{
 
     private final static String FIND_ALL = "SELECT * FROM paper;";
+    private final static String COUNT = "SELECT COUNT(*) FROM paper;";
+    private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+            "FROM paper " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
     private final static String FIND = "SELECT * FROM paper WHERE id=?;";
     private final static String INSERT = "INSERT INTO paper (id, name, type, year) VALUES(DEFAULT,?,?,?);";
     private final static String UPDATE = "UPDATE paper SET name=?, type=?, year=? WHERE id = ?;";
@@ -29,6 +34,16 @@ public class PaperDAO implements IPaperDAO{
     @Override
     public List<Paper> findAll() {
         return jdbcTemplate.query(FIND_ALL, paperMapper);
+    }
+
+    @Override
+    public List<Paper> findAll(long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, paperMapper);
+    }
+
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
     }
 
     @Override
@@ -120,14 +135,4 @@ public class PaperDAO implements IPaperDAO{
         }
     }
 
-	@Override
-	public List<Paper> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public int count() {
-		// TODO Auto-generated method stub
-		return 5;
-	}
 }

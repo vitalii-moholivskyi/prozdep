@@ -20,6 +20,11 @@ import util.DateUtil;
 public class TopicDAO implements ITopicDAO{
 
     private final static String FIND_ALL = "SELECT * FROM topic;";
+    private final static String COUNT = "SELECT COUNT(*) FROM topic;";
+    private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+            "FROM topic " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
     private final static String FIND = "SELECT * FROM topic WHERE id=?;";
     private final static String FIND_EAGER = "SELECT t.id AS topic_id, " +
             "t.name AS topic_name," +
@@ -57,19 +62,29 @@ public class TopicDAO implements ITopicDAO{
             "WHERE id = ?;";
     private final static String REMOVE = "DELETE FROM topic WHERE id=?;";
 
-    private final TopicMapper paperMapper = new TopicMapper();
+    private final TopicMapper topicMapper = new TopicMapper();
     private final EagerTopicMapper eagerTopicMapper = new EagerTopicMapper();
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Topic> findAll() {
-        return jdbcTemplate.query(FIND_ALL, paperMapper);
+        return jdbcTemplate.query(FIND_ALL, topicMapper);
+    }
+
+    @Override
+    public List<Topic> findAll(long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, topicMapper);
+    }
+
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
     }
 
     @Override
     public Topic find(int id) {
-        List<Topic>  topics = jdbcTemplate.query(FIND, new Object[] { id }, paperMapper);
+        List<Topic>  topics = jdbcTemplate.query(FIND, new Object[] { id }, topicMapper);
         return topics.isEmpty() ? null : topics.get(0);
     }
 
@@ -212,11 +227,11 @@ public class TopicDAO implements ITopicDAO{
             return topic;*/
             return Topic
                     .builder()
-                        .id(rs.getInt("id"))
-                        .name(rs.getString("name"))
-                        .client(rs.getString("client"))
-                        .startDate(rs.getDate("start_date"))
-                        .endDate(rs.getDate("end_date"))
+                        .id(rs.getInt("topic_id"))
+                        .name(rs.getString("topic_name"))
+                        .client(rs.getString("topic_client"))
+                        .startDate(rs.getDate("topic_start_date"))
+                        .endDate(rs.getDate("topic_end_date"))
                         .department(Department
                                 .builder()
                                     .id(rs.getInt("department_id"))
@@ -236,14 +251,4 @@ public class TopicDAO implements ITopicDAO{
         }
     }
 
-	@Override
-	public List<Topic> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public int count() {
-		// TODO Auto-generated method stub
-		return 5;
-	}
 }
