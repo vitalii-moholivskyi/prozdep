@@ -6,6 +6,7 @@ import department.model.form.PostgraduateUpdateForm;
 
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
+import rx.functions.Action1;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -63,9 +64,17 @@ public interface IPostgraduateModel {
 	@NotNull
 	Observable<? extends PostgraduateViewModel> create(@NotNull(message = "form cannot be null") PostgraduateCreateForm form);
 
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
 	@NotNull
-	Observable<? extends PostgraduateViewModel> update(@NotNull(message = "form cannot be null") PostgraduateUpdateForm postgraduate);
-
+	void update(@NotNull(message = "form cannot be null") PostgraduateUpdateForm form,
+			@NotNull(message = "model cannot be null") PostgraduateViewModel model,
+			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
+	
+	
 	Observable<? extends Integer> count();
 
 	// add other methods below...

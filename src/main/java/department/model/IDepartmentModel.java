@@ -3,6 +3,7 @@ package department.model;
 import java.util.Collection;
 import department.model.form.DepartmentCreateForm;
 import department.model.form.DepartmentUpdateForm;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 
 import department.ui.controller.model.DepartmentViewModel;
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * @author Nikolay
@@ -63,10 +65,21 @@ public interface IDepartmentModel {
 	@NotNull
 	Observable<? extends DepartmentViewModel> create(@NotNull(message = "form cannot be null") DepartmentCreateForm form);
 
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
 	@NotNull
-	Observable<? extends DepartmentViewModel> update(@NotNull(message = "form cannot be null") DepartmentUpdateForm department);
-
+	void update(@NotNull(message = "form cannot be null") DepartmentUpdateForm form,
+			@NotNull(message = "model cannot be null") DepartmentViewModel model,
+			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
+	/**
+	 * 
+	 * @return count
+	 */
 	Observable<? extends Integer> count();
+
 
 	// add other methods below...
 }

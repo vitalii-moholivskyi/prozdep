@@ -20,47 +20,63 @@ import java.util.Collection;
 @Validated
 public interface IMasterModel {
 
-    /**
-     * Fetches masters
-     *
-     * @param offset number of elements to skip, inclusive
-     * @param limit  max number to fetch, inclusive
-     * @throws IllegalArgumentException if offset < 0 or limit < 0
-     */
-    @NotNull(message = "Null is not allowed")
-    Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit);
+	/**
+	 * Fetches masters
+	 *
+	 * @param offset
+	 *            number of elements to skip, inclusive
+	 * @param limit
+	 *            max number to fetch, inclusive
+	 * @throws IllegalArgumentException
+	 *             if offset < 0 or limit < 0
+	 */
+	@NotNull(message = "Null is not allowed")
+	Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit);
 
-    /**
-     * Fetches masters by user query asynchronously
-     *
-     * @param query  query to search by
-     * @param offset number of elements to skip, inclusive
-     * @param limit  max number to fetch, inclusive
-     * @throws IllegalArgumentException if offset < 0 or limit < 0
-     * @throws NullPointerException     if query is null
-     */
-    @NotNull
-    Observable<Collection<? extends MasterViewModel>> fetchMasters(@NotNull(message = "query cannot be null") String query,
-                                                                   @Min(0) long offset, @Min(0) long limit);
+	/**
+	 * Fetches masters by user query asynchronously
+	 *
+	 * @param query
+	 *            query to search by
+	 * @param offset
+	 *            number of elements to skip, inclusive
+	 * @param limit
+	 *            max number to fetch, inclusive
+	 * @throws IllegalArgumentException
+	 *             if offset < 0 or limit < 0
+	 * @throws NullPointerException
+	 *             if query is null
+	 */
+	@NotNull
+	Observable<Collection<? extends MasterViewModel>> fetchMasters(
+			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit);
 
-    /**
-     * Updates master asynchronously
-     *
-     * @param form update form
-     * @return rx observable which will return updated master after completion
-     * @throws IllegalArgumentException if offset < 0 or limit < 0
-     * @throws NullPointerException     if form is null
-     */
-    @NotNull
-    Observable<? extends MasterViewModel> create(@NotNull(message = "form cannot be null") MasterCreateForm form);
-    
-    void update(@NotNull(message = "form cannot be null") MasterUpdateForm master,
-                @NotNull(message = "model cannot be null") MasterViewModel model,
-                @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
+	/**
+	 * Updates master asynchronously
+	 *
+	 * @param form
+	 *            update form
+	 * @return rx observable which will return updated master after completion
+	 * @throws IllegalArgumentException
+	 *             if offset < 0 or limit < 0
+	 * @throws NullPointerException
+	 *             if form is null
+	 */
+	@NotNull
+	Observable<? extends MasterViewModel> create(@NotNull(message = "form cannot be null") MasterCreateForm form);
 
-    @NotNull
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
+	@NotNull
+	void update(@NotNull(message = "form cannot be null") MasterUpdateForm master,
+			@NotNull(message = "model cannot be null") MasterViewModel model,
+			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
+
+	@NotNull
 	Observable<? extends Integer> count();
 
-
-    // add other methods below...
+	// add other methods below...
 }

@@ -71,35 +71,32 @@ public class MasterModel implements IMasterModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(MasterMapper::toViewModel);
 	}
 
-    @Override
-    public void update(@NotNull(message = "form cannot be null") MasterUpdateForm form,
-                       @NotNull(message = "model cannot be null") MasterViewModel model,
-                       @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback) {
-        Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
+	@Override
+	public void update(MasterUpdateForm form, MasterViewModel model, Action1<? super Throwable> errCallback) {
+		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
-            sub.onStart();
-            try {
-                val master = Master.builder().id(form.getId())
-                        .teacher(Teacher.builder().id(form.getTeacher()).build())
-                        .department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
-                        .startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
-                        .phone(form.getPhone()).build();
-                masterDao.update(master);
-                sub.onNext(master);
-            } finally {
-                sub.onCompleted();
-            }
-        })).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
-            model.setTeacherId(result.getTeacher().getId());
-            model.setFirstName(result.getName());
-            model.setPhone(result.getPhone());
-            model.setTopic(result.getTopic());
-            model.setEndDate(result.getEndDate());
-            model.setStartDate(result.getStartDate());
-        }, errCallback::call);
-    }
+			sub.onStart();
+			try {
+				val master = Master.builder().id(form.getId()).teacher(Teacher.builder().id(form.getTeacher()).build())
+						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
+						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
+						.phone(form.getPhone()).build();
+				masterDao.update(master);
+				sub.onNext(master);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
+			model.setTeacherId(result.getTeacher().getId());
+			model.setFirstName(result.getName());
+			model.setPhone(result.getPhone());
+			model.setTopic(result.getTopic());
+			model.setEndDate(result.getEndDate());
+			model.setStartDate(result.getStartDate());
+		} , errCallback::call);
+	}
 
-    @Override
+	@Override
 	public Observable<? extends Integer> count() {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Integer>) sub -> {
 

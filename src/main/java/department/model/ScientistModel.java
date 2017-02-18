@@ -19,6 +19,7 @@ import department.ui.controller.model.ScientistViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -69,12 +70,8 @@ public class ScientistModel implements IScientistModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(scientistDao
-						.insert(Scientist
-								.builder()
-								.phone(form.getPhone())
-								.name(form.getName())
-								.build()));
+				sub.onNext(
+						scientistDao.insert(Scientist.builder().phone(form.getPhone()).name(form.getName()).build()));
 			} finally {
 				sub.onCompleted();
 			}
@@ -82,23 +79,22 @@ public class ScientistModel implements IScientistModel {
 	}
 
 	@Override
-	public Observable<? extends ScientistViewModel> update(ScientistUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
+	public void update(ScientistUpdateForm form, ScientistViewModel model, Action1<? super Throwable> errCallback) {
+		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
 
 			sub.onStart();
 			try {
-				val scientist = Scientist
-						.builder()
-						.id(form.getId())
-						.phone(form.getPhone())
-						.name(form.getName())
+				val scientist = Scientist.builder().id(form.getId()).phone(form.getPhone()).name(form.getName())
 						.build();
 				scientistDao.update(scientist);
 				sub.onNext(scientist);
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
+			model.setFirstName(result.getName());
+			model.setPhone(result.getPhone());
+		} , errCallback::call);
 	}
 
 	@Override

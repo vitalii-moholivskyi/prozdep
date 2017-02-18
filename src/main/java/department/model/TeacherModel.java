@@ -12,6 +12,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import javax.validation.constraints.Min;
@@ -74,8 +75,8 @@ public class TeacherModel implements ITeacherModel {
 	}
 
 	@Override
-	public Observable<? extends TeacherViewModel> update(TeacherUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Teacher>) sub -> {
+	public void update(TeacherUpdateForm form, TeacherViewModel model, Action1<? super Throwable> errCallback) {
+		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Teacher>) sub -> {
 
 			sub.onStart();
 			try {
@@ -88,7 +89,14 @@ public class TeacherModel implements ITeacherModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
+			model.setFirstName(result.getName());
+			model.setStartDate(result.getStartDate());
+			model.setPhone(result.getPhone());
+			model.setDegree(result.getDegree());
+			model.setDepartment(result.getDepartment().getId());
+			model.setPosition(result.getPosition());
+		} , errCallback::call);
 	}
 
 	@Override

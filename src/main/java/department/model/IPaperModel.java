@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 
 import department.ui.controller.model.PaperViewModel;
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * @author Nikolay
@@ -63,10 +64,17 @@ public interface IPaperModel {
 	@NotNull
 	Observable<? extends PaperViewModel> create(@NotNull(message = "form cannot be null") PaperCreateForm form);
 
-	@NotNull
-	Observable<? extends PaperViewModel> update(@NotNull(message = "form cannot be null") PaperUpdateForm paper);
-
 	Observable<? extends Integer> count();
+
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
+	@NotNull
+	void update(@NotNull(message = "form cannot be null") PaperUpdateForm form,
+			@NotNull(message = "model cannot be null") PaperViewModel model,
+			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 
 	// add other methods below...
 }
