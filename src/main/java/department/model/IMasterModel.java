@@ -1,11 +1,11 @@
 package department.model;
 
-import department.ui.controller.model.MasterViewModel;
 import department.model.form.MasterCreateForm;
 import department.model.form.MasterUpdateForm;
-
+import department.ui.controller.model.MasterViewModel;
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
+import rx.functions.Action1;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -54,9 +54,11 @@ public interface IMasterModel {
     @NotNull
     Observable<? extends MasterViewModel> create(@NotNull(message = "form cannot be null") MasterCreateForm form);
     
-    @NotNull
-	Observable<? extends MasterViewModel> update(@NotNull(message = "form cannot be null") MasterUpdateForm master);
+    void update(@NotNull(message = "form cannot be null") MasterUpdateForm master,
+                @NotNull(message = "model cannot be null") MasterViewModel model,
+                @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 
+    @NotNull
 	Observable<? extends Integer> count();
 
 

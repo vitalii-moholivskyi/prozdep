@@ -18,7 +18,7 @@ import java.util.Date;
 public class MasterViewModel {
 
     int id;
-    int teacherId;
+    BehaviorSubject<Integer> teacherId;
     BehaviorSubject<String> firstName;
     BehaviorSubject<String> phone;
     BehaviorSubject<Date> startDate;
@@ -39,7 +39,7 @@ public class MasterViewModel {
         @NonFinal String topic;
 
         public Builder(int id, String firstName, Date startDate) {
-            Preconditions.checkArgument(id > 0, "id > 0");
+            Preconditions.checkArgument(id > 0, "id <= 0");
             this.id = id;
             this.firstName = Preconditions.notNull(firstName);
             this.startDate = Preconditions.notNull(startDate);
@@ -73,7 +73,7 @@ public class MasterViewModel {
 
     private MasterViewModel(Builder builder) {
         this.id = builder.getId();
-        this.teacherId = builder.getTeacherId();
+        this.teacherId = BehaviorSubject.create(builder.getTeacherId());
         this.firstName = BehaviorSubject.create(builder.getFirstName());
         this.phone = BehaviorSubject.create(builder.getPhone());
         this.startDate = BehaviorSubject.create(builder.getStartDate());
@@ -85,28 +85,52 @@ public class MasterViewModel {
         return id;
     }
 
+    public void setTeacherId(int id) {
+        this.teacherId.onNext(id);
+    }
+
     public int getTeacherId() {
-        return teacherId;
+        return teacherId.getValue();
     }
 
     public String getFirstName() {
         return firstName.getValue();
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName.onNext(firstName);
+    }
+
     public String getPhone() {
         return phone.getValue();
+    }
+
+    public void setPhone(String phone) {
+        this.phone.onNext(phone);
     }
 
     public Date getStartDate() {
         return startDate.getValue();
     }
 
+    public void setStartDate(Date start) {
+        this.startDate.onNext(start);
+    }
+
     public Date getEndDate() {
         return endDate.getValue();
     }
 
+    public void setEndDate(Date end) {
+        this.endDate.onNext(end);
+    }
+
     public String getTopic() {
         return topic.getValue();
+    }
+
+    public void setTopic(String topic) {
+        this.topic.onNext(topic);
     }
 
     public Observable<String> getFirstNameObs() {
