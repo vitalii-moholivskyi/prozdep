@@ -30,18 +30,21 @@ public class DaoTestSuit {
     private IMasterDAO masterDAO;
     @Autowired
     private IPostgraduateDAO postgraduateDAO;
-/*
+
     @Test
     public void testDepartmentDao() {
-        Department department = new Department("Super", "+380");
+        Department department = Department.builder()
+                .name("Some name")
+                .phone("+3 603 320")
+                .build();
+
         System.out.println("Before insert:" + department);
-        departmentDAO.insert(department);
+        department = departmentDAO.insert(department);
         System.out.println("Find after insert:");
         System.out.println(departmentDAO.find(department.getId()));
 
-        System.out.println("Find All:");
         System.out.println(departmentDAO.findAll());
-        department.setName("New Super");
+        department = department.toBuilder().name("New Name").phone("New Phone").build();
         System.out.println("Before update:" + department);
         departmentDAO.update(department);
         System.out.println("Find after update:");
@@ -50,65 +53,93 @@ public class DaoTestSuit {
         departmentDAO.remove(department);
         System.out.println("Find after remove:");
         System.out.println(departmentDAO.find(department.getId()));
+
+        System.out.println("Find All:");
+        System.out.println("Count:" + departmentDAO.count());
+        System.out.println("Find all with limit, offset:" + departmentDAO.findAll(2,1));
     }
 
     @Test
     public void testScientistDao(){
-        Scientist scientist = new Scientist("Super", "+380");
+        Scientist scientist = Scientist.builder()
+                .name("Super")
+                .phone("+380")
+                .build();
 
         System.out.println("Before insert:" + scientist);
-        scientistDAO.insert(scientist);
+        scientist = scientistDAO.insert(scientist);
         System.out.println("Find after insert:" + scientistDAO.find(scientist.getId()));
-        System.out.println("Find All:" + scientistDAO.findAll());
 
-        scientist.setName("New Super");
-        scientist.setPhone("New Phone");
+
+        scientist = scientist.toBuilder()
+                .name("New Super")
+                .phone("New Phone")
+                .build();
+
         scientistDAO.update(scientist);
         System.out.println("Find after update:" + scientistDAO.find(scientist.getId()));
 
         scientistDAO.remove(scientist);
         System.out.println("Find after delete:" + scientistDAO.find(scientist.getId()));
+
+        System.out.println("Find All:" + scientistDAO.findAll());
+        System.out.println("Count:" + scientistDAO.count());
+        System.out.println("Find all with limit, offset:" + scientistDAO.findAll(5,10));
     }
 
     @Test
     public void testPaperDao(){
-        Paper paper = new Paper("Ремонт чайників у космосі", "дослідницька робота", 2017);
+        Paper paper = Paper.builder()
+                .name("Ремонт чайників у космосі")
+                .type("дослідницька робота")
+                .year(2017)
+                .build();
 
         System.out.println("Before insert:" + paper);
-        paperDAO.insert(paper);
+        paper = paperDAO.insert(paper);
         System.out.println("Find after insert:" + paperDAO.find(paper.getId()));
-        System.out.println("Find All:" + paperDAO.findAll());
 
-        paper.setName("NEW Ремонт чайників у космосі\"");
-        paper.setType("New дослідницька робота");
-        paper.setYear(2018);
+        paper = paper.toBuilder()
+                .name("NEW Ремонт чайників у космосі\"")
+                .type("New дослідницька робота")
+                .year(2018)
+                .build();
+
         paperDAO.update(paper);
         System.out.println("Find after update:" + paperDAO.find(paper.getId()));
 
         paperDAO.remove(paper);
         System.out.println("Find after delete:" + paperDAO.find(paper.getId()));
+
+        System.out.println("Find All:" + paperDAO.findAll());
+        System.out.println("Count:" + paperDAO.count());
+        System.out.println("Find all with limit, offset:" + paperDAO.findAll(5,10));
     }
 
     @Test
     public void testTopicDao(){
-        Topic topic = new Topic("Використання BigData для побудови піар компаній",
-                "компанія \"Ваш Піар\"",
-                DateUtil.getDate("31.09.2009"),
-                DateUtil.getDate("31.09.2019"),
-                new Department(2),
-                new Teacher(2));
+        Topic topic = Topic.builder()
+                .name("Використання BigData для побудови піар компаній")
+                .client("компанія \"Ваш Піар\"")
+                .startDate(DateUtil.getDate("31.09.2009"))
+                .endDate(DateUtil.getDate("31.09.2019"))
+                .department(Department.builder().id(2).build())
+                .chiefScientist(Teacher.builder().id(2).build())
+                .build();
 
         System.out.println("Before insert:" + topic);
-        topicDAO.insert(topic);
+        topic = topicDAO.insert(topic);
         System.out.println("Find after insert:" + topicDAO.find(topic.getId()));
-        System.out.println("Find All:" + topicDAO.findAll());
 
-        topic.setName("NEW Використання BigData для побудови піар компаній");
-        topic.setCliect("New компанія \"Ваш Піар\"");
-        topic.setStartDate(DateUtil.getDate("31.09.2010"));
-        topic.setEndDate(DateUtil.getDate("31.09.2020"));
-        topic.setDepartment(new Department(1));
-        topic.setChiefScientist(new Teacher(1));
+        topic = topic.toBuilder()
+                .name("NEW Використання BigData для побудови піар компаній")
+                .client("New компанія \"Ваш Піар\"")
+                .startDate(DateUtil.getDate("31.09.2010"))
+                .endDate(DateUtil.getDate("31.09.2020"))
+                .department(Department.builder().id(1).build())
+                .chiefScientist(Teacher.builder().id(1).build())
+                .build();
+
         topicDAO.update(topic);
         System.out.println("Find after update:" + topicDAO.find(topic.getId()));
 
@@ -116,24 +147,36 @@ public class DaoTestSuit {
 
         topicDAO.remove(topic);
         System.out.println("Find after delete:" + topicDAO.find(topic.getId()));
+
+        System.out.println("Find All:" + topicDAO.findAll());
+        System.out.println("Count:" + topicDAO.count());
+        System.out.println("Find all with limit, offset:" + topicDAO.findAll(5,10));
     }
 
     @Test
     public void testTeacherDao(){
-        Teacher teacher = new Teacher(4,
-                "Доцент",
-                "Доцент",
-                DateUtil.getDate("31.09.2020"), new Department(2));
+        Teacher teacher = Teacher.builder()
+                .name("Super")
+                .phone("+380")
+                .position("Доцент")
+                .degree("Доцент")
+                .startDate(DateUtil.getDate("31.09.2020"))
+                .department(Department.builder().id(2).build())
+                .build();
 
         System.out.println("Before insert:" + teacher);
-        teacherDAO.insert(teacher);
+        teacher = teacherDAO.insert(teacher);
         System.out.println("Find after insert:" + teacherDAO.find(teacher.getId()));
-        System.out.println("Find All:" + teacherDAO.findAll());
 
-        teacher.setDegree("New Доцент");
-        teacher.setPosition("New Доцент");
-        teacher.setStartDate(DateUtil.getDate("31.09.2021"));
-        teacher.getDepartment().setId(1);
+        teacher = teacher.toBuilder()
+                .name("NEW Super")
+                .phone("+NEW 380")
+                .degree("New Доцент")
+                .position("New Доцент")
+                .startDate(DateUtil.getDate("31.09.2021"))
+                .department(Department.builder().id(1).build())
+                .build();
+
         teacherDAO.update(teacher);
         System.out.println("Find after update:" + teacherDAO.find(teacher.getId()));
 
@@ -141,28 +184,40 @@ public class DaoTestSuit {
 
         teacherDAO.remove(teacher);
         System.out.println("Find after delete:" + teacherDAO.find(teacher.getId()));
+
+        System.out.println("Find All:" + teacherDAO.findAll());
+        System.out.println("Count:" + teacherDAO.count());
+        System.out.println("Find all with limit, offset:" + teacherDAO.findAll(1,1));
     }
+
+
     @Test
     public void testPostgraduateDao(){
-        Postgraduate postgraduate = new Postgraduate(3,
-                "Haskell як релігія",
-                DateUtil.getDate("31.09.2000"),
-                DateUtil.getDate("31.09.2010"),
-                DateUtil.getDate("31.10.2010"),
-                new Teacher(2),
-                new Department(2));
+        Postgraduate postgraduate = Postgraduate.builder()
+                .name("Super")
+                .phone("+380")
+                .topic( "Haskell як релігія")
+                .startDate(DateUtil.getDate("31.09.2000"))
+                .endDate(DateUtil.getDate("31.09.2010"))
+                .protectionDate(DateUtil.getDate("31.10.2010"))
+                .teacher(Teacher.builder().id(2).build())
+                .department(Department.builder().id(2).build())
+                .build();
 
         System.out.println("Before insert:" + postgraduate);
-        postgraduateDAO.insert(postgraduate);
+        postgraduate = postgraduateDAO.insert(postgraduate);
         System.out.println("Find after insert:" + postgraduateDAO.find(postgraduate.getId()));
-        System.out.println("Find All:" + postgraduateDAO.findAll());
 
-        postgraduate.setTopic("New Haskell як релігія");
-        postgraduate.setStartDate(DateUtil.getDate("31.09.2010"));
-        postgraduate.setEndDate(DateUtil.getDate("31.09.2020"));
-        postgraduate.setProtectionDate(DateUtil.getDate("31.10.2020"));
-        postgraduate.setTeacher(new Teacher(1));
-        postgraduate.getDepartment().setId(1);
+        postgraduate = postgraduate.toBuilder()
+                .name("NEW Super")
+                .phone("+NEW 380")
+                .topic("New Haskell як релігія")
+                .startDate(DateUtil.getDate("31.09.2010"))
+                .endDate(DateUtil.getDate("31.09.2020"))
+                .protectionDate(DateUtil.getDate("31.10.2020"))
+                .teacher(Teacher.builder().id(1).build())
+                .department(Department.builder().id(1).build())
+                .build();
         postgraduateDAO.update(postgraduate);
         System.out.println("Find after update:" + postgraduateDAO.find(postgraduate.getId()));
 
@@ -170,23 +225,37 @@ public class DaoTestSuit {
 
         postgraduateDAO.remove(postgraduate);
         System.out.println("Find after delete:" + postgraduateDAO.find(postgraduate.getId()));
+
+        System.out.println("Find All:" + postgraduateDAO.findAll());
+        System.out.println("Count:" + postgraduateDAO.count());
+        System.out.println("Find all with limit, offset:" + postgraduateDAO.findAll(1,2));
     }
     @Test
     public void testMasterDao(){
-        Master master = new Master(6,
-                "Haskell як релігія", DateUtil.getDate("31.09.2000"),
-                DateUtil.getDate("31.09.2010"), new Teacher(2), new Department(2));
+        Master master = Master.builder()
+                .name("Super")
+                .phone("+380")
+                .topic( "Haskell як релігія")
+                .startDate(DateUtil.getDate("31.09.2000"))
+                .endDate(DateUtil.getDate("31.09.2010"))
+                .teacher(Teacher.builder().id(2).build())
+                .department(Department.builder().id(2).build())
+                .build();
 
         System.out.println("Before insert:" + master);
-        masterDAO.insert(master);
+        master = masterDAO.insert(master);
         System.out.println("Find after insert:" + masterDAO.find(master.getId()));
-        System.out.println("Find All:" + masterDAO.findAll());
 
-        master.setTopic("New Haskell як релігія");
-        master.setStartDate(DateUtil.getDate("31.09.2010"));
-        master.setEndDate(DateUtil.getDate("31.09.2020"));
-        master.setTeacher(new Teacher(1));
-        master.getDepartment().setId(1);
+        master = master.toBuilder()
+                .name("NEW Super")
+                .phone("+NEW 380")
+                .topic("New Haskell як релігія")
+                .startDate(DateUtil.getDate("31.09.2010"))
+                .endDate(DateUtil.getDate("31.09.2020"))
+                .teacher(Teacher.builder().id(1).build())
+                .department(Department.builder().id(1).build())
+                .build();
+
         masterDAO.update(master);
         System.out.println("Find after update:" + masterDAO.find(master.getId()));
 
@@ -194,7 +263,10 @@ public class DaoTestSuit {
 
         masterDAO.remove(master);
         System.out.println("Find after delete:" + masterDAO.find(master.getId()));
-    }*/
 
+        System.out.println("Find All:" + masterDAO.findAll());
+        System.out.println("Count:" + masterDAO.count());
+        System.out.println("Find all with limit, offset:" + masterDAO.findAll(2,2));
+    }
 
 }

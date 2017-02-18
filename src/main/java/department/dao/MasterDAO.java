@@ -1,8 +1,10 @@
 package department.dao;
 
-import department.model.bo.Department;
-import department.model.bo.Master;
-import department.model.bo.Teacher;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import department.model.bo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +21,12 @@ public class MasterDAO implements IMasterDAO{
     private final static String FIND_ALL = "SELECT * " +
             "FROM master m " +
             "INNER JOIN scientist s ON m.scientist_id = s.id;";
-
+    private final static String COUNT = "SELECT COUNT(*) FROM master;";
+    private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+            "FROM master m " +
+            "INNER JOIN scientist s ON m.scientist_id = s.id " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
     private final static String FIND = "SELECT * " +
             "FROM master m " +
             "INNER JOIN scientist s ON m.scientist_id = s.id " +
@@ -83,10 +90,35 @@ public class MasterDAO implements IMasterDAO{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private IScientistDAO scientistDAO;
 
     @Override
     public List<Master> findAll() {
         return jdbcTemplate.query(FIND_ALL, masterMapper);
+    }
+
+
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
+
+    @Override
+    public List<Master> findAll(long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, masterMapper);
+    }
+
+    @Override
+    public int count(String name) {
+        // TODO
+        return count();
+    }
+
+    @Override
+    public List<Master> findAll(String name, long limit, long offset) {
+        // TODO
+        return findAll(limit, offset);
     }
 
     @Override
@@ -106,6 +138,10 @@ public class MasterDAO implements IMasterDAO{
     }
 
     public Master insert(Master master) {
+        if(master.getId() == 0){
+            Scientist scientist = scientistDAO.insert(master);
+            master = master.toBuilder().id(scientist.getId()).build();
+        }
         Object [] values = {
                 master.getId(),
                 master.getTopic(),
@@ -119,6 +155,7 @@ public class MasterDAO implements IMasterDAO{
     }
 
     public void update(Master master) {
+        scientistDAO.update(master);
         Object [] values = {
                 master.getTopic(),
                 DateUtil.convertToSqlDate(master.getStartDate()),
@@ -239,12 +276,6 @@ public class MasterDAO implements IMasterDAO{
 					.build();
 
 		}
-	}
-
-	@Override
-	public List<Master> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return findAll();//Arrays.asList(Master.builder().build(), Master.builder().build());
 	}
 
 }

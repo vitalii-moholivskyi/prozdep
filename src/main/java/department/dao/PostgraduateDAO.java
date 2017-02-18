@@ -3,10 +3,7 @@ package department.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import department.model.bo.Department;
-import department.model.bo.Postgraduate;
-import department.model.bo.Teacher;
+import department.model.bo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,6 +16,13 @@ public class PostgraduateDAO implements IPostgraduateDAO{
     private final static String FIND_ALL = "SELECT * " +
             "FROM postgraduate p " +
             "INNER JOIN scientist s ON p.scientist_id = s.id;";
+
+    private final static String COUNT = "SELECT COUNT(*) FROM postgraduate;";
+    private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+            "FROM postgraduate p " +
+            "INNER JOIN scientist s ON p.scientist_id = s.id " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
 
     private final static String FIND = "SELECT * " +
             "FROM postgraduate p " +
@@ -70,10 +74,35 @@ public class PostgraduateDAO implements IPostgraduateDAO{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private IScientistDAO scientistDAO;
 
     @Override
     public List<Postgraduate> findAll() {
         return jdbcTemplate.query(FIND_ALL, postgraduateMapper);
+    }
+
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
+
+
+    @Override
+    public List<Postgraduate> findAll(long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, postgraduateMapper);
+    }
+
+    @Override
+    public int count(String name) {
+        // TODO
+        return count();
+    }
+
+    @Override
+    public List<Postgraduate> findAll(String name, long limit, long offset) {
+        // TODO
+        return findAll(limit, offset);
     }
 
     @Override
@@ -94,6 +123,10 @@ public class PostgraduateDAO implements IPostgraduateDAO{
     }
 
     public Postgraduate insert(Postgraduate postgraduate) {
+        if(postgraduate.getId() == 0){
+            Scientist scientist = scientistDAO.insert(postgraduate);
+            postgraduate = postgraduate.toBuilder().id(scientist.getId()).build();
+        }
         Object [] values = {
                 postgraduate.getId(),
                 postgraduate.getTopic(),
@@ -108,6 +141,7 @@ public class PostgraduateDAO implements IPostgraduateDAO{
     }
 
     public void update(Postgraduate postgraduate) {
+        scientistDAO.update(postgraduate);
         Object [] values = {
                 postgraduate.getTopic(),
                 DateUtil.convertToSqlDate(postgraduate.getStartDate()),
@@ -263,11 +297,5 @@ public class PostgraduateDAO implements IPostgraduateDAO{
                     .build();
         }
     }
-
-	@Override
-	public List<Postgraduate> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

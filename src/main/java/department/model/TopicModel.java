@@ -11,11 +11,13 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import department.dao.IDepartmentDAO;
+import department.dao.ITopicDAO;
 import department.model.bo.Department;
-import department.model.form.DepartmentCreateForm;
-import department.model.form.DepartmentUpdateForm;
-import department.ui.controller.model.DepartmentViewModel;
+import department.model.bo.Teacher;
+import department.model.bo.Topic;
+import department.model.form.TopicCreateForm;
+import department.model.form.TopicUpdateForm;
+import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
 import rx.Observable;
@@ -26,20 +28,20 @@ import rx.schedulers.Schedulers;
  *
  */
 @Repository
-public class DepartmentModel implements IDepartmentModel {
+public class TopicModel implements ITopicModel {
 
 	@Autowired
-	IDepartmentDAO departmentDao;
+	ITopicDAO topicDao;
 
 	@Override
-	public Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(@Min(0) long offset,
+	public Observable<Collection<? extends TopicViewModel>> fetchTopics(@Min(0) long offset,
 			@Min(0) long limit) {
 		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Department>>) sub -> {
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Topic>>) sub -> {
 
 					sub.onStart();
 					try {
-						sub.onNext(departmentDao.findAll(limit, offset));
+						sub.onNext(topicDao.findAll(limit, offset));
 					} finally {
 						sub.onCompleted();
 					}
@@ -47,14 +49,14 @@ public class DepartmentModel implements IDepartmentModel {
 	}
 
 	@Override
-	public Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(
+	public Observable<Collection<? extends TopicViewModel>> fetchTopics(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit) {
 		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Department>>) sub -> {
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Topic>>) sub -> {
 
 					sub.onStart();
 					try {
-						sub.onNext(departmentDao.findAll(limit, offset));
+						sub.onNext(topicDao.findAll(limit, offset));
 					} finally {
 						sub.onCompleted();
 					}
@@ -62,18 +64,23 @@ public class DepartmentModel implements IDepartmentModel {
 	}
 
 	@Override
-	public Observable<? extends DepartmentViewModel> create(
-			@NotNull(message = "form cannot be null") DepartmentCreateForm form) {
+	public Observable<? extends TopicViewModel> create(
+			@NotNull(message = "form cannot be null") TopicCreateForm form) {
 
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Department>) sub -> {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Topic>) sub -> {
 
 			sub.onStart();
 			try {
-				sub.onNext(departmentDao
-						.insert(Department
+				sub.onNext(topicDao
+						.insert(Topic
 								.builder()
-								.phone(form.getPhone())
 								.name(form.getName())
+								.chiefScientist(Teacher.builder().id(form.getChiefScientist()).build())
+								.client(form.getClient())
+								.department(Department.builder().id(form.getDepartment()).build())
+								.endDate(form.getEndDate())
+								.startDate(form.getStartDate())
+														
 								.build()));
 			} finally {
 				sub.onCompleted();
@@ -82,19 +89,24 @@ public class DepartmentModel implements IDepartmentModel {
 	}
 
 	@Override
-	public Observable<? extends DepartmentViewModel> update(DepartmentUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Department>) sub -> {
+	public Observable<? extends TopicViewModel> update(TopicUpdateForm form) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Topic>) sub -> {
 
 			sub.onStart();
 			try {
-				val department = Department
+				val topic = Topic
 						.builder()
 						.id(form.getId())
-						.phone(form.getPhone())
 						.name(form.getName())
+						.chiefScientist(Teacher.builder().id(form.getChiefScientist()).build())
+						.client(form.getClient())
+						.department(Department.builder().id(form.getDepartment()).build())
+						.endDate(form.getEndDate())
+						.startDate(form.getStartDate())
+												
 						.build();
-				departmentDao.update(department);
-				sub.onNext(department);
+				topicDao.update(topic);
+				sub.onNext(topic);
 			} finally {
 				sub.onCompleted();
 			}
@@ -107,7 +119,7 @@ public class DepartmentModel implements IDepartmentModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(departmentDao.count());
+				sub.onNext(topicDao.count());
 			} finally {
 				sub.onCompleted();
 			}

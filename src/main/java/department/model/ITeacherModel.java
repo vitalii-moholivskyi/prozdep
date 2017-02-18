@@ -1,25 +1,25 @@
 package department.model;
 
-import java.util.Collection;
-import department.model.form.DepartmentCreateForm;
-import department.model.form.DepartmentUpdateForm;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import department.ui.controller.model.TeacherViewModel;
+import department.model.form.TeacherCreateForm;
+import department.model.form.TeacherUpdateForm;
 
 import org.springframework.validation.annotation.Validated;
-
-import department.ui.controller.model.DepartmentViewModel;
 import rx.Observable;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * @author Nikolay
  *
  */
 @Validated
-public interface IDepartmentModel {
+public interface ITeacherModel {
 
 	/**
-	 * Fetches departments
+	 * Fetches teachers
 	 *
 	 * @param offset
 	 *            number of elements to skip, inclusive
@@ -29,10 +29,10 @@ public interface IDepartmentModel {
 	 *             if offset < 0 or limit < 0
 	 */
 	@NotNull(message = "Null is not allowed")
-	Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(@Min(0) long offset, @Min(0) long limit);
+	Observable<Collection<? extends TeacherViewModel>> fetchTeachers(@Min(0) long offset, @Min(0) long limit);
 
 	/**
-	 * Fetches departments by user query asynchronously
+	 * Fetches teachers by user query asynchronously
 	 *
 	 * @param query
 	 *            query to search by
@@ -46,25 +46,25 @@ public interface IDepartmentModel {
 	 *             if query is null
 	 */
 	@NotNull
-	Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(
+	Observable<Collection<? extends TeacherViewModel>> fetchTeachers(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit);
 
 	/**
-	 * Updates department asynchronously
+	 * Updates teacher asynchronously
 	 *
 	 * @param form
 	 *            update form
-	 * @return rx observable which will return updated department after completion
+	 * @return rx observable which will return updated teacher after completion
 	 * @throws IllegalArgumentException
 	 *             if offset < 0 or limit < 0
 	 * @throws NullPointerException
 	 *             if form is null
 	 */
 	@NotNull
-	Observable<? extends DepartmentViewModel> create(@NotNull(message = "form cannot be null") DepartmentCreateForm form);
+	Observable<? extends TeacherViewModel> create(@NotNull(message = "form cannot be null") TeacherCreateForm form);
 
 	@NotNull
-	Observable<? extends DepartmentViewModel> update(@NotNull(message = "form cannot be null") DepartmentUpdateForm department);
+	Observable<? extends TeacherViewModel> update(@NotNull(message = "form cannot be null") TeacherUpdateForm teacher);
 
 	Observable<? extends Integer> count();
 

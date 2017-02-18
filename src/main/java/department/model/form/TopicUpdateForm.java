@@ -1,18 +1,27 @@
+/**
+ * 
+ */
 package department.model.form;
 
 import java.util.Date;
 
+import org.springframework.validation.annotation.Validated;
+
 import lombok.Data;
 
+/**
+ * @author Nikolay
+ *
+ */
 @Data
-public class MasterUpdateForm {
+@Validated
+public class TopicUpdateForm {
+
 	private Integer id;
     private String name;
-    private String phone;
-	
-	private String topic;
+    private String client;
     private Date startDate;
     private Date endDate;
-    private Integer teacher;
     private Integer department;
+    private Integer chiefScientist;
 }

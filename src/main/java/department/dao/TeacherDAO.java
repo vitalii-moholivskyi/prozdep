@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import department.model.bo.Department;
+import department.model.bo.Scientist;
 import department.model.bo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,7 +19,12 @@ public class TeacherDAO implements ITeacherDAO{
     private final static String FIND_ALL = "SELECT * " +
             "FROM teacher t " +
             "INNER JOIN scientist s ON t.scientist_id = s.id;";
-
+    private final static String COUNT = "SELECT COUNT(*) FROM teacher;";
+    private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
     private final static String FIND = "SELECT * " +
             "FROM teacher t " +
             "INNER JOIN scientist s ON t.scientist_id = s.id " +
@@ -57,10 +63,34 @@ public class TeacherDAO implements ITeacherDAO{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private IScientistDAO scientistDAO;
 
     @Override
     public List<Teacher> findAll() {
         return jdbcTemplate.query(FIND_ALL, teacherMapper);
+    }
+
+    @Override
+    public int count() {
+        return jdbcTemplate.queryForObject(COUNT, Integer.class);
+    }
+
+    @Override
+    public List<Teacher> findAll(long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, teacherMapper);
+    }
+
+    @Override
+    public int count(String name) {
+        // TODO
+        return count();
+    }
+
+    @Override
+    public List<Teacher> findAll(String name, long limit, long offset) {
+        // TODO
+        return findAll(limit, offset);
     }
 
     @Override
@@ -80,6 +110,10 @@ public class TeacherDAO implements ITeacherDAO{
     }
 
     public Teacher insert(Teacher teacher) {
+        if(teacher.getId() == 0){
+            Scientist scientist = scientistDAO.insert(teacher);
+            teacher = teacher.toBuilder().id(scientist.getId()).build();
+        }
         Object [] values = {
                 teacher.getId(),
                 teacher.getPosition(),
@@ -92,6 +126,7 @@ public class TeacherDAO implements ITeacherDAO{
     }
 
     public void update(Teacher teacher) {
+        scientistDAO.update(teacher);
         Object [] values = {
                 teacher.getPosition(),
                 teacher.getDegree(),
@@ -198,10 +233,4 @@ public class TeacherDAO implements ITeacherDAO{
                     .build();
         }
     }
-
-	@Override
-	public List<Teacher> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

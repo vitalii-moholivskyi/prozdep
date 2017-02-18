@@ -17,18 +17,46 @@ import org.springframework.stereotype.Repository;
 public class DepartmentDAO implements IDepartmentDAO {
 
 	private final static String FIND_ALL = "SELECT * FROM department;";
+	private final static String COUNT = "SELECT COUNT(*) FROM department;";
+	private final static String FIND_ALL_WITH_PAGINATION = "SELECT * " +
+			"FROM department " +
+			"ORDER BY id " +
+			"LIMIT ? OFFSET ?;";
 	private final static String FIND = "SELECT * FROM department WHERE id=?;";
 	private final static String INSERT = "INSERT INTO department (id, name, phone) VALUES(DEFAULT,?,?);";
 	private final static String UPDATE = "UPDATE department SET name=?, phone=? WHERE id = ?;";
 	private final static String REMOVE = "DELETE FROM department WHERE id=?;";
 
 	private final DepartmentMapper departmentMapper = new DepartmentMapper();
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public List<Department> findAll() {
 		return jdbcTemplate.query(FIND_ALL, departmentMapper);
+	}
+
+	@Override
+	public List<Department> findAll(long limit, long offset) {
+		return jdbcTemplate.query(FIND_ALL_WITH_PAGINATION, new Object[] { limit, offset }, departmentMapper);
+	}
+
+	@Override
+	public int count(String name) {
+		// TODO
+		return count();
+	}
+
+	@Override
+	public List<Department> findAll(String name, long limit, long offset) {
+		// TODO
+		return findAll(limit, offset);
+	}
+
+	@Override
+	public int count() {
+		return jdbcTemplate.queryForObject(COUNT, Integer.class);
 	}
 
 	@Override
@@ -85,12 +113,6 @@ public class DepartmentDAO implements IDepartmentDAO {
 						.phone(rs.getString("phone"))
 					.build();
 		}
-	}
-
-	@Override
-	public List<Department> findAll(long limit, long offset) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

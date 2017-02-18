@@ -36,7 +36,6 @@ public class MainConfig {
         dataSource.setMinIdle(1);
         dataSource.setMaxIdle(2);
         dataSource.setInitialSize(1);
-
         return dataSource;
     }
 

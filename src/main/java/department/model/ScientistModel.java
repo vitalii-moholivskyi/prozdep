@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import department.dao.IDepartmentDAO;
-import department.model.bo.Department;
-import department.model.form.DepartmentCreateForm;
-import department.model.form.DepartmentUpdateForm;
-import department.ui.controller.model.DepartmentViewModel;
+import department.dao.IScientistDAO;
+import department.model.bo.Scientist;
+import department.model.form.ScientistCreateForm;
+import department.model.form.ScientistUpdateForm;
+import department.ui.controller.model.ScientistViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
 import rx.Observable;
@@ -26,20 +26,20 @@ import rx.schedulers.Schedulers;
  *
  */
 @Repository
-public class DepartmentModel implements IDepartmentModel {
+public class ScientistModel implements IScientistModel {
 
 	@Autowired
-	IDepartmentDAO departmentDao;
+	IScientistDAO scientistDao;
 
 	@Override
-	public Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(@Min(0) long offset,
+	public Observable<Collection<? extends ScientistViewModel>> fetchScientists(@Min(0) long offset,
 			@Min(0) long limit) {
 		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Department>>) sub -> {
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Scientist>>) sub -> {
 
 					sub.onStart();
 					try {
-						sub.onNext(departmentDao.findAll(limit, offset));
+						sub.onNext(scientistDao.findAll(limit, offset));
 					} finally {
 						sub.onCompleted();
 					}
@@ -47,14 +47,14 @@ public class DepartmentModel implements IDepartmentModel {
 	}
 
 	@Override
-	public Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(
+	public Observable<Collection<? extends ScientistViewModel>> fetchScientists(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit) {
 		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Department>>) sub -> {
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Scientist>>) sub -> {
 
 					sub.onStart();
 					try {
-						sub.onNext(departmentDao.findAll(limit, offset));
+						sub.onNext(scientistDao.findAll(limit, offset));
 					} finally {
 						sub.onCompleted();
 					}
@@ -62,15 +62,15 @@ public class DepartmentModel implements IDepartmentModel {
 	}
 
 	@Override
-	public Observable<? extends DepartmentViewModel> create(
-			@NotNull(message = "form cannot be null") DepartmentCreateForm form) {
+	public Observable<? extends ScientistViewModel> create(
+			@NotNull(message = "form cannot be null") ScientistCreateForm form) {
 
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Department>) sub -> {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
 
 			sub.onStart();
 			try {
-				sub.onNext(departmentDao
-						.insert(Department
+				sub.onNext(scientistDao
+						.insert(Scientist
 								.builder()
 								.phone(form.getPhone())
 								.name(form.getName())
@@ -82,19 +82,19 @@ public class DepartmentModel implements IDepartmentModel {
 	}
 
 	@Override
-	public Observable<? extends DepartmentViewModel> update(DepartmentUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Department>) sub -> {
+	public Observable<? extends ScientistViewModel> update(ScientistUpdateForm form) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
 
 			sub.onStart();
 			try {
-				val department = Department
+				val scientist = Scientist
 						.builder()
 						.id(form.getId())
 						.phone(form.getPhone())
 						.name(form.getName())
 						.build();
-				departmentDao.update(department);
-				sub.onNext(department);
+				scientistDao.update(scientist);
+				sub.onNext(scientist);
 			} finally {
 				sub.onCompleted();
 			}
@@ -107,7 +107,7 @@ public class DepartmentModel implements IDepartmentModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(departmentDao.count());
+				sub.onNext(scientistDao.count());
 			} finally {
 				sub.onCompleted();
 			}
