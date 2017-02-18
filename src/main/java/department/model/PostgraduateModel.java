@@ -17,6 +17,7 @@ import department.model.bo.Postgraduate;
 import department.model.bo.Teacher;
 import department.model.form.PostgraduateCreateForm;
 import department.model.form.PostgraduateUpdateForm;
+import department.model.mapper.PostgraduateMapper;
 import department.ui.controller.model.PostgraduateViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
@@ -46,7 +47,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 					} finally {
 						sub.onCompleted();
 					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PostgraduateMapper::toViewModel);
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 					} finally {
 						sub.onCompleted();
 					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PostgraduateMapper::toViewModel);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PostgraduateMapper::toViewModel);
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 
 }

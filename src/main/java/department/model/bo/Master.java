@@ -1,6 +1,5 @@
 package department.model.bo;
 
-import lombok.Builder;
 import lombok.Value;
 import java.util.Date;
 
