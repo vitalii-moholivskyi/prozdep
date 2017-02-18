@@ -1,16 +1,13 @@
-/**
- * 
- */
 package department.model;
 
 import java.util.Collection;
-
+import department.model.form.PaperCreateForm;
+import department.model.form.PaperUpdateForm;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.annotation.Validated;
 
-import department.model.bo.Paper;
 import department.ui.controller.model.PaperViewModel;
 import rx.Observable;
 
@@ -64,10 +61,10 @@ public interface IPaperModel {
 	 *             if form is null
 	 */
 	@NotNull
-	Observable<? extends PaperViewModel> create(@NotNull(message = "form cannot be null") Paper form);
+	Observable<? extends PaperViewModel> create(@NotNull(message = "form cannot be null") PaperCreateForm form);
 
 	@NotNull
-	Observable<? extends PaperViewModel> update(@NotNull(message = "form cannot be null") Paper paper);
+	Observable<? extends PaperViewModel> update(@NotNull(message = "form cannot be null") PaperUpdateForm paper);
 
 	Observable<? extends Integer> count();
 

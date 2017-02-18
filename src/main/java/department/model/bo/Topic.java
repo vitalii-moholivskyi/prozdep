@@ -9,7 +9,7 @@ public class Topic {
 
     private Integer id;
     private String name;
-    private String cliect;
+    private String client;
     private Date startDate;
     private Date endDate;
     private Department department;

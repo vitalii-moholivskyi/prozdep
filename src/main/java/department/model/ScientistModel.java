@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import department.dao.IPaperDAO;
-import department.model.bo.Paper;
-import department.model.form.PaperCreateForm;
-import department.model.form.PaperUpdateForm;
-import department.ui.controller.model.PaperViewModel;
+import department.dao.IScientistDAO;
+import department.model.bo.Scientist;
+import department.model.form.ScientistCreateForm;
+import department.model.form.ScientistUpdateForm;
+import department.ui.controller.model.ScientistViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
 import rx.Observable;
@@ -26,20 +26,20 @@ import rx.schedulers.Schedulers;
  *
  */
 @Repository
-public class PaperModel implements IPaperModel {
+public class ScientistModel implements IScientistModel {
 
 	@Autowired
-	IPaperDAO paperDao;
+	IScientistDAO scientistDao;
 
 	@Override
-	public Observable<Collection<? extends PaperViewModel>> fetchPapers(@Min(0) long offset,
+	public Observable<Collection<? extends ScientistViewModel>> fetchScientists(@Min(0) long offset,
 			@Min(0) long limit) {
 		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Paper>>) sub -> {
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Scientist>>) sub -> {
 
 					sub.onStart();
 					try {
-						sub.onNext(paperDao.findAll(limit, offset));
+						sub.onNext(scientistDao.findAll(limit, offset));
 					} finally {
 						sub.onCompleted();
 					}
@@ -47,14 +47,14 @@ public class PaperModel implements IPaperModel {
 	}
 
 	@Override
-	public Observable<Collection<? extends PaperViewModel>> fetchPapers(
+	public Observable<Collection<? extends ScientistViewModel>> fetchScientists(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit) {
 		return Observable
-				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Paper>>) sub -> {
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Scientist>>) sub -> {
 
 					sub.onStart();
 					try {
-						sub.onNext(paperDao.findAll(limit, offset));
+						sub.onNext(scientistDao.findAll(limit, offset));
 					} finally {
 						sub.onCompleted();
 					}
@@ -62,19 +62,18 @@ public class PaperModel implements IPaperModel {
 	}
 
 	@Override
-	public Observable<? extends PaperViewModel> create(
-			@NotNull(message = "form cannot be null") PaperCreateForm form) {
+	public Observable<? extends ScientistViewModel> create(
+			@NotNull(message = "form cannot be null") ScientistCreateForm form) {
 
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Paper>) sub -> {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
 
 			sub.onStart();
 			try {
-				sub.onNext(paperDao
-						.insert(Paper
+				sub.onNext(scientistDao
+						.insert(Scientist
 								.builder()
-								.type(form.getType())
+								.phone(form.getPhone())
 								.name(form.getName())
-								.year(form.getYear())
 								.build()));
 			} finally {
 				sub.onCompleted();
@@ -83,20 +82,19 @@ public class PaperModel implements IPaperModel {
 	}
 
 	@Override
-	public Observable<? extends PaperViewModel> update(PaperUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Paper>) sub -> {
+	public Observable<? extends ScientistViewModel> update(ScientistUpdateForm form) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
 
 			sub.onStart();
 			try {
-				val paper = Paper
+				val scientist = Scientist
 						.builder()
 						.id(form.getId())
-						.type(form.getType())
+						.phone(form.getPhone())
 						.name(form.getName())
-						.year(form.getYear())
 						.build();
-				paperDao.update(paper);
-				sub.onNext(paper);
+				scientistDao.update(scientist);
+				sub.onNext(scientist);
 			} finally {
 				sub.onCompleted();
 			}
@@ -109,7 +107,7 @@ public class PaperModel implements IPaperModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(paperDao.count());
+				sub.onNext(scientistDao.count());
 			} finally {
 				sub.onCompleted();
 			}

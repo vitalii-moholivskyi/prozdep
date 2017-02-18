@@ -11,6 +11,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
+/**
+ * @author Nikolay
+ *
+ */
 @Validated
 public interface ITeacherModel {
 

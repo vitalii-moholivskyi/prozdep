@@ -90,7 +90,7 @@ public class TopicDAO implements ITopicDAO{
             PreparedStatement ps = connection.prepareStatement(INSERT,
                     new String[] {"id"});
             ps.setString(1, topic.getName());
-            ps.setString(2, topic.getCliect());
+            ps.setString(2, topic.getClient());
             ps.setDate(3, DateUtil.convertToSqlDate(topic.getStartDate()));
             ps.setDate(4, DateUtil.convertToSqlDate(topic.getEndDate()));
             ps.setInt(5, topic.getDepartment().getId());
@@ -104,7 +104,7 @@ public class TopicDAO implements ITopicDAO{
     public void update(Topic topic) {
         Object [] values = {
                 topic.getName(),
-                topic.getCliect(),
+                topic.getClient(),
                 topic.getStartDate(),
                 topic.getEndDate(),
                 topic.getDepartment().getId(),
@@ -175,7 +175,7 @@ public class TopicDAO implements ITopicDAO{
                     .builder()
                         .id(rs.getInt("id"))
                         .name(rs.getString("name"))
-                        .cliect(rs.getString("client"))
+                        .client(rs.getString("client"))
                         .startDate(rs.getDate("start_date"))
                         .endDate(rs.getDate("end_date"))
                         .department(Department.builder().id(rs.getInt("department_id")).build())
@@ -214,7 +214,7 @@ public class TopicDAO implements ITopicDAO{
                     .builder()
                         .id(rs.getInt("id"))
                         .name(rs.getString("name"))
-                        .cliect(rs.getString("client"))
+                        .client(rs.getString("client"))
                         .startDate(rs.getDate("start_date"))
                         .endDate(rs.getDate("end_date"))
                         .department(Department

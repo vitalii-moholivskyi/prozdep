@@ -1,8 +1,8 @@
 package department.model;
 
-import department.ui.controller.model.PostgraduateViewModel;
-import department.model.form.PostgraduateCreateForm;
-import department.model.form.PostgraduateUpdateForm;
+import department.ui.controller.model.TopicViewModel;
+import department.model.form.TopicCreateForm;
+import department.model.form.TopicUpdateForm;
 
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
@@ -16,10 +16,10 @@ import java.util.Collection;
  *
  */
 @Validated
-public interface IPostgraduateModel {
+public interface ITopicModel {
 
 	/**
-	 * Fetches postgraduates
+	 * Fetches topics
 	 *
 	 * @param offset
 	 *            number of elements to skip, inclusive
@@ -29,10 +29,10 @@ public interface IPostgraduateModel {
 	 *             if offset < 0 or limit < 0
 	 */
 	@NotNull(message = "Null is not allowed")
-	Observable<Collection<? extends PostgraduateViewModel>> fetchPostgraduates(@Min(0) long offset, @Min(0) long limit);
+	Observable<Collection<? extends TopicViewModel>> fetchTopics(@Min(0) long offset, @Min(0) long limit);
 
 	/**
-	 * Fetches postgraduates by user query asynchronously
+	 * Fetches topics by user query asynchronously
 	 *
 	 * @param query
 	 *            query to search by
@@ -46,25 +46,25 @@ public interface IPostgraduateModel {
 	 *             if query is null
 	 */
 	@NotNull
-	Observable<Collection<? extends PostgraduateViewModel>> fetchPostgraduates(
+	Observable<Collection<? extends TopicViewModel>> fetchTopics(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit);
 
 	/**
-	 * Updates postgraduate asynchronously
+	 * Updates topic asynchronously
 	 *
 	 * @param form
 	 *            update form
-	 * @return rx observable which will return updated postgraduate after completion
+	 * @return rx observable which will return updated topic after completion
 	 * @throws IllegalArgumentException
 	 *             if offset < 0 or limit < 0
 	 * @throws NullPointerException
 	 *             if form is null
 	 */
 	@NotNull
-	Observable<? extends PostgraduateViewModel> create(@NotNull(message = "form cannot be null") PostgraduateCreateForm form);
+	Observable<? extends TopicViewModel> create(@NotNull(message = "form cannot be null") TopicCreateForm form);
 
 	@NotNull
-	Observable<? extends PostgraduateViewModel> update(@NotNull(message = "form cannot be null") PostgraduateUpdateForm postgraduate);
+	Observable<? extends TopicViewModel> update(@NotNull(message = "form cannot be null") TopicUpdateForm topic);
 
 	Observable<? extends Integer> count();
 

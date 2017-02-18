@@ -1,25 +1,25 @@
 package department.model;
 
-import department.ui.controller.model.PostgraduateViewModel;
-import department.model.form.PostgraduateCreateForm;
-import department.model.form.PostgraduateUpdateForm;
-
-import org.springframework.validation.annotation.Validated;
-import rx.Observable;
-
+import java.util.Collection;
+import department.model.form.DepartmentCreateForm;
+import department.model.form.DepartmentUpdateForm;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
+
+import org.springframework.validation.annotation.Validated;
+
+import department.ui.controller.model.DepartmentViewModel;
+import rx.Observable;
 
 /**
  * @author Nikolay
  *
  */
 @Validated
-public interface IPostgraduateModel {
+public interface IDepartmentModel {
 
 	/**
-	 * Fetches postgraduates
+	 * Fetches departments
 	 *
 	 * @param offset
 	 *            number of elements to skip, inclusive
@@ -29,10 +29,10 @@ public interface IPostgraduateModel {
 	 *             if offset < 0 or limit < 0
 	 */
 	@NotNull(message = "Null is not allowed")
-	Observable<Collection<? extends PostgraduateViewModel>> fetchPostgraduates(@Min(0) long offset, @Min(0) long limit);
+	Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(@Min(0) long offset, @Min(0) long limit);
 
 	/**
-	 * Fetches postgraduates by user query asynchronously
+	 * Fetches departments by user query asynchronously
 	 *
 	 * @param query
 	 *            query to search by
@@ -46,25 +46,25 @@ public interface IPostgraduateModel {
 	 *             if query is null
 	 */
 	@NotNull
-	Observable<Collection<? extends PostgraduateViewModel>> fetchPostgraduates(
+	Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit);
 
 	/**
-	 * Updates postgraduate asynchronously
+	 * Updates department asynchronously
 	 *
 	 * @param form
 	 *            update form
-	 * @return rx observable which will return updated postgraduate after completion
+	 * @return rx observable which will return updated department after completion
 	 * @throws IllegalArgumentException
 	 *             if offset < 0 or limit < 0
 	 * @throws NullPointerException
 	 *             if form is null
 	 */
 	@NotNull
-	Observable<? extends PostgraduateViewModel> create(@NotNull(message = "form cannot be null") PostgraduateCreateForm form);
+	Observable<? extends DepartmentViewModel> create(@NotNull(message = "form cannot be null") DepartmentCreateForm form);
 
 	@NotNull
-	Observable<? extends PostgraduateViewModel> update(@NotNull(message = "form cannot be null") PostgraduateUpdateForm postgraduate);
+	Observable<? extends DepartmentViewModel> update(@NotNull(message = "form cannot be null") DepartmentUpdateForm department);
 
 	Observable<? extends Integer> count();
 
