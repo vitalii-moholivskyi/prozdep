@@ -1,0 +1,22 @@
+.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: transparent;
+}
+
+.combo-box1 .arrow-button
+{
+    -fx-background-color: null;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding:  0 1 0 0;
+}
+
+.combo-box1 .arrow-button .arrow
+{
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 0 0 0 0, 0;
+    -fx-padding: 0 0 0 0;
+    /*
+        -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+    */
+    -fx-shape: null;
+}

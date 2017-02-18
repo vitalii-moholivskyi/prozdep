@@ -6,6 +6,7 @@ import department.model.form.TopicUpdateForm;
 
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
+import rx.functions.Action1;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -63,8 +64,15 @@ public interface ITopicModel {
 	@NotNull
 	Observable<? extends TopicViewModel> create(@NotNull(message = "form cannot be null") TopicCreateForm form);
 
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
 	@NotNull
-	Observable<? extends TopicViewModel> update(@NotNull(message = "form cannot be null") TopicUpdateForm topic);
+	void update(@NotNull(message = "form cannot be null") TopicUpdateForm form,
+			@NotNull(message = "model cannot be null") TopicViewModel model,
+			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 
 	Observable<? extends Integer> count();
 

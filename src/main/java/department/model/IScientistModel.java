@@ -1,6 +1,7 @@
 package department.model;
 
 import java.util.Collection;
+
 import department.model.form.ScientistCreateForm;
 import department.model.form.ScientistUpdateForm;
 import javax.validation.constraints.Min;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 
 import department.ui.controller.model.ScientistViewModel;
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * @author Nikolay
@@ -54,7 +56,8 @@ public interface IScientistModel {
 	 *
 	 * @param form
 	 *            update form
-	 * @return rx observable which will return updated scientist after completion
+	 * @return rx observable which will return updated scientist after
+	 *         completion
 	 * @throws IllegalArgumentException
 	 *             if offset < 0 or limit < 0
 	 * @throws NullPointerException
@@ -63,8 +66,15 @@ public interface IScientistModel {
 	@NotNull
 	Observable<? extends ScientistViewModel> create(@NotNull(message = "form cannot be null") ScientistCreateForm form);
 
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
 	@NotNull
-	Observable<? extends ScientistViewModel> update(@NotNull(message = "form cannot be null") ScientistUpdateForm scientist);
+	void update(@NotNull(message = "form cannot be null") ScientistUpdateForm form,
+			@NotNull(message = "model cannot be null") ScientistViewModel model,
+			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 
 	Observable<? extends Integer> count();
 

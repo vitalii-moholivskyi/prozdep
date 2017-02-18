@@ -21,6 +21,7 @@ import department.ui.controller.model.PostgraduateViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -72,55 +73,47 @@ public class PostgraduateModel implements IPostgraduateModel {
 			sub.onStart();
 			try {
 				sub.onNext(postgraduateDao
-						.insert(Postgraduate
-								.builder()
-								.teacher(Teacher.builder()
-										.id(form.getTeacher())
-										.build())
-								.department(Department.builder()
-										.id(form.getDepartment())
-										.build())
-								.endDate(form.getEndDate())
-								.startDate(form.getStartDate())
-								.topic(form.getTopic())
-								.name(form.getName())
-								.phone(form.getPhone())
-								.endDate(form.getEndDate())
-								.build()));
+						.insert(Postgraduate.builder().teacher(Teacher.builder().id(form.getTeacher()).build())
+								.department(Department.builder().id(form.getDepartment()).build())
+								.endDate(form.getEndDate()).startDate(form.getStartDate()).topic(form.getTopic())
+								.name(form.getName()).phone(form.getPhone()).endDate(form.getEndDate()).build()));
 			} finally {
 				sub.onCompleted();
 			}
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
 	}
 
+	/**
+	 * @param form
+	 * @param model
+	 * @param errCallback
+	 */
 	@Override
-	public Observable<? extends PostgraduateViewModel> update(PostgraduateUpdateForm form) {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Postgraduate>) sub -> {
+	public void update(PostgraduateUpdateForm form, PostgraduateViewModel model,
+			Action1<? super Throwable> errCallback) {
+		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Postgraduate>) sub -> {
 
 			sub.onStart();
 			try {
-				val postgraduate = Postgraduate
-						.builder()
-						.id(form.getId())
-						.teacher(Teacher.builder()
-								.id(form.getTeacher())
-								.build())
-						.department(Department.builder()
-								.id(form.getDepartment())
-								.build())
-						.endDate(form.getEndDate())
-						.startDate(form.getStartDate())
-						.topic(form.getTopic())
-						.name(form.getName())
-						.phone(form.getPhone())
-						.endDate(form.getEndDate())
-						.build();
+				val postgraduate = Postgraduate.builder().id(form.getId())
+						.teacher(Teacher.builder().id(form.getTeacher()).build())
+						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
+						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
+						.phone(form.getPhone()).endDate(form.getEndDate()).build();
 				postgraduateDao.update(postgraduate);
 				sub.onNext(postgraduate);
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
+			model.setFirstName(result.getName());
+			model.setEndDate(result.getEndDate());
+			model.setStartDate(result.getStartDate());
+			model.setPhone(result.getPhone());
+			model.setProtectionDate(result.getProtectionDate());
+			model.setTopic(result.getTopic());
+			model.setTeacherId(result.getTeacher().getId());
+		} , errCallback::call);
 	}
 
 	@Override
