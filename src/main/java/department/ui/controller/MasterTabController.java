@@ -2,9 +2,10 @@ package department.ui.controller;
 
 import department.model.IMasterModel;
 import department.ui.controller.model.MasterViewModel;
-import department.ui.utils.FxSchedulers;
+import department.ui.utils.UiConstants;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
+import department.utils.Tuple;
 import javafx.scene.control.TableColumn;
 import lombok.extern.java.Log;
 import lombok.val;
@@ -12,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import rx.Observable;
 import rx.functions.Func1;
+import rx.functions.Func2;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+
+import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
 
 /**
  * Created by Максим on 2/1/2017.
@@ -41,6 +44,7 @@ public final class MasterTabController extends ListTabController<MasterViewModel
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void doInitialize() {
 
         final TableColumn<MasterViewModel, String> firstNameCol = new TableColumn<>("Ім'я"),
@@ -60,31 +64,40 @@ public final class MasterTabController extends ListTabController<MasterViewModel
         for (val column : tableView.getColumns()) {
             column.prefWidthProperty().bind(tableView.widthProperty().divide(size));
         }
-        fetchMasters(0, ListTabController.RESULTS_PER_PAGE);
+        initialize();
     }
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
-        fetchMasters(newIndex * ListTabController.RESULTS_PER_PAGE, ListTabController.RESULTS_PER_PAGE);
-    }
-
-    private void fetchMasters(long offset, long limit) {
         val toastId = mainController.showProgress("Loading masters...");
 
-        model.fetchMasters(offset, limit)
+        model.fetchMasters(newIndex * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
-                .subscribe(this::setTableContent,
-                        th -> {
-                            val errId = mainController.showError("Failed to retrieve master list... Try again later");
+                .subscribe(this::setTableContent, this::processError);
+    }
 
-                            log.log(Level.WARNING, "Failed to fetch masters", th);
-                            Observable.defer(() -> Observable.just(null))
-                                    .delay(2, TimeUnit.SECONDS)
-                                    .observeOn(FxSchedulers.platform())
-                                    .doOnNext(obj -> mainController.hideError(errId))
-                                    .subscribe();
-                        }
-                );
+    private void initialize() {
+        val toastId = mainController.showProgress("Loading masters...");
+
+        Observable.combineLatest(
+                model.fetchMasters(0, UiConstants.RESULTS_PER_PAGE)
+                        .doOnTerminate(() -> mainController.hideProgress(toastId)),
+                model.count()
+                        .doOnSubscribe(() -> pagination.setVisible(false))
+                        .doOnCompleted(() -> pagination.setVisible(true)),// will be called only if observers proceeded successfully
+                (Func2<Collection<? extends MasterViewModel>, Integer, Tuple<Collection<? extends MasterViewModel>, Integer>>) Tuple::new)
+                .subscribe(result -> {
+                    val count = result.getV2();
+                    val reside = count % RESULTS_PER_PAGE;
+
+                    pagination.setPageCount(count / RESULTS_PER_PAGE + (reside == 0 ? 0 : 1));
+                    setTableContent(result.getV1());
+                }, this::processError);
+    }
+
+    private void processError(Throwable th) {
+        log.log(Level.WARNING, "Failed to fetch masters", th);
+        mainController.showError("Failed to retrieve master list... Try again later", UiConstants.DURATION_NORMAL);
     }
 
     private void setTableContent(Collection<? extends MasterViewModel> masters) {

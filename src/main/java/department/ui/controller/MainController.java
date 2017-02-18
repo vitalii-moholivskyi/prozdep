@@ -1,6 +1,7 @@
 package department.ui.controller;
 
 import department.model.IMasterModel;
+import department.ui.utils.FxSchedulers;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
@@ -13,9 +14,11 @@ import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.Observable;
 
 import java.io.IOException;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -81,6 +84,16 @@ public final class MainController {
         errorMessageLabel.setText(message);
         idToErrMsg.put(idGenerator, message);
         return idGenerator++;
+    }
+
+    public void showError(String message, long millis) {
+        val errId = showError(message);
+
+        Observable.defer(() -> Observable.just(null))
+                .delay(millis, TimeUnit.MILLISECONDS)
+                .observeOn(FxSchedulers.platform())
+                .doOnNext(obj -> hideError(errId))
+                .subscribe();
     }
 
     public void hideError() {

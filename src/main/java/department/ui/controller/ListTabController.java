@@ -9,8 +9,6 @@ import javafx.scene.control.TableView;
  */
 public abstract class ListTabController<T> {
 
-    protected static final int              RESULTS_PER_PAGE = 30;
-
     @FXML protected TableView<T>            tableView;
     @FXML protected Pagination              pagination;
 
