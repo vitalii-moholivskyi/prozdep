@@ -15,6 +15,7 @@ import department.dao.IDepartmentDAO;
 import department.model.bo.Department;
 import department.model.form.DepartmentCreateForm;
 import department.model.form.DepartmentUpdateForm;
+import department.model.mapper.DepartmentMapper;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
@@ -44,7 +45,7 @@ public class DepartmentModel implements IDepartmentModel {
 					} finally {
 						sub.onCompleted();
 					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class DepartmentModel implements IDepartmentModel {
 					} finally {
 						sub.onCompleted();
 					}
-				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class DepartmentModel implements IDepartmentModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class DepartmentModel implements IDepartmentModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 
 }

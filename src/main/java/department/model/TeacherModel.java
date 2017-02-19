@@ -5,6 +5,7 @@ import department.model.bo.Department;
 import department.model.bo.Teacher;
 import department.model.form.TeacherCreateForm;
 import department.model.form.TeacherUpdateForm;
+import department.model.mapper.TeacherMapper;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
@@ -39,7 +40,7 @@ public class TeacherModel implements ITeacherModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TeacherMapper::toViewModel);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class TeacherModel implements ITeacherModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TeacherMapper::toViewModel);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class TeacherModel implements ITeacherModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TeacherMapper::toViewModel);
 	}
 
 	@Override
@@ -109,6 +110,6 @@ public class TeacherModel implements ITeacherModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(func -> null);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 }
