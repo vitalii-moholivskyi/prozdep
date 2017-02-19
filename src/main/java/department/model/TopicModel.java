@@ -3,14 +3,6 @@
  */
 package department.model;
 
-import java.util.Collection;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import department.dao.ITopicDAO;
 import department.model.bo.Department;
 import department.model.bo.Teacher;
@@ -20,9 +12,15 @@ import department.model.form.TopicUpdateForm;
 import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * @author Nikolay
@@ -102,7 +100,7 @@ public class TopicModel implements ITopicModel {
 			model.setStartDate(result.getStartDate());
 			model.setName(result.getName());
 			model.setEndDate(result.getEndDate());
-			model.setClient(result.getClient());
+			//model.setClient(result.getClient());
 		} , errCallback::call);
 	}
 

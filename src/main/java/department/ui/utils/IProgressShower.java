@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.utils;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,5 +1,6 @@
 package department.ui.controller;
 
+import department.ui.utils.IProgressShower;
 import department.utils.Preconditions;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -61,11 +61,12 @@ public abstract class ListTabController<T> {
                         .doOnCompleted(() -> pagination.setVisible(true)),// will be called only if observers proceeded successfully
                 (Func2<Collection<? extends T>, Integer, Tuple<Collection<? extends T>, Integer>>) Tuple::new)
                 .subscribe(result -> {
+                    setTableContent(result.getV1());
+
                     val count = result.getV2();
                     val reside = count % RESULTS_PER_PAGE;
 
                     pagination.setPageCount(count / RESULTS_PER_PAGE + (reside == 0 ? 0 : 1));
-                    setTableContent(result.getV1());
                 }, callback::onFailure);
     }
 

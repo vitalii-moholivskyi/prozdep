@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane prefHeight="357.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:controller="department.ui.controller.CreateMasterTabController" prefHeight="357.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
     </columnConstraints>
@@ -23,18 +23,18 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <ComboBox minWidth="200.0" promptText="Кафедра">
+                        <ComboBox minWidth="200.0" promptText="Кафедра" fx:id="departmentComboBox">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></ComboBox>
-                        <Label text="ПІБ">
+                        <Label text="ПІБ" >
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin></Label>
-                        <TextField>
+                        <TextField fx:id="fullNameField">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -45,7 +45,7 @@
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin></Label>
-                        <TextField>
+                        <TextField fx:id="phoneField">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -56,7 +56,7 @@
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin></Label>
-                        <DatePicker minWidth="200.0">
+                        <DatePicker minWidth="200.0" fx:id="startDatePicker">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -67,14 +67,14 @@
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin></Label>
-                        <DatePicker minWidth="200.0">
+                        <DatePicker minWidth="200.0" fx:id="endDatePicker">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></DatePicker>
-                        <Button mnemonicParsing="false" text="Додати">
+                        <Button mnemonicParsing="false" text="Додати" onAction="#onCreate">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin></Button>

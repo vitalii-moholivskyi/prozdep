@@ -132,20 +132,18 @@ public final class MainController {
     @FXML
     private void onCreateMaster() {
 
-        Stage stage = new Stage();
+        val stage = new Stage();
+        val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml");
 
-        val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml", CreateMasterTabController.class);
         try {
             stage.setScene(new Scene(loader.load()));
+
             stage.centerOnScreen();
             stage.show();
             stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (final IOException e) {
+            log.log(Level.SEVERE, "Failed to open master form", e);
         }
-
-        //loadTab(MainController.MASTERS_CREATE_TAB_ID, "Create master",
-          //      "/view/partials/_formMaster.fxml", CreateMasterTabController.class);
     }
 
     @FXML
