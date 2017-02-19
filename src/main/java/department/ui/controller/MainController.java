@@ -131,19 +131,27 @@ public final class MainController {
 
     @FXML
     private void onCreateMaster() {
+        loadCreationView("/view/partials/_formMaster.fxml");
+    }
 
-        val stage = new Stage();
-        val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml");
+    @FXML
+    private void onCreateTeacher() {
+        loadCreationView("/view/partials/_formTeacher.fxml");
+    }
 
-        try {
-            stage.setScene(new Scene(loader.load()));
+    @FXML
+    private void onCreatePostgraduate() {
+        loadCreationView("/view/partials/_formPostgraduate.fxml");
+    }
 
-            stage.centerOnScreen();
-            stage.show();
-            stage.sizeToScene();
-        } catch (final IOException e) {
-            log.log(Level.SEVERE, "Failed to open master form", e);
-        }
+    @FXML
+    private void onCreateTopic() {
+        loadCreationView("/view/partials/_formTopic.fxml");
+    }
+
+    @FXML
+    private void onCreatePaper() {
+        loadCreationView("/view/partials/_formPaper.fxml");
     }
 
     @FXML
@@ -162,6 +170,22 @@ public final class MainController {
     private void onViewPostgraduate() {
         loadTab(MainController.POSTGRADUATES_VIEW_TAB_ID, "Аспіранти",
                 "/view/partials/_listTemplate.fxml", PostgraduateTabController.class);
+    }
+
+    private void loadCreationView(String filepath) {
+
+        val stage = new Stage();
+        val loader = UiUtils.newLoader(filepath);
+
+        try {
+            stage.setScene(new Scene(loader.load()));
+
+            stage.centerOnScreen();
+            stage.show();
+            stage.sizeToScene();
+        } catch (final IOException e) {
+            log.log(Level.SEVERE, "Failed to open form", e);
+        }
     }
 
     private void loadTab(String tabId, String title, String filePath, Class<?> controller) {

@@ -22,10 +22,10 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Додати">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="Наукова тема" />
-                        <MenuItem mnemonicParsing="false" text="Наукова робота" />
-                        <MenuItem mnemonicParsing="false" text="Аспірант" />
-                        <MenuItem mnemonicParsing="false" text="Викладач" />
+                        <MenuItem mnemonicParsing="false" text="Наукова тема" onAction="#onCreateTopic"/>
+                        <MenuItem mnemonicParsing="false" text="Наукова робота" onAction="#onCreatePaper"/>
+                        <MenuItem mnemonicParsing="false" text="Аспірант" onAction="#onCreatePostgraduate"/>
+                        <MenuItem mnemonicParsing="false" text="Викладач" onAction="#onCreateTeacher"/>
                         <MenuItem mnemonicParsing="false" onAction="#onCreateMaster" text="Магістр" />
                   </items>
                 </Menu>

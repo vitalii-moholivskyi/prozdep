@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="451.0" prefWidth="696.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" fx:controller="department.ui.controller.CreateTopicController" fx:id="viewRoot" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="451.0" prefWidth="696.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="65.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0" prefWidth="88.0" />
@@ -24,9 +24,9 @@
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <children>
             <Label text="Назва теми" />
-            <TextField editable="false" />
+            <TextField editable="false" fx:id="titleField"/>
             <Label text="Замовник" />
-            <TextField editable="false" />
+            <TextField editable="false" fx:id="clientField"/>
             <HBox prefHeight="54.0" prefWidth="389.0">
                <children>
                   <VBox>
@@ -36,7 +36,7 @@
                               <Insets right="5.0" />
                            </HBox.margin>
                         </Label>
-                        <DatePicker />
+                        <DatePicker fx:id="startDatePicker"/>
                      </children>
                   </VBox>
                   <VBox>
@@ -46,7 +46,7 @@
                               <Insets right="5.0" />
                            </HBox.margin>
                         </Label>
-                        <DatePicker />
+                        <DatePicker fx:id="endDatePicker" />
                      </children>
                      <HBox.margin>
                         <Insets left="30.0" />
@@ -58,7 +58,7 @@
                </VBox.margin>
             </HBox>
             <Label text="Кафедра" />
-            <ComboBox editable="true" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
+            <ComboBox editable="true" maxWidth="1.7976931348623157E308" promptText="Кафедра" fx:id="departmentComboBox" styleClass="combo-box1" stylesheets="@../style.css" />
             <FlowPane prefHeight="62.0" prefWidth="389.0" />
             <Label text="Керівник" />
             <ComboBox editable="true" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
@@ -81,7 +81,7 @@
       </HBox>
       <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <Button mnemonicParsing="false" text="Додати роботу" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" text="Додати роботу" onAction="#onCreateTopic" GridPane.columnIndex="2" GridPane.rowIndex="2" />
          </children>
       </VBox>
    </children>
