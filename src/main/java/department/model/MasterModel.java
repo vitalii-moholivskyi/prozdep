@@ -62,16 +62,19 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 
-				val builder = Master.builder()
-						.department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
-						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
-						.phone(form.getPhone());
+                val builder = Master.builder()
+                        .department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
+                        .startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
+                        .phone(form.getPhone());
 
-				if(form.getTeacher() != null) {
-					builder.teacher(Teacher.builder().id(form.getTeacher()).build());
-				}
+                if (form.getTeacher() != null) {
+                    builder.teacher(Teacher.builder().id(form.getTeacher()).build());
+                }
 
-				sub.onNext(masterDao.insert(builder.build()));
+                sub.onNext(masterDao.insert(builder.build()));
+            } catch (final Exception e) {
+                sub.onError(e);
+                e.printStackTrace();
 			} finally {
 				sub.onCompleted();
 			}

@@ -13,6 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,20 @@ public class CreateMasterTabController {
 
     @FXML
     private void initialize() {
-        /*departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
+
+        departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
+            @Override
+            public String toString(DepartmentViewModel object) {
+                return String.format("%d %s", object.getId(), object.getName());
+            }
+
+            @Override
+            public DepartmentViewModel fromString(String string) {
+                return null;
+            }
+        });
+
+        departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
                         , th -> {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -61,19 +75,19 @@ public class CreateMasterTabController {
                             alert.showAndWait();
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
-                );*/
+                );
     }
 
     @FXML
     private void onCreate() {
 
-        /*val department = departmentComboBox.valueProperty().get();
+        val department = departmentComboBox.valueProperty().get();
 
         if (department == null) {
             showWarning("Не обрано кафедру", "Для того, аби продовжити, виберіть кафедру зі списку");
             departmentComboBox.requestFocus();
             return;
-        }*/
+        }
 
         val name = fullNameField.getText();
 
@@ -95,15 +109,14 @@ public class CreateMasterTabController {
 
         val form = new MasterCreateForm();
 
-        // form.setDepartment(department.getId());
-        form.setDepartment(1);// todo remove
+        form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
         form.setStartDate(new Date(start.toEpochDay()));
         form.setEndDate(end == null ? null : new Date(end.toEpochDay()));
 
         model.create(form).subscribe(master -> {
-            log.log(Level.INFO, "Model created");
+            log.log(Level.SEVERE, "Model created");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -116,7 +129,13 @@ public class CreateMasterTabController {
             } else {
                 ((Stage) viewRoot.getScene().getWindow()).close();
             }
-        }, th -> log.log(Level.SEVERE, "Failed to create model", th));
+        }, th -> {
+            log.log(Level.SEVERE, "Failed to create model", th);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Помилка");
+            alert.setContentText("Не вдалося створити магістра");
+            alert.showAndWait();
+        });
     }
 
     private void showWarning(String header, String body) {

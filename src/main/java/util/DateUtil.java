@@ -26,7 +26,7 @@ public class DateUtil {
     }
 
     public static java.sql.Date convertToSqlDate(Date date) {
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());// here is NPE!
         return sqlDate;
     }
 }
