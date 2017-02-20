@@ -3,10 +3,7 @@ package department.config;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -34,14 +31,15 @@ public class MainConfig {
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
         dataSource.setMinIdle(1);
-        dataSource.setMaxIdle(2);
+        dataSource.setMaxIdle(1);
+        dataSource.setMaxTotal(1);
         dataSource.setInitialSize(1);
         return dataSource;
     }
 
     @Bean
     public JdbcTemplate getJdbcTemplate(DataSource dataSource){
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource, false);
         return jdbcTemplate;
     }
 
