@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane prefHeight="404.0" fx:id="viewRoot" fx:controller="department.ui.controller.CreatePostgraduateController" prefWidth="289.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="viewRoot" prefHeight="456.0" prefWidth="289.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreatePostgraduateController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
     </columnConstraints>
@@ -14,7 +14,7 @@
         <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <HBox alignment="CENTER">
+        <HBox alignment="CENTER" prefHeight="403.0" prefWidth="289.0">
             <children>
                 <VBox alignment="BASELINE_CENTER" maxWidth="200.0" prefWidth="200.0">
                     <children>
@@ -23,7 +23,7 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <ComboBox minWidth="200.0" promptText="Кафедра" fx:id="departmentComboBox">
+                        <ComboBox fx:id="departmentComboBox" minWidth="200.0" promptText="Кафедра">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></ComboBox>
@@ -47,7 +47,7 @@
                      <padding>
                         <Insets top="3.0" />
                      </padding></Label>
-                        <DatePicker minWidth="200.0" fx:id="startDatePicker">
+                        <DatePicker fx:id="startDatePicker" minWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></DatePicker>
@@ -55,7 +55,7 @@
                      <padding>
                         <Insets top="3.0" />
                      </padding></Label>
-                        <DatePicker minWidth="200.0" fx:id="endDatePicker">
+                        <DatePicker fx:id="endDatePicker" minWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></DatePicker>
@@ -63,11 +63,17 @@
                      <padding>
                         <Insets top="3.0" />
                      </padding></Label>
-                        <DatePicker layoutX="10.0" layoutY="10.0" minWidth="200.0" fx:id="defenceDatePicker">
+                        <DatePicker fx:id="defenceDatePicker" layoutX="10.0" layoutY="10.0" minWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></DatePicker>
-                        <Button mnemonicParsing="false" text="Button" onAction="#onCreatePostgraduate">
+                  <Label text="Викладач">
+                     <padding>
+                        <Insets top="3.0" />
+                     </padding>
+                  </Label>
+                  <ComboBox fx:id="departmentComboBox1" editable="true" minWidth="200.0" promptText="Викладач" />
+                        <Button mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Зберегти">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin></Button>
