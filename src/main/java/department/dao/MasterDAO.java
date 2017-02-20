@@ -152,7 +152,7 @@ public class MasterDAO implements IMasterDAO{
                 master.getTopic(),
                 DateUtil.convertToSqlDate(master.getStartDate()),
                 DateUtil.convertToSqlDate(master.getEndDate()),
-                master.getTeacher().getId(),
+                master.getTeacher() == null ? null : master.getTeacher().getId(),
                 master.getDepartment().getId()
         };
         jdbcTemplate.update(INSERT, values);
@@ -165,7 +165,7 @@ public class MasterDAO implements IMasterDAO{
                 master.getTopic(),
                 DateUtil.convertToSqlDate(master.getStartDate()),
                 DateUtil.convertToSqlDate(master.getEndDate()),
-                master.getTeacher().getId(),
+                master.getTeacher() == null ? null : master.getTeacher().getId(),
                 master.getDepartment().getId(),
                 master.getId()
         };

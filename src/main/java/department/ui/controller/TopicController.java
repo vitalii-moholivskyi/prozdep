@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.logging.Level;
 
+import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
 import static department.ui.utils.UiUtils.DATE_FLD_MAPPER;
 import static department.ui.utils.UiUtils.NULLABLE_FLD_MAPPER;
 
@@ -23,7 +24,7 @@ import static department.ui.utils.UiUtils.NULLABLE_FLD_MAPPER;
 @EqualsAndHashCode(callSuper = false)
 @Getter(value = AccessLevel.NONE)
 @Controller
-public class TopicController extends ListTabController<TopicViewModel>  {
+public class TopicController extends ListTabController<TopicViewModel> {
 
     ITopicModel topicModel;
     MainController mainController;
@@ -72,15 +73,28 @@ public class TopicController extends ListTabController<TopicViewModel>  {
                      public void onFailure(Throwable th) {
                          processError(th);
                      }
-                 }, topicModel.fetchTopics(0, UiConstants.RESULTS_PER_PAGE), topicModel.count()
+                 }, topicModel.fetchTopics(0, RESULTS_PER_PAGE), topicModel.count()
         );
     }
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(newIndex);
+    }
+
+    @Override
+    protected void onRefresh() {
+        val indx = pagination.currentPageIndexProperty().get();
+
+        if (indx >= 0) {
+            doLoad(indx);
+        }
+    }
+
+    private void doLoad(int indx) {
         val toastId = mainController.showProgress("Завантаження списку наукових тем...");
 
-        topicModel.fetchTopics(newIndex * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
+        topicModel.fetchTopics(indx * RESULTS_PER_PAGE, RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }

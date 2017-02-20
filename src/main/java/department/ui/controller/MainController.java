@@ -144,7 +144,7 @@ public final class MainController {
 
     @FXML
     private void onCreatePostgraduate() {
-        loadCreationView("/view/partials/_formPostgraduate.fxml");
+        loadCreationView("/view/partials/_formPostgraduate.fxml", CreatePostgraduateController.class);
     }
 
     @FXML

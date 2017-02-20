@@ -34,8 +34,8 @@ public class MasterViewModel {
         String firstName;
         Date startDate;
 
-        @NonFinal int teacherId;
-        @NonFinal int departmentId;
+        @NonFinal Integer teacherId;
+        @NonFinal Integer departmentId;
         @NonFinal String phone;
         @NonFinal Date endDate;
         @NonFinal String topic;
@@ -47,7 +47,7 @@ public class MasterViewModel {
             this.startDate = Preconditions.notNull(startDate);
         }
 
-        public Builder setTeacherId(int teacherId) {
+        public Builder setTeacherId(Integer teacherId) {
             this.teacherId = teacherId;
             return this;
         }
@@ -67,7 +67,7 @@ public class MasterViewModel {
             return this;
         }
 
-        public Builder setDepartmentId(int departmentId) {
+        public Builder setDepartmentId(Integer departmentId) {
             this.departmentId = departmentId;
             return this;
         }
@@ -93,11 +93,11 @@ public class MasterViewModel {
         return id;
     }
 
-    public void setTeacherId(int id) {
+    public void setTeacherId(Integer id) {
         this.teacherId.onNext(id);
     }
 
-    public int getTeacherId() {
+    public Integer getTeacherId() {
         return teacherId.getValue();
     }
 
@@ -169,7 +169,7 @@ public class MasterViewModel {
         return department.getValue();
     }
 
-    public void setDepartment(int id) {
+    public void setDepartment(Integer id) {
         this.department.onNext(id);
     }
 

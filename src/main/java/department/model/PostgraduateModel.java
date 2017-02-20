@@ -88,14 +88,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PostgraduateMapper::toViewModel);
 	}
 
-	/**
-	 * @param form
-	 * @param model
-	 * @param errCallback
-	 */
 	@Override
-	public void update(PostgraduateUpdateForm form, PostgraduateViewModel model,
-			Action1<? super Throwable> errCallback) {
+	public void update(@NotNull(message = "form cannot be null") PostgraduateUpdateForm form, @NotNull(message = "model cannot be null") PostgraduateViewModel model, @NotNull(message = "error callback cannot be null") Action1<? super Void> callback, @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Postgraduate>) sub -> {
 
 			sub.onStart();
@@ -120,6 +114,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 			model.setProtectionDate(result.getProtectionDate());
 			model.setTopic(result.getTopic());
 			model.setTeacherId(result.getTeacher().getId());
+			callback.call(null);
 		} , errCallback::call);
 	}
 

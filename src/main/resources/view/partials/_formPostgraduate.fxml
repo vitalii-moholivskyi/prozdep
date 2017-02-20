@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane fx:id="viewRoot" prefHeight="456.0" prefWidth="289.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreatePostgraduateController">
+<GridPane fx:id="viewRoot" prefHeight="456.0" prefWidth="289.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.BasePostrgraduateController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
     </columnConstraints>
@@ -72,7 +72,8 @@
                         <Insets top="3.0" />
                      </padding>
                   </Label>
-                  <ComboBox fx:id="departmentComboBox1" editable="true" minWidth="200.0" promptText="Викладач" />
+                  <ComboBox fx:id="teacherComboBox" editable="true" minWidth="200.0" promptText="Викладач" />
+                        <ComboBox fx:id="topicComboBox" editable="true" minWidth="200.0" promptText="Тема" />
                         <Button mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Зберегти">
                      <VBox.margin>
                         <Insets top="5.0" />

@@ -75,9 +75,22 @@ public class PaperController extends ListTabController<PaperViewModel> {
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(newIndex);
+    }
+
+    @Override
+    protected void onRefresh() {
+        val indx = pagination.currentPageIndexProperty().get();
+
+        if (indx >= 0) {
+            doLoad(indx);
+        }
+    }
+
+    private void doLoad(int indx) {
         val toastId = mainController.showProgress("Завантаження списку наукових робіт...");
 
-        paperModel.fetchPapers(newIndex * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
+        paperModel.fetchPapers(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }

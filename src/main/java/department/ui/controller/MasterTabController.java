@@ -107,10 +107,23 @@ public final class MasterTabController extends ListTabController<MasterViewModel
     }
 
     @Override
+    protected void onRefresh() {
+        val indx = pagination.currentPageIndexProperty().get();
+
+        if(indx >= 0) {
+            doLoad(indx);
+        }
+    }
+
+    @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(newIndex);
+    }
+
+    private void doLoad(int indx) {
         val toastId = mainController.showProgress("Завантаження списку магістрів...");
 
-        model.fetchMasters(newIndex * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
+        model.fetchMasters(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }

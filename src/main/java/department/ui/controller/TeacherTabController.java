@@ -78,9 +78,22 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(newIndex);
+    }
+
+    @Override
+    protected void onRefresh() {
+        val indx = pagination.currentPageIndexProperty().get();
+
+        if (indx >= 0) {
+            doLoad(indx);
+        }
+    }
+
+    private void doLoad(int indx) {
         val toastId = mainController.showProgress("Завантаження списку викладачів...");
 
-        model.fetchTeachers(newIndex * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
+        model.fetchTeachers(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }

@@ -72,6 +72,7 @@ public interface IPostgraduateModel {
 	@NotNull
 	void update(@NotNull(message = "form cannot be null") PostgraduateUpdateForm form,
 			@NotNull(message = "model cannot be null") PostgraduateViewModel model,
+				@NotNull(message = "error callback cannot be null") Action1<? super Void> callback,
 			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 	
 	
