@@ -52,6 +52,12 @@ public class ScientistDAO implements IScientistDAO{
     }
 
     @Override
+    public List<Scientist> findAll(String name) {
+        // TODO
+        return findAll();
+    }
+
+    @Override
     public List<Scientist> findAll(String name, long limit, long offset) {
         // TODO
         return findAll(limit, offset);

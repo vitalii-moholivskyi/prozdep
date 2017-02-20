@@ -116,6 +116,12 @@ public class MasterDAO implements IMasterDAO{
     }
 
     @Override
+    public List<Master> findAll(String name) {
+        // TODO
+        return findAll();
+    }
+
+    @Override
     public List<Master> findAll(String name, long limit, long offset) {
         // TODO
         return findAll(limit, offset);

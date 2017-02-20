@@ -100,6 +100,12 @@ public class PostgraduateDAO implements IPostgraduateDAO{
     }
 
     @Override
+    public List<Postgraduate> findAll(String name) {
+        // TODO
+        return findAll();
+    }
+
+    @Override
     public List<Postgraduate> findAll(String name, long limit, long offset) {
         // TODO
         return findAll(limit, offset);

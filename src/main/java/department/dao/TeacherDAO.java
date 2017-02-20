@@ -25,6 +25,22 @@ public class TeacherDAO implements ITeacherDAO{
             "INNER JOIN scientist s ON t.scientist_id = s.id " +
             "ORDER BY s.id " +
             "LIMIT ? OFFSET ?;";
+
+    private final static String COUNT_WIHT_NAME_LIKE = "SELECT COUNT(*) " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "WHERE s.name LIKE CONCAT('%', ? , '%')  COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE= "SELECT * " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "WHERE s.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = "SELECT * " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "WHERE s.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
+
     private final static String FIND = "SELECT * " +
             "FROM teacher t " +
             "INNER JOIN scientist s ON t.scientist_id = s.id " +
@@ -83,14 +99,17 @@ public class TeacherDAO implements ITeacherDAO{
 
     @Override
     public int count(String name) {
-        // TODO
-        return count();
+        return jdbcTemplate.queryForObject(COUNT_WIHT_NAME_LIKE, new Object[] {name}, Integer.class);
+    }
+
+    @Override
+    public List<Teacher> findAll(String name) {
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE, new Object[] {name}, teacherMapper);
     }
 
     @Override
     public List<Teacher> findAll(String name, long limit, long offset) {
-        // TODO
-        return findAll(limit, offset);
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, teacherMapper);
     }
 
     @Override

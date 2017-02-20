@@ -269,4 +269,12 @@ public class DaoTestSuit {
         System.out.println("Find all with limit, offset:" + masterDAO.findAll(2,2));
     }
 
+
+    @Test
+    public void testSearchDaoMethods(){
+        System.out.println(teacherDAO.findAll("Сергій"));
+        System.out.println(teacherDAO.count("Сергій"));
+        System.out.println(teacherDAO.findAll("Сергій", 2,10));
+    }
+
 }
