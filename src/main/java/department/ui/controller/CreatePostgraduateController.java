@@ -18,6 +18,7 @@ import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
 
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 
@@ -106,9 +107,9 @@ public final class CreatePostgraduateController {
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
-        form.setStartDate(new Date(start.toEpochDay()));
-        form.setEndDate(end == null ? null : new Date(end.toEpochDay()));
-        form.setProtectionDate(defence == null ? null : new Date(defence.toEpochDay()));
+        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setProtectionDate(defence == null ? null : Date.from(defence.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         postgraduateModel.create(form).subscribe(master -> {
             log.log(Level.SEVERE, "Model created");
@@ -128,7 +129,7 @@ public final class CreatePostgraduateController {
             log.log(Level.SEVERE, "Failed to create model", th);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити магістра");
+            alert.setContentText("Не вдалося створити аспіранта");
             alert.showAndWait();
         });
     }
