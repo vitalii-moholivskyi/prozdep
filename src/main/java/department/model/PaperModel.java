@@ -3,14 +3,6 @@
  */
 package department.model;
 
-import java.util.Collection;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import department.dao.IPaperDAO;
 import department.model.bo.Paper;
 import department.model.form.PaperCreateForm;
@@ -19,9 +11,15 @@ import department.model.mapper.PaperMapper;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * @author Nikolay
@@ -40,6 +38,8 @@ public class PaperModel implements IPaperModel {
 			sub.onStart();
 			try {
 				sub.onNext(paperDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -54,6 +54,8 @@ public class PaperModel implements IPaperModel {
 			sub.onStart();
 			try {
 				sub.onNext(paperDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -69,6 +71,8 @@ public class PaperModel implements IPaperModel {
 			try {
 				sub.onNext(paperDao.insert(
 						Paper.builder().type(form.getType()).name(form.getName()).year(form.getYear()).build()));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -85,6 +89,8 @@ public class PaperModel implements IPaperModel {
 						.year(form.getYear()).build();
 				paperDao.update(paper);
 				sub.onNext(paper);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -103,6 +109,8 @@ public class PaperModel implements IPaperModel {
 			sub.onStart();
 			try {
 				sub.onNext(paperDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}

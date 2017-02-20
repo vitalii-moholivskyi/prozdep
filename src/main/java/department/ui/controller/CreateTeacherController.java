@@ -18,6 +18,7 @@ import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
 
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 
@@ -119,7 +120,7 @@ public final class CreateTeacherController {
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
-        form.setStartDate(new Date(start.toEpochDay()));
+        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         form.setDegree(degree);
         form.setPosition(position);
 

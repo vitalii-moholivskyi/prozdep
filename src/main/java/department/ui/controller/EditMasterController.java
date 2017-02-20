@@ -1,21 +1,18 @@
 package department.ui.controller;
 
 import department.model.IDepartmentModel;
-import department.model.IPostgraduateModel;
-import department.model.form.PostgraduateCreateForm;
+import department.model.IMasterModel;
+import department.model.form.MasterUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.MasterViewModel;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.time.ZoneId;
@@ -23,31 +20,47 @@ import java.util.Date;
 import java.util.logging.Level;
 
 /**
- * Created by Максим on 2/19/2017.
+ * Created by Максим on 2/7/2017.
  */
-@Log
 @Controller
-public final class CreatePostgraduateController {
+@Log
+public final class EditMasterController extends MasterBaseController {
 
-    private final IPostgraduateModel postgraduateModel;
+    private final IMasterModel model;
     private final IDepartmentModel departmentModel;
 
-    @FXML private Parent viewRoot;
-    @FXML private ComboBox<DepartmentViewModel> departmentComboBox;
-    @FXML private TextField fullNameField;
-    @FXML private TextField phoneField;
-    @FXML private DatePicker startDatePicker;
-    @FXML private DatePicker endDatePicker;
-    @FXML private DatePicker defenceDatePicker;
+    private MasterViewModel dataModel;
 
-    public CreatePostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel) {
-        this.postgraduateModel = postgraduateModel;
+    @Autowired
+    public EditMasterController(IMasterModel model, IDepartmentModel departmentModel) {
+        this.model = model;
         this.departmentModel = departmentModel;
     }
 
-    @FXML
-    private void initialize() {
+    public MasterViewModel getDataModel() {
+        return dataModel;
+    }
 
+    public void setDataModel(MasterViewModel dataModel) {
+        this.dataModel = dataModel;
+
+        fullNameField.setText(dataModel.getFirstName());
+
+        if (dataModel.getStartDate() != null) {
+            startDatePicker.setValue(dataModel.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+
+        if (dataModel.getEndDate() != null) {
+            endDatePicker.setValue(dataModel.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        phoneField.setText(dataModel.getPhone());
+    }
+
+    @Override
+    protected void initialize() {
+
+        titleLabel.setText("Редагувати магістра");
+        actionButton.setText("Зберегти");
         departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
@@ -61,10 +74,20 @@ public final class CreatePostgraduateController {
         });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
-                .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
+                .subscribe(departments -> {
+
+                            if (dataModel.getDepartment() != null) {
+                                for (val department : departments) {
+                                    departmentComboBox.getItems().add(department);
+                                    if (department.getId() == dataModel.getDepartment()) {
+                                        departmentComboBox.getSelectionModel().select(department);
+                                    }
+                                }
+                            }
+                        }
                         , th -> {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Помилка");
+                            alert.setTitle("Error");
                             alert.setContentText("Не вдалося завантажити список кафедр");
                             alert.showAndWait();
                             log.log(Level.WARNING, "Failed to fetch departments", th);
@@ -72,8 +95,8 @@ public final class CreatePostgraduateController {
                 );
     }
 
-    @FXML
-    private void onCreatePostgraduate() {
+    @Override
+    protected void onCreate() {
 
         val department = departmentComboBox.valueProperty().get();
 
@@ -100,19 +123,20 @@ public final class CreatePostgraduateController {
         }
 
         val end = endDatePicker.getValue();
-        val defence = defenceDatePicker.getValue();
 
-        val form = new PostgraduateCreateForm();
+        val form = new MasterUpdateForm();
 
+        form.setId(dataModel.getId());
+        form.setTeacher(dataModel.getTeacherId());
+        form.setTopic(dataModel.getTopic());
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
         form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        form.setProtectionDate(defence == null ? null : Date.from(defence.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        postgraduateModel.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+        model.update(form, dataModel, a -> {
+            log.log(Level.SEVERE, "Model updated");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -129,19 +153,9 @@ public final class CreatePostgraduateController {
             log.log(Level.SEVERE, "Failed to create model", th);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити аспіранта");
+            alert.setContentText("Не вдалося оновити дані про магістра");
             alert.showAndWait();
         });
-    }
-
-    private void showWarning(String header, String body) {
-
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText(header);
-        alert.setContentText(body);
-
-        alert.showAndWait();
     }
 
 }

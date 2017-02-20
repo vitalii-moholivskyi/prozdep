@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane fx:controller="department.ui.controller.CreateMasterController" fx:id="viewRoot" prefHeight="357.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:controller="department.ui.controller.MasterBaseController" fx:id="viewRoot" prefHeight="357.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
     </columnConstraints>
@@ -18,7 +18,7 @@
             <children>
                 <VBox alignment="BASELINE_CENTER" maxWidth="200.0" prefHeight="334.0" prefWidth="200.0">
                     <children>
-                        <Label text="Додати магістра">
+                        <Label text="Додати магістра" fx:id="titleLabel">
                             <font>
                                 <Font size="18.0" />
                             </font>
@@ -74,7 +74,7 @@
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></DatePicker>
-                        <Button mnemonicParsing="false" text="Додати" onAction="#onCreate">
+                        <Button mnemonicParsing="false" text="Додати" fx:id="actionButton" onAction="#onCreate">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin></Button>

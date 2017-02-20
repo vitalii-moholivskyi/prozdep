@@ -34,8 +34,8 @@
                         <MenuItem mnemonicParsing="false" onAction="#onViewMaster" text="Магістри" />
                       <MenuItem mnemonicParsing="false" onAction="#onViewTeacher" text="Викладачі" />
                       <MenuItem mnemonicParsing="false" onAction="#onViewPostgraduate" text="Аспіранти" />
-                        <MenuItem mnemonicParsing="false" text="Наукові теми" />
-                        <MenuItem mnemonicParsing="false" text="Наукові роботи" />
+                        <MenuItem mnemonicParsing="false" text="Наукові теми" onAction="#onViewTopic"/>
+                        <MenuItem mnemonicParsing="false" text="Наукові роботи" onAction="#onViewPapers"/>
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Призначити">

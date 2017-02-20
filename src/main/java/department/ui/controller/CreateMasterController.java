@@ -6,12 +6,7 @@ import department.model.form.MasterCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import lombok.extern.java.Log;
@@ -19,6 +14,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 
@@ -27,17 +23,10 @@ import java.util.logging.Level;
  */
 @Controller
 @Log
-public final class CreateMasterController {
+public final class CreateMasterController extends MasterBaseController {
 
     private final IMasterModel model;
     private final IDepartmentModel departmentModel;
-
-    @FXML private Parent viewRoot;
-    @FXML private ComboBox<DepartmentViewModel> departmentComboBox;
-    @FXML private TextField fullNameField;
-    @FXML private TextField phoneField;
-    @FXML private DatePicker startDatePicker;
-    @FXML private DatePicker endDatePicker;
 
     @Autowired
     public CreateMasterController(IMasterModel model, IDepartmentModel departmentModel) {
@@ -45,8 +34,8 @@ public final class CreateMasterController {
         this.departmentModel = departmentModel;
     }
 
-    @FXML
-    private void initialize() {
+    @Override
+    protected void initialize() {
 
         departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
             @Override
@@ -72,8 +61,8 @@ public final class CreateMasterController {
                 );
     }
 
-    @FXML
-    private void onCreate() {
+    @Override
+    protected void onCreate() {
 
         val department = departmentComboBox.valueProperty().get();
 
@@ -106,8 +95,8 @@ public final class CreateMasterController {
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
-        form.setStartDate(new Date(start.toEpochDay()));
-        form.setEndDate(end == null ? null : new Date(end.toEpochDay()));
+        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         model.create(form).subscribe(master -> {
             log.log(Level.SEVERE, "Model created");
@@ -130,16 +119,6 @@ public final class CreateMasterController {
             alert.setContentText("Не вдалося створити магістра");
             alert.showAndWait();
         });
-    }
-
-    private void showWarning(String header, String body) {
-
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText(header);
-        alert.setContentText(body);
-
-        alert.showAndWait();
     }
 
 }

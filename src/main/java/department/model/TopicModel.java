@@ -3,14 +3,6 @@
  */
 package department.model;
 
-import java.util.Collection;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import department.dao.ITopicDAO;
 import department.model.bo.Department;
 import department.model.bo.Teacher;
@@ -21,9 +13,15 @@ import department.model.mapper.TopicMapper;
 import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * @author Nikolay
@@ -42,6 +40,8 @@ public class TopicModel implements ITopicModel {
 			sub.onStart();
 			try {
 				sub.onNext(topicDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -56,6 +56,8 @@ public class TopicModel implements ITopicModel {
 			sub.onStart();
 			try {
 				sub.onNext(topicDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -75,6 +77,8 @@ public class TopicModel implements ITopicModel {
 						.startDate(form.getStartDate())
 
 						.build()));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -95,6 +99,8 @@ public class TopicModel implements ITopicModel {
 						.build();
 				topicDao.update(topic);
 				sub.onNext(topic);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -113,6 +119,8 @@ public class TopicModel implements ITopicModel {
 			sub.onStart();
 			try {
 				sub.onNext(topicDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
