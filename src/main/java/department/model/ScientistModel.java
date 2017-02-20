@@ -3,14 +3,6 @@
  */
 package department.model;
 
-import java.util.Collection;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import department.dao.IScientistDAO;
 import department.model.bo.Scientist;
 import department.model.form.ScientistCreateForm;
@@ -19,9 +11,15 @@ import department.model.mapper.ScientistMapper;
 import department.ui.controller.model.ScientistViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * @author Nikolay
@@ -42,6 +40,8 @@ public class ScientistModel implements IScientistModel {
 					sub.onStart();
 					try {
 						sub.onNext(scientistDao.findAll(limit, offset));
+					} catch (Exception e) {
+						sub.onError(e);
 					} finally {
 						sub.onCompleted();
 					}
@@ -57,6 +57,8 @@ public class ScientistModel implements IScientistModel {
 					sub.onStart();
 					try {
 						sub.onNext(scientistDao.findAll(limit, offset));
+					} catch (Exception e) {
+						sub.onError(e);
 					} finally {
 						sub.onCompleted();
 					}
@@ -73,6 +75,8 @@ public class ScientistModel implements IScientistModel {
 			try {
 				sub.onNext(
 						scientistDao.insert(Scientist.builder().phone(form.getPhone()).name(form.getName()).build()));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -89,6 +93,8 @@ public class ScientistModel implements IScientistModel {
 						.build();
 				scientistDao.update(scientist);
 				sub.onNext(scientist);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -105,6 +111,8 @@ public class ScientistModel implements IScientistModel {
 			sub.onStart();
 			try {
 				sub.onNext(scientistDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}

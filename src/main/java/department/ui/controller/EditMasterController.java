@@ -2,8 +2,9 @@ package department.ui.controller;
 
 import department.model.IDepartmentModel;
 import department.model.IMasterModel;
-import department.model.form.MasterCreateForm;
+import department.model.form.MasterUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.MasterViewModel;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.scene.control.Alert;
@@ -23,20 +24,43 @@ import java.util.logging.Level;
  */
 @Controller
 @Log
-public final class CreateMasterController extends MasterBaseController {
+public final class EditMasterController extends MasterBaseController {
 
     private final IMasterModel model;
     private final IDepartmentModel departmentModel;
 
+    private MasterViewModel dataModel;
+
     @Autowired
-    public CreateMasterController(IMasterModel model, IDepartmentModel departmentModel) {
+    public EditMasterController(IMasterModel model, IDepartmentModel departmentModel) {
         this.model = model;
         this.departmentModel = departmentModel;
+    }
+
+    public MasterViewModel getDataModel() {
+        return dataModel;
+    }
+
+    public void setDataModel(MasterViewModel dataModel) {
+        this.dataModel = dataModel;
+
+        fullNameField.setText(dataModel.getFirstName());
+
+        if (dataModel.getStartDate() != null) {
+            startDatePicker.setValue(dataModel.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+
+        if (dataModel.getEndDate() != null) {
+            endDatePicker.setValue(dataModel.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        phoneField.setText(dataModel.getPhone());
     }
 
     @Override
     protected void initialize() {
 
+        titleLabel.setText("Редагувати магістра");
+        actionButton.setText("Зберегти");
         departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
@@ -50,7 +74,17 @@ public final class CreateMasterController extends MasterBaseController {
         });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
-                .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
+                .subscribe(departments -> {
+
+                            if (dataModel.getDepartment() != null) {
+                                for (val department : departments) {
+                                    departmentComboBox.getItems().add(department);
+                                    if (department.getId() == dataModel.getDepartment()) {
+                                        departmentComboBox.getSelectionModel().select(department);
+                                    }
+                                }
+                            }
+                        }
                         , th -> {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Error");
@@ -90,16 +124,19 @@ public final class CreateMasterController extends MasterBaseController {
 
         val end = endDatePicker.getValue();
 
-        val form = new MasterCreateForm();
+        val form = new MasterUpdateForm();
 
+        form.setId(dataModel.getId());
+        form.setTeacher(dataModel.getTeacherId());
+        form.setTopic(dataModel.getTopic());
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
         form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        model.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+        model.update(form, dataModel, a -> {
+            log.log(Level.SEVERE, "Model updated");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -116,7 +153,7 @@ public final class CreateMasterController extends MasterBaseController {
             log.log(Level.SEVERE, "Failed to create model", th);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити магістра");
+            alert.setContentText("Не вдалося оновити дані про магістра");
             alert.showAndWait();
         });
     }

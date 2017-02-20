@@ -20,6 +20,8 @@ public class TopicViewModel {
     BehaviorSubject<Date> startDate;
     BehaviorSubject<Date> endDate;
     BehaviorSubject<Integer> chiefScientist;
+    BehaviorSubject<String> chiefScientistName;
+    BehaviorSubject<String> departmentTitle;
 
     @Getter
     @Value
@@ -29,6 +31,7 @@ public class TopicViewModel {
         String client, name;
         Date startDate;
 
+        @NonFinal String chiefScientistName, departmentTitle;
         @NonFinal Date endDate;
 
         public Builder(int id, String client, Date startDate, int department, int chiefScientist, String name) {
@@ -48,6 +51,16 @@ public class TopicViewModel {
             return this;
         }
 
+        public Builder setChiefScientistName(String chiefScientistName) {
+            this.chiefScientistName = chiefScientistName;
+            return this;
+        }
+
+        public Builder setDepartmentTitle(String departmentTitle) {
+            this.departmentTitle = departmentTitle;
+            return this;
+        }
+
         public TopicViewModel build() {
             return new TopicViewModel(this);
         }
@@ -62,6 +75,8 @@ public class TopicViewModel {
         this.name = BehaviorSubject.create(builder.getName());
         this.department = builder.getDepartment();
         this.chiefScientist = BehaviorSubject.create(builder.getChiefScientist());
+        this.chiefScientistName = BehaviorSubject.create(builder.getChiefScientistName());
+        this.departmentTitle = BehaviorSubject.create(builder.getDepartmentTitle());
     }
 
     public int getId() {
@@ -124,5 +139,28 @@ public class TopicViewModel {
         return chiefScientist;
     }
 
+    public Observable<String> getChiefScientistNameObs() {
+        return chiefScientistName.asObservable();
+    }
+
+    public Observable<String> getDepartmentTitleObs() {
+        return departmentTitle.asObservable();
+    }
+
+    public String getChiefScientistName() {
+        return chiefScientistName.getValue();
+    }
+
+    public void setChiefScientistName(String name) {
+        this.chiefScientistName.onNext(name);
+    }
+
+    public String getDepartmentTitle() {
+        return departmentTitle.getValue();
+    }
+
+    public void setDepartmentTitle(String name) {
+        this.departmentTitle.onNext(name);
+    }
 
 }

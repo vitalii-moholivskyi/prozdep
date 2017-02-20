@@ -3,14 +3,6 @@
  */
 package department.model;
 
-import java.util.Collection;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import department.dao.IPostgraduateDAO;
 import department.model.bo.Department;
 import department.model.bo.Postgraduate;
@@ -21,9 +13,15 @@ import department.model.mapper.PostgraduateMapper;
 import department.ui.controller.model.PostgraduateViewModel;
 import department.ui.utils.FxSchedulers;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * @author Nikolay
@@ -44,6 +42,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 					sub.onStart();
 					try {
 						sub.onNext(postgraduateDao.findAll(limit, offset));
+					} catch (Exception e) {
+						sub.onError(e);
 					} finally {
 						sub.onCompleted();
 					}
@@ -59,6 +59,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 					sub.onStart();
 					try {
 						sub.onNext(postgraduateDao.findAll(limit, offset));
+					} catch (Exception e) {
+						sub.onError(e);
 					} finally {
 						sub.onCompleted();
 					}
@@ -78,6 +80,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 								.department(Department.builder().id(form.getDepartment()).build())
 								.endDate(form.getEndDate()).startDate(form.getStartDate()).topic(form.getTopic())
 								.name(form.getName()).phone(form.getPhone()).endDate(form.getEndDate()).build()));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -103,6 +107,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 						.phone(form.getPhone()).endDate(form.getEndDate()).build();
 				postgraduateDao.update(postgraduate);
 				sub.onNext(postgraduate);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -124,6 +130,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 			sub.onStart();
 			try {
 				sub.onNext(postgraduateDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
