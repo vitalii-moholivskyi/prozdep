@@ -53,7 +53,7 @@ public final class MasterTabController extends ListTabController<MasterViewModel
         val size = tableView.getColumns().size();
 
         for (val column : tableView.getColumns()) {
-            column.prefWidthProperty().bind(tableView.widthProperty().divide(size));
+            column.prefWidthProperty().bind(tableView.widthProperty().divide(size).add(-4.));
         }
 
         val progress = new DefaultProgressMessage(mainController);
