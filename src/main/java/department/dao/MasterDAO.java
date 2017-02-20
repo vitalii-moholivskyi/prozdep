@@ -1,10 +1,9 @@
 package department.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
-import department.model.bo.*;
+import department.model.bo.Department;
+import department.model.bo.Master;
+import department.model.bo.Scientist;
+import department.model.bo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -116,6 +115,12 @@ public class MasterDAO implements IMasterDAO{
     }
 
     @Override
+    public List<Master> findAll(String name) {
+        // TODO
+        return findAll();
+    }
+
+    @Override
     public List<Master> findAll(String name, long limit, long offset) {
         // TODO
         return findAll(limit, offset);
@@ -147,7 +152,7 @@ public class MasterDAO implements IMasterDAO{
                 master.getTopic(),
                 DateUtil.convertToSqlDate(master.getStartDate()),
                 DateUtil.convertToSqlDate(master.getEndDate()),
-                master.getTeacher().getId(),
+                master.getTeacher() == null ? null : master.getTeacher().getId(),
                 master.getDepartment().getId()
         };
         jdbcTemplate.update(INSERT, values);
@@ -160,7 +165,7 @@ public class MasterDAO implements IMasterDAO{
                 master.getTopic(),
                 DateUtil.convertToSqlDate(master.getStartDate()),
                 DateUtil.convertToSqlDate(master.getEndDate()),
-                master.getTeacher().getId(),
+                master.getTeacher() == null ? null : master.getTeacher().getId(),
                 master.getDepartment().getId(),
                 master.getId()
         };
@@ -229,8 +234,8 @@ public class MasterDAO implements IMasterDAO{
                         .name(rs.getString("name"))
                         .phone(rs.getString("phone"))
                         .topic(rs.getString("topic"))
-                        .startDate(rs.getDate("start_date"))
-                        .endDate(rs.getDate("end_date"))
+                        .startDate(rs.getTimestamp("start_date"))
+                        .endDate(rs.getTimestamp("end_date"))
                         .teacher(Teacher
                                 .builder()
                                     .id(rs.getInt("teacher_id"))

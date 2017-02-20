@@ -1,9 +1,13 @@
 package department.ui.controller;
 
 import department.model.IDepartmentModel;
+import department.model.ITeacherModel;
 import department.model.ITopicModel;
 import department.model.form.TopicCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.TeacherViewModel;
+import department.ui.utils.DefaultStringConverter;
+import department.ui.utils.UiConstants;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
@@ -13,12 +17,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 
@@ -35,29 +39,33 @@ public final class CreateTopicController {
     @FXML private TextField clientField;
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
-    @FXML private TextField teacherField;
+    @FXML private ComboBox<TeacherViewModel> teacherComboBox;
 
     private final IDepartmentModel departmentModel;
     private final ITopicModel topicModel;
+    private final ITeacherModel teacherModel;
 
     @Autowired
-    public CreateTopicController(IDepartmentModel departmentModel, ITopicModel topicModel) {
+    public CreateTopicController(IDepartmentModel departmentModel, ITopicModel topicModel, ITeacherModel teacherModel) {
         this.departmentModel = departmentModel;
         this.topicModel = topicModel;
+        this.teacherModel = teacherModel;
     }
 
     @FXML
     private void initialize() {
 
-        departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
+        departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
                 return object == null ? "" : String.format("%d %s", object.getId(), object.getName());
             }
+        });
 
+        teacherComboBox.setConverter(new DefaultStringConverter<TeacherViewModel>() {
             @Override
-            public DepartmentViewModel fromString(String string) {
-                return null;
+            public String toString(TeacherViewModel object) {
+                return object == null ? "" : object.getFirstName();
             }
         });
 
@@ -71,6 +79,16 @@ public final class CreateTopicController {
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
+
+        teacherComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
+                        .doOnCompleted(teacherComboBox::show)
+                        .subscribe(teacherComboBox.getItems()::setAll,
+                                th -> log.log(Level.WARNING, "Failed to fetch teachers"));
+            }
+        });
     }
 
     @FXML
@@ -81,6 +99,14 @@ public final class CreateTopicController {
         if (department == null) {
             showWarning("Не обрано кафедру", "Для того, аби продовжити, виберіть кафедру зі списку");
             departmentComboBox.requestFocus();
+            return;
+        }
+
+        val chief = teacherComboBox.valueProperty().get();
+
+        if (chief == null) {
+            showWarning("Не обрано керівника", "Для того, аби продовжити, виберіть керівника зі списку");
+            teacherComboBox.requestFocus();
             return;
         }
 
@@ -108,17 +134,22 @@ public final class CreateTopicController {
             return;
         }
 
-        val form = new TopicCreateForm();
         val end = endDatePicker.getValue();
-        //todo finish
-        val chief = 0;
+
+        if (end == null) {
+            showWarning(null, "Дату кінця роботи не вказано");
+            endDatePicker.requestFocus();
+            return;
+        }
+
+        val form = new TopicCreateForm();
 
         form.setName(name);
         form.setClient(client);
         form.setDepartment(department.getId());
-        form.setStartDate(new Date(start.toEpochDay()));
-        form.setEndDate(end == null ? null : new Date(end.toEpochDay()));
-        form.setChiefScientist(chief);
+        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setEndDate(Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setChiefScientist(chief.getId());
 
         topicModel.create(form).subscribe(master -> {
             log.log(Level.SEVERE, "Model created");

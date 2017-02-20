@@ -3,13 +3,18 @@ package department.ui.controller;
 import department.model.IMasterModel;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.utils.UiConstants;
+import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.stage.Stage;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiUtils.DATE_FLD_MAPPER;
@@ -50,6 +55,31 @@ public final class MasterTabController extends ListTabController<MasterViewModel
         // setup table columns and content
         tableView.getColumns().addAll(firstNameCol, phoneCol, topicCol, startDateCol, endDateCol);
 
+        tableView.setRowFactory(tv -> {
+            TableRow<MasterViewModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+
+                    val stage = new Stage();
+                    val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml", EditMasterController.class);
+
+                    try {
+                        stage.setScene(new Scene(loader.load()));
+
+                        EditMasterController controller = loader.getController();
+
+                        controller.setDataModel(row.getItem());
+                        stage.centerOnScreen();
+                        stage.show();
+                        stage.sizeToScene();
+                    } catch (final IOException e) {
+                        log.log(Level.SEVERE, "Failed to open form", e);
+                    }
+                }
+            });
+            return row;
+        });
+
         val size = tableView.getColumns().size();
 
         for (val column : tableView.getColumns()) {
@@ -77,10 +107,23 @@ public final class MasterTabController extends ListTabController<MasterViewModel
     }
 
     @Override
+    protected void onRefresh() {
+        val indx = pagination.currentPageIndexProperty().get();
+
+        if(indx >= 0) {
+            doLoad(indx);
+        }
+    }
+
+    @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(newIndex);
+    }
+
+    private void doLoad(int indx) {
         val toastId = mainController.showProgress("Завантаження списку магістрів...");
 
-        model.fetchMasters(newIndex * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
+        model.fetchMasters(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }

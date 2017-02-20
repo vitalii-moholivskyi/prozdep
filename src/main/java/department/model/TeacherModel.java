@@ -37,6 +37,8 @@ public class TeacherModel implements ITeacherModel {
 			sub.onStart();
 			try {
 				sub.onNext(teacherDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -51,6 +53,8 @@ public class TeacherModel implements ITeacherModel {
 			sub.onStart();
 			try {
 				sub.onNext(teacherDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -69,6 +73,8 @@ public class TeacherModel implements ITeacherModel {
 						.department(Department.builder().id(form.getDepartment()).build())
 						.startDate(form.getStartDate()).name(form.getName()).phone(form.getPhone())
 						.position(form.getPosition()).build()));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -87,6 +93,8 @@ public class TeacherModel implements ITeacherModel {
 						.position(form.getPosition()).build();
 				teacherDao.update(teacher);
 				sub.onNext(teacher);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -107,6 +115,8 @@ public class TeacherModel implements ITeacherModel {
 			sub.onStart();
 			try {
 				sub.onNext(teacherDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}

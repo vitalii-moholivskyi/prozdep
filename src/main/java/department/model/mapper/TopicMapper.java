@@ -3,12 +3,13 @@
  */
 package department.model.mapper;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import department.model.bo.Topic;
 import department.ui.controller.model.TopicViewModel;
 import department.utils.Preconditions;
+import lombok.val;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikolay
@@ -22,9 +23,12 @@ public final class TopicMapper {
 
 	public static TopicViewModel toViewModel(Topic topic) {
 		Preconditions.notNull(topic);
+		val teacher = topic.getChiefScientist();
+		val department = topic.getDepartment();
 		return new TopicViewModel.Builder(topic.getId(), topic.getClient(), topic.getStartDate(),
-				topic.getDepartment() == null ? null : topic.getDepartment().getId(),
-				topic.getChiefScientist() == null ? null : topic.getChiefScientist().getId(), topic.getName())
+				department.getId(), teacher.getId(), topic.getName())
+				.setChiefScientistName(teacher.getName())
+				.setDepartmentTitle(department.getName())
 						.setEndDate(topic.getEndDate()).build();
 	}
 

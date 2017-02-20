@@ -10,6 +10,7 @@ public interface IDAOGeneric<T> {
 	List<T> findAll(long limit, long offset);
 
 	int count(String name);
+	List<T> findAll(String name);
 	List<T> findAll(String name, long limit, long offset);
 
 	T find(int id);

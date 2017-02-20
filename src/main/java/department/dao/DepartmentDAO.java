@@ -49,6 +49,12 @@ public class DepartmentDAO implements IDepartmentDAO {
 	}
 
 	@Override
+	public List<Department> findAll(String name) {
+		// TODO
+		return findAll();
+	}
+
+	@Override
 	public List<Department> findAll(String name, long limit, long offset) {
 		// TODO
 		return findAll(limit, offset);

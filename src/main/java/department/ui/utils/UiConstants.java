@@ -15,4 +15,6 @@ public final class UiConstants {
 
     public static final int RESULTS_PER_PAGE = 30;
 
+    public static final int HINT_RESULT = 15;
+
 }

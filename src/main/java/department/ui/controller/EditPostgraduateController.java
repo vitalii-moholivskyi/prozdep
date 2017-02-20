@@ -4,8 +4,9 @@ import department.model.IDepartmentModel;
 import department.model.IPostgraduateModel;
 import department.model.ITeacherModel;
 import department.model.ITopicModel;
-import department.model.form.PostgraduateCreateForm;
+import department.model.form.PostgraduateUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.PostgraduateViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.DefaultStringConverter;
@@ -27,19 +28,43 @@ import java.util.logging.Level;
  */
 @Log
 @Controller
-public final class CreatePostgraduateController extends BasePostrgraduateController {
+public final class EditPostgraduateController extends BasePostrgraduateController {
 
     private final IPostgraduateModel postgraduateModel;
     private final IDepartmentModel departmentModel;
     private final ITeacherModel teacherModel;
     private final ITopicModel topicModel;
 
-    public CreatePostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
-                                        ITeacherModel teacherModel, ITopicModel topicModel) {
+    private PostgraduateViewModel data;
+
+    public EditPostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
+                                      ITeacherModel teacherModel, ITopicModel topicModel) {
         this.postgraduateModel = postgraduateModel;
         this.departmentModel = departmentModel;
         this.teacherModel = teacherModel;
         this.topicModel = topicModel;
+    }
+
+    public PostgraduateViewModel getData() {
+        return data;
+    }
+
+    public void setData(PostgraduateViewModel data) {
+        this.data = data;
+
+
+        fullNameField.setText(data.getFirstName());
+        if (data.getStartDate() != null) {
+            startDatePicker.setValue(data.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+
+        if (data.getEndDate() != null) {
+            endDatePicker.setValue(data.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        if (data.getProtectionDate() != null) {
+            defenceDatePicker.setValue(data.getProtectionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        phoneField.setText(data.getPhone());
     }
 
     @Override
@@ -146,8 +171,9 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         val end = endDatePicker.getValue();
         val defence = defenceDatePicker.getValue();
 
-        val form = new PostgraduateCreateForm();
+        val form = new PostgraduateUpdateForm();
 
+        form.setId(data.getId());
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
@@ -157,8 +183,8 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         form.setProtectionDate(defence == null ? null : Date.from(defence.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-        postgraduateModel.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+        postgraduateModel.update(form, data, aVoid -> {
+            log.log(Level.SEVERE, "Model updated");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())

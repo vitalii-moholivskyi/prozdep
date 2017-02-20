@@ -33,6 +33,8 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 				sub.onNext(masterDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -47,6 +49,8 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 				sub.onNext(masterDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -82,7 +86,9 @@ public class MasterModel implements IMasterModel {
 	}
 
 	@Override
-	public void update(MasterUpdateForm form, MasterViewModel model, Action1<? super Throwable> errCallback) {
+	public void update(MasterUpdateForm form, MasterViewModel model,
+					   Action1<? super Void> finishCallback,
+					   Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
 			sub.onStart();
@@ -93,6 +99,8 @@ public class MasterModel implements IMasterModel {
 						.phone(form.getPhone()).build();
 				masterDao.update(master);
 				sub.onNext(master);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -103,6 +111,7 @@ public class MasterModel implements IMasterModel {
 			model.setTopic(result.getTopic());
 			model.setEndDate(result.getEndDate());
 			model.setStartDate(result.getStartDate());
+			finishCallback.call(null);
 		} , errCallback::call);
 	}
 
@@ -113,6 +122,8 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 				sub.onNext(masterDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}

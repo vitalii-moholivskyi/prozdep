@@ -53,8 +53,8 @@ CREATE TABLE postgraduate(
   scientist_id INT,
   topic VARCHAR(255) NOT NULL,
   start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  protection_date DATE NOT NULL,
+  end_date DATE,
+  protection_date DATE,
   teacher_id INT,
   department_id INT,
   PRIMARY KEY(scientist_id),
@@ -65,6 +65,7 @@ CREATE TABLE postgraduate(
   FOREIGN KEY (department_id)
   REFERENCES department(id)
 );
+
 
 CREATE TABLE topic(
   id INT AUTO_INCREMENT PRIMARY KEY,

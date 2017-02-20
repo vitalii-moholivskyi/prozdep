@@ -23,7 +23,7 @@
       <children>
           <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0">
               <items>
-                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Оновити" />
+                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Оновити" onAction="#onRefresh"/>
                   <Separator maxHeight="30.0" orientation="VERTICAL" prefHeight="20.0">
                       <padding>
                           <Insets left="50.0" right="50.0" />

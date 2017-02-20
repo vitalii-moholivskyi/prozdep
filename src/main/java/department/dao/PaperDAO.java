@@ -51,6 +51,11 @@ public class PaperDAO implements IPaperDAO{
         // TODO
         return count();
     }
+    @Override
+    public List<Paper> findAll(String name) {
+        // TODO
+        return findAll();
+    }
 
     @Override
     public List<Paper> findAll(String name, long limit, long offset) {

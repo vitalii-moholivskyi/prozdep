@@ -89,6 +89,12 @@ public class TopicDAO implements ITopicDAO{
     }
 
     @Override
+    public List<Topic> findAll(String name) {
+        // TODO
+        return findAll();
+    }
+
+    @Override
     public List<Topic> findAll(String name, long limit, long offset) {
         // TODO
         return findAll(limit, offset);
