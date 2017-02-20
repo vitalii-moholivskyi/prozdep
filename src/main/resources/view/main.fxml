@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -14,7 +17,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
+<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
    <top>
       <ToolBar minHeight="40.0" minWidth="640.0" BorderPane.alignment="CENTER">
         <items>
@@ -22,10 +25,10 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Додати">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="Наукова тема" onAction="#onCreateTopic"/>
-                        <MenuItem mnemonicParsing="false" text="Наукова робота" onAction="#onCreatePaper"/>
-                        <MenuItem mnemonicParsing="false" text="Аспірант" onAction="#onCreatePostgraduate"/>
-                        <MenuItem mnemonicParsing="false" text="Викладач" onAction="#onCreateTeacher"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onCreateTopic" text="Наукова тема" />
+                        <MenuItem mnemonicParsing="false" onAction="#onCreatePaper" text="Наукова робота" />
+                        <MenuItem mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Аспірант" />
+                        <MenuItem mnemonicParsing="false" onAction="#onCreateTeacher" text="Викладач" />
                         <MenuItem mnemonicParsing="false" onAction="#onCreateMaster" text="Магістр" />
                   </items>
                 </Menu>
@@ -70,7 +73,7 @@
       </ToolBar>
    </top>
    <bottom>
-      <ToolBar minHeight="20.0" BorderPane.alignment="CENTER">
+      <ToolBar maxHeight="25.0" minHeight="-Infinity" BorderPane.alignment="CENTER">
          <items>
             <ProgressBar fx:id="progressBar" prefHeight="9.0" prefWidth="200.0" progress="0.0" />
             <Label fx:id="progressMessageLabel" />
@@ -81,7 +84,7 @@
    <center>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
          <children>
-            <TabPane fx:id="contentTabPane" layoutX="-6.0" layoutY="34.0" tabClosingPolicy="UNAVAILABLE" />
+            <TabPane fx:id="contentTabPane" layoutX="-6.0" layoutY="34.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </center>
