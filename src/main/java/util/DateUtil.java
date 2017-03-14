@@ -29,4 +29,8 @@ public class DateUtil {
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());// here is NPE!
         return sqlDate;
     }
+
+    public String dateToString(Date date){
+        return DEFAULT_DATE_FORMAT.format(date);
+    }
 }
