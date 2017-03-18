@@ -109,6 +109,7 @@ public class MasterModel implements IMasterModel {
 			model.setFirstName(result.getName());
 			model.setPhone(result.getPhone());
 			model.setTopic(result.getTopic());
+			model.setDepartment(result.getDepartment().getId());
 			model.setEndDate(result.getEndDate());
 			model.setStartDate(result.getStartDate());
 			finishCallback.call(null);
