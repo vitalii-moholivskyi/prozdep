@@ -21,6 +21,7 @@
 		<hibernate.version>5.3.0.Final</hibernate.version>
 		<javax.version>1.1.0.Final</javax.version>
 		<javax.el>2.2.4</javax.el>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<build>

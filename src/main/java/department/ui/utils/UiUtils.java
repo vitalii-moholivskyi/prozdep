@@ -3,6 +3,9 @@ package department.ui.utils;
 import department.di.Injector;
 import department.utils.TextUtils;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.util.Callback;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,9 +13,13 @@ import lombok.Value;
 import lombok.val;
 import rx.functions.Func1;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
 
 /**
  * Created by Максим on 1/31/2017.
@@ -21,11 +28,13 @@ import java.util.ResourceBundle;
 @Getter(value = AccessLevel.NONE)
 public final class UiUtils {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+
     public static final Func1<? super String, ? extends String> NULLABLE_FLD_MAPPER =
             str -> TextUtils.isEmpty(str) ? "N/a" : str;
 
     public static final Func1<? super Date, ? extends String> DATE_FLD_MAPPER =
-            date -> date == null ? "N/a" : date.toString();
+            date -> date == null ? "N/a" : DATE_FORMAT.format(date);
 
     /**
      * default callback which takes controllers from app context as beans
@@ -77,6 +86,68 @@ public final class UiUtils {
 
         loader.setControllerFactory(cl -> Injector.getInstance().getContext().getBean(controller));
         return loader;
+    }
+
+    public static Alert createErrDialog(String title, String body) {
+        return createDialog(Alert.AlertType.ERROR, title, body);
+    }
+
+    public static Alert createErrDialog(String body) {
+        return createErrDialog("Помилка", body);
+    }
+
+    public static Alert createWarnDialog(String title, String body) {
+        return createDialog(Alert.AlertType.WARNING, title, body);
+    }
+
+    public static Alert createWarnDialog(String body) {
+        return createDialog(Alert.AlertType.WARNING, "Попередження", body);
+    }
+
+    public static Alert createInfoDialog(String title, String body) {
+        return createDialog(Alert.AlertType.INFORMATION, title, body);
+    }
+
+    public static Alert createDialog(Alert.AlertType type, String title, String body) {
+        val alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(body);
+
+        return alert;
+    }
+
+    public static Callback<DatePicker, DateCell> startDayFactory(DatePicker endDatePicker) {
+        return new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val endDate = endDatePicker.getValue();
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED) || item.isAfter(LocalDate.now())
+                                || (endDate != null && (item.isAfter(endDate) || item.isEqual(endDate))));
+                    }
+                };
+            }
+        };
+    }
+
+    public static Callback<DatePicker, DateCell> endDayFactory(DatePicker startDatePicker) {
+        return new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val startDate = startDatePicker.getValue();
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED) || item.isAfter(LocalDate.now())
+                                || (startDate != null && (item.isBefore(startDate) || item.isEqual(startDate))));
+                    }
+                };
+            }
+        };
     }
 
 }

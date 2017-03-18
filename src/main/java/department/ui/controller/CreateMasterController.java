@@ -4,18 +4,17 @@ import department.model.IDepartmentModel;
 import department.model.IMasterModel;
 import department.model.form.MasterCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.utils.DefaultStringConverter;
+import department.ui.utils.UiUtils;
+import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.logging.Level;
 
 /**
@@ -36,26 +35,19 @@ public final class CreateMasterController extends MasterBaseController {
 
     @Override
     protected void initialize() {
+        super.initialize();
 
-        departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
+        departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
                 return String.format("%d %s", object.getId(), object.getName());
-            }
-
-            @Override
-            public DepartmentViewModel fromString(String string) {
-                return null;
             }
         });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
                         , th -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setContentText("Не вдалося завантажити список кафедр");
-                            alert.showAndWait();
+                            UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
@@ -67,7 +59,7 @@ public final class CreateMasterController extends MasterBaseController {
         val department = departmentComboBox.valueProperty().get();
 
         if (department == null) {
-            showWarning("Не обрано кафедру", "Для того, аби продовжити, виберіть кафедру зі списку");
+            UiUtils.createWarnDialog("Для того, аби продовжити, виберіть кафедру зі списку").showAndWait();
             departmentComboBox.requestFocus();
             return;
         }
@@ -75,7 +67,7 @@ public final class CreateMasterController extends MasterBaseController {
         val name = fullNameField.getText();
 
         if (TextUtils.isEmpty(name)) {
-            showWarning(null, "ФІБ не вказано");
+            UiUtils.createWarnDialog("ФІБ не вказано").showAndWait();
             fullNameField.requestFocus();
             return;
         }
@@ -83,23 +75,22 @@ public final class CreateMasterController extends MasterBaseController {
         val start = startDatePicker.getValue();
 
         if (start == null) {
-            showWarning(null, "Дату вступу не вказано");
+            UiUtils.createWarnDialog("Дату вступу не вказано").showAndWait();
             startDatePicker.requestFocus();
             return;
         }
 
         val end = endDatePicker.getValue();
-
         val form = new MasterCreateForm();
 
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
-        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setStartDate(DateUtils.fromLocal(start));
+        form.setEndDate(DateUtils.tryFromLocal(end));
 
         model.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+            log.log(Level.INFO, "Model created");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -114,10 +105,7 @@ public final class CreateMasterController extends MasterBaseController {
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити магістра");
-            alert.showAndWait();
+            UiUtils.createErrDialog("Не вдалося створити магістра").showAndWait();
         });
     }
 

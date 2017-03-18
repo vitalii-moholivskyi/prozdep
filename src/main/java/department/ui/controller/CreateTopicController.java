@@ -8,11 +8,11 @@ import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
+import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -25,6 +25,9 @@ import org.springframework.stereotype.Controller;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
+
+import static department.ui.utils.UiUtils.endDayFactory;
+import static department.ui.utils.UiUtils.startDayFactory;
 
 /**
  * Created by Максим on 2/19/2017.
@@ -55,6 +58,16 @@ public final class CreateTopicController {
     @FXML
     private void initialize() {
 
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        startDatePicker.setDayCellFactory(startDayFactory(endDatePicker));
+        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker));
+
+        startDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> endDatePicker.setDayCellFactory(endDayFactory(startDatePicker)));
+        endDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> startDatePicker.setDayCellFactory(startDayFactory(endDatePicker)));
+
         departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
@@ -72,10 +85,7 @@ public final class CreateTopicController {
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
                         , th -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Помилка");
-                            alert.setContentText("Не вдалося завантажити список кафедр");
-                            alert.showAndWait();
+                            UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
@@ -86,7 +96,10 @@ public final class CreateTopicController {
                 teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
                         .doOnCompleted(teacherComboBox::show)
                         .subscribe(teacherComboBox.getItems()::setAll,
-                                th -> log.log(Level.WARNING, "Failed to fetch teachers"));
+                                th -> {
+                                    UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
+                                    log.log(Level.WARNING, "Failed to fetch teachers");
+                                });
             }
         });
     }
@@ -97,7 +110,7 @@ public final class CreateTopicController {
         val department = departmentComboBox.valueProperty().get();
 
         if (department == null) {
-            showWarning("Не обрано кафедру", "Для того, аби продовжити, виберіть кафедру зі списку");
+            UiUtils.createWarnDialog("Для того, аби продовжити, виберіть кафедру зі списку").showAndWait();
             departmentComboBox.requestFocus();
             return;
         }
@@ -105,7 +118,7 @@ public final class CreateTopicController {
         val chief = teacherComboBox.valueProperty().get();
 
         if (chief == null) {
-            showWarning("Не обрано керівника", "Для того, аби продовжити, виберіть керівника зі списку");
+            UiUtils.createWarnDialog("Для того, аби продовжити, виберіть керівника зі списку").showAndWait();
             teacherComboBox.requestFocus();
             return;
         }
@@ -113,7 +126,7 @@ public final class CreateTopicController {
         val name = titleField.getText();
 
         if (TextUtils.isEmpty(name)) {
-            showWarning(null, "Тему не вказано");
+            UiUtils.createWarnDialog("Тему не вказано").showAndWait();
             titleField.requestFocus();
             return;
         }
@@ -121,7 +134,7 @@ public final class CreateTopicController {
         val client = clientField.getText();
 
         if (TextUtils.isEmpty(client)) {
-            showWarning(null, "Компанію не вказано");
+            UiUtils.createWarnDialog("Компанію не вказано").showAndWait();
             clientField.requestFocus();
             return;
         }
@@ -129,7 +142,7 @@ public final class CreateTopicController {
         val start = startDatePicker.getValue();
 
         if (start == null) {
-            showWarning(null, "Дату початку роботи не вказано");
+            UiUtils.createWarnDialog("Дату початку роботи не вказано").showAndWait();
             startDatePicker.requestFocus();
             return;
         }
@@ -137,7 +150,7 @@ public final class CreateTopicController {
         val end = endDatePicker.getValue();
 
         if (end == null) {
-            showWarning(null, "Дату кінця роботи не вказано");
+            UiUtils.createWarnDialog("Дату кінця роботи не вказано").showAndWait();
             endDatePicker.requestFocus();
             return;
         }
@@ -152,7 +165,7 @@ public final class CreateTopicController {
         form.setChiefScientist(chief.getId());
 
         topicModel.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+            log.log(Level.INFO, "Model created");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -167,21 +180,8 @@ public final class CreateTopicController {
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити наукову тему");
-            alert.showAndWait();
+            UiUtils.createErrDialog("Не вдалося створити наукову тему").showAndWait();
         });
-    }
-
-    private void showWarning(String header, String body) {
-
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText(header);
-        alert.setContentText(body);
-
-        alert.showAndWait();
     }
 
 }

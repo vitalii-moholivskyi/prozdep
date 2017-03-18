@@ -3,11 +3,11 @@ package department.ui.controller;
 import department.model.IPaperModel;
 import department.model.bo.Scientist;
 import department.model.form.PaperCreateForm;
+import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -16,6 +16,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.Calendar;
 import java.util.logging.Level;
 
 /**
@@ -25,12 +26,18 @@ import java.util.logging.Level;
 @Controller
 public final class CreatePaperController {
 
-    @FXML private Parent viewRoot;
-    @FXML private TextField titleField;
-    @FXML private TextField typeField;
-    @FXML private TextField yearField;
-    @FXML private ComboBox<? extends Scientist> supervisorBox;
-    @FXML private ComboBox<? extends Scientist> executorBox;
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private TextField titleField;
+    @FXML
+    private TextField typeField;
+    @FXML
+    private TextField yearField;
+    @FXML
+    private ComboBox<? extends Scientist> supervisorBox;
+    @FXML
+    private ComboBox<? extends Scientist> executorBox;
 
     private final IPaperModel paperModel;
 
@@ -49,8 +56,8 @@ public final class CreatePaperController {
 
         val year = tryGetYear(yearField.getText());
 
-        if(year < 0) {
-            showWarning(null, "Неправильно вказаний рік");
+        if (year < 0) {
+            UiUtils.createWarnDialog("Неправильно вказаний рік").showAndWait();
             yearField.requestFocus();
             return;
         }
@@ -58,7 +65,7 @@ public final class CreatePaperController {
         val name = titleField.getText();
 
         if (TextUtils.isEmpty(name)) {
-            showWarning(null, "Назву не вказано");
+            UiUtils.createWarnDialog("Назву не вказано").showAndWait();
             titleField.requestFocus();
             return;
         }
@@ -66,7 +73,7 @@ public final class CreatePaperController {
         val type = typeField.getText();
 
         if (TextUtils.isEmpty(type)) {
-            showWarning(null, "Тип не вказано");
+            UiUtils.createWarnDialog("Тип не вказано").showAndWait();
             typeField.requestFocus();
             return;
         }
@@ -77,7 +84,7 @@ public final class CreatePaperController {
         form.setName(name);
         form.setYear(year);
         paperModel.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+            log.log(Level.INFO, "Model created");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -92,10 +99,7 @@ public final class CreatePaperController {
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити наукову роботу");
-            alert.showAndWait();
+            UiUtils.createErrDialog("Не вдалося створити наукову роботу").showAndWait();
         });
     }
 
@@ -103,20 +107,10 @@ public final class CreatePaperController {
 
         try {
             val year = Integer.parseInt(str);
-            return year >= 1900 ? year : -1;
+            return year >= 1900 && year <= Calendar.getInstance().get(Calendar.YEAR) ? year : -1;
         } catch (Exception e) {
             return -1;
         }
-    }
-
-    private void showWarning(String header, String body) {
-
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText(header);
-        alert.setContentText(body);
-
-        alert.showAndWait();
     }
 
 }
