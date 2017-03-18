@@ -61,7 +61,7 @@ public final class MasterTabController extends ListTabController<MasterViewModel
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
 
                     val stage = new Stage();
-                    val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml", EditMasterController.class);
+                    val loader = UiUtils.newLoader("/view/partials/_formEditMaster.fxml", EditMasterController.class);
 
                     try {
                         stage.setScene(new Scene(loader.load()));

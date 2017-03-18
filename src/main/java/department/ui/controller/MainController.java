@@ -134,27 +134,27 @@ public final class MainController {
 
     @FXML
     private void onCreateMaster() {
-        loadCreationView("/view/partials/_formMaster.fxml", CreateMasterController.class);
+        loadCreationView("/view/partials/_formCreateMaster.fxml", CreateMasterController.class);
     }
 
     @FXML
     private void onCreateTeacher() {
-        loadCreationView("/view/partials/_formTeacher.fxml");
+        loadCreationView("/view/partials/_formCreateTeacher.fxml");
     }
 
     @FXML
     private void onCreatePostgraduate() {
-        loadCreationView("/view/partials/_formPostgraduate.fxml", CreatePostgraduateController.class);
+        loadCreationView("/view/partials/_formCreatePostgraduate.fxml", CreatePostgraduateController.class);
     }
 
     @FXML
     private void onCreateTopic() {
-        loadCreationView("/view/partials/_formTopic.fxml");
+        loadCreationView("/view/partials/_formCreateTopic.fxml");
     }
 
     @FXML
     private void onCreatePaper() {
-        loadCreationView("/view/partials/_formPaper.fxml");
+        loadCreationView("/view/partials/_formCreatePaper.fxml");
     }
 
     @FXML

@@ -44,7 +44,10 @@ public class TopicController extends ListTabController<TopicViewModel> {
                 endDateCol = new TableColumn<>("Кінець"), departmentCol = new TableColumn<>("Кафедра");
 
         titleCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getNameObs()));
-        chiefCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getChiefScientistNameObs().map(NULLABLE_FLD_MAPPER)));
+        chiefCol.setCellValueFactory(param -> {
+            System.out.println(param.getValue().getChiefScientist());
+            return RxUtils.fromRx(param.getValue().getChiefScientistNameObs().map(NULLABLE_FLD_MAPPER));
+        });
         startDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getStartDateObs().map(DATE_FLD_MAPPER)));
         endDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getEndDateObs().map(DATE_FLD_MAPPER)));
         departmentCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDepartmentTitleObs().map(NULLABLE_FLD_MAPPER)));

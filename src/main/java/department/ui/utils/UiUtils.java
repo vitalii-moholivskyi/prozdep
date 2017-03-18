@@ -31,10 +31,10 @@ public final class UiUtils {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     public static final Func1<? super String, ? extends String> NULLABLE_FLD_MAPPER =
-            str -> TextUtils.isEmpty(str) ? "N/a" : str;
+            str -> TextUtils.isEmpty(str) ? "" : str;
 
     public static final Func1<? super Date, ? extends String> DATE_FLD_MAPPER =
-            date -> date == null ? "N/a" : DATE_FORMAT.format(date);
+            date -> date == null ? "" : DATE_FORMAT.format(date);
 
     /**
      * default callback which takes controllers from app context as beans

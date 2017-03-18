@@ -56,7 +56,7 @@
                </VBox.margin>
             </HBox>
             <Label text="Керівник" />
-            <TextField  />
+             <ComboBox editable="true" fx:id="supervisorBox" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
             <Label text="Виконавець" />
             <ComboBox editable="true" fx:id="executorBox" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
             <FlowPane prefHeight="86.0" prefWidth="389.0" />

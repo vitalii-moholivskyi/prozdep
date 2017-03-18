@@ -63,7 +63,7 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
 
                     val stage = new Stage();
-                    val loader = UiUtils.newLoader("/view/partials/_formPostgraduate.fxml", EditPostgraduateController.class);
+                    val loader = UiUtils.newLoader("/view/partials/_formEditPostgraduate.fxml", EditPostgraduateController.class);
 
                     try {
                         stage.setScene(new Scene(loader.load()));
