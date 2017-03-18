@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreatePaperController">
+   <tabs>
+      <Tab text="Редагування роботи">
+         <content>
+            <VBox>
+               <children>
+                  <Label text="Керівник" />
+                  <HBox alignment="TOP_CENTER" GridPane.columnIndex="2">
+                     <children>
+                        <Label text="Редагування роботи" GridPane.columnIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label text="Тема роботи" />
+                  <TextField fx:id="titleField" />
+                  <HBox prefHeight="54.0" prefWidth="389.0">
+                     <children>
+                        <VBox prefHeight="54.0" prefWidth="249.0">
+                           <children>
+                              <Label text="Тип">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="typeField" prefHeight="25.0" prefWidth="209.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Рік">
+                                 <HBox.margin>
+                                    <Insets left="30.0" right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="yearField" prefHeight="25.0" prefWidth="96.0" />
+                           </children>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Виконавець" />
+                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
+                  <TextField />
+                  <FlowPane prefHeight="86.0" prefWidth="389.0" />
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onCreatePaper" text="Додати роботу" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="editStatus" text="тут  може бути ваша помилка">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
+            </VBox>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>
