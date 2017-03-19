@@ -32,6 +32,22 @@ public class PaperModel implements IPaperModel {
 	IPaperDAO paperDao;
 
 	@Override
+	public Observable<? extends PaperViewModel> fetch(@NotNull(message = "id cannot be null") int id) {
+
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Paper>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(paperDao.find(id));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PaperMapper::toViewModel);
+	}
+	
+	@Override
 	public Observable<Collection<? extends PaperViewModel>> fetchPapers(@Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Paper>>) sub -> {
 
