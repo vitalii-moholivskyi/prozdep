@@ -34,6 +34,22 @@ public class TopicModel implements ITopicModel {
 	ITopicDAO topicDao;
 
 	@Override
+	public Observable<? extends TopicViewModel> fetch(@NotNull(message = "id cannot be null") int id) {
+
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Topic>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(topicDao.find(id));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TopicMapper::toViewModel);
+	}
+	
+	@Override
 	public Observable<Collection<? extends TopicViewModel>> fetchTopics(@Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Topic>>) sub -> {
 
