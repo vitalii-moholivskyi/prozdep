@@ -1,6 +1,9 @@
 package department.ui.controller;
 
 import department.model.IMasterModel;
+import department.ui.controller.create.CreateMasterController;
+import department.ui.controller.create.CreatePostgraduateController;
+import department.ui.controller.view.*;
 import department.ui.utils.FxSchedulers;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;

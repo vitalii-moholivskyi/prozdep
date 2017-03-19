@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane fx:id="viewRoot" prefHeight="456.0" prefWidth="289.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.BasePostrgraduateController">
+<GridPane fx:id="viewRoot" prefHeight="456.0" prefWidth="289.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.create.CreatePostgraduateController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
     </columnConstraints>

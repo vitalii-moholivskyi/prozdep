@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.controller.create;
 
 import department.model.IMasterModel;
 import department.model.IPaperModel;

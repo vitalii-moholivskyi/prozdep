@@ -150,4 +150,70 @@ public final class UiUtils {
         };
     }
 
+    public static Callback<DatePicker, DateCell> defenceDayFactory(DatePicker endDatePicker, DatePicker startDatePicker) {
+        return new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val endDate = endDatePicker.getValue();
+                        val startDate = startDatePicker.getValue();
+
+                        val isBeforeStart = startDate != null && (item.isBefore(startDate) || item.isEqual(startDate));
+                        val isAfterEnd = endDate != null && (item.isAfter(endDate) || item.isEqual(endDate));
+
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED) || item.isAfter(LocalDate.now())
+                                || isBeforeStart || isAfterEnd);
+                    }
+                };
+            }
+        };
+    }
+
+    public static Callback<DatePicker, DateCell> startDayFactory(DatePicker endDatePicker, DatePicker defenceDatePicker) {
+        return new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val endDate = endDatePicker.getValue();
+                        val defenceDate = defenceDatePicker.getValue();
+
+                        val isAfterEnd = endDate != null && (item.isAfter(endDate) || item.isEqual(endDate));
+                        val isAfterDefence = defenceDate != null && (item.isAfter(defenceDate) || item.isEqual(defenceDate));
+
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED) || item.isAfter(LocalDate.now())
+                                || isAfterEnd || isAfterDefence);
+                    }
+                };
+            }
+        };
+    }
+
+    public static Callback<DatePicker, DateCell> endDayFactory(DatePicker startDatePicker, DatePicker defenceDatePicker) {
+        return new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val startDate = startDatePicker.getValue();
+                        val defenceDate = defenceDatePicker.getValue();
+
+                        val isBeforeStart = startDate != null && (item.isBefore(startDate) || item.isEqual(startDate));
+                        val isBeforeDefence = defenceDate != null && (item.isBefore(defenceDate) || item.isEqual(defenceDate));
+
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED) || item.isAfter(LocalDate.now())
+                                || isBeforeStart || isBeforeDefence);
+                    }
+                };
+            }
+        };
+    }
+
 }

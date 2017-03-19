@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreatePaperController">
+<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.create.CreatePaperController">
    <tabs>
       <Tab text="Редагування роботи">
          <content>

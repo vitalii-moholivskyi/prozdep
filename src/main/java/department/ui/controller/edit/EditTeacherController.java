@@ -1,15 +1,21 @@
-package department.ui.controller.create;
+package department.ui.controller.edit;
 
 import department.model.IDepartmentModel;
 import department.model.ITeacherModel;
 import department.model.form.TeacherCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.TeacherViewModel;
 import department.ui.utils.UiUtils;
+import department.utils.DateUtils;
+import department.utils.Preconditions;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -29,7 +35,7 @@ import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
  */
 @Log
 @Controller
-public final class CreateTeacherController {
+public final class EditTeacherController {
 
     private final ITeacherModel teacherModel;
     private final IDepartmentModel departmentModel;
@@ -49,9 +55,25 @@ public final class CreateTeacherController {
     @FXML
     private DatePicker startDatePicker;
 
-    public CreateTeacherController(ITeacherModel teacherModel, IDepartmentModel departmentModel) {
+    private TeacherViewModel model;
+
+    public EditTeacherController(ITeacherModel teacherModel, IDepartmentModel departmentModel) {
         this.teacherModel = teacherModel;
         this.departmentModel = departmentModel;
+    }
+
+    public TeacherViewModel getModel() {
+        return model;
+    }
+
+    public void setModel(TeacherViewModel model) {
+        this.model = Preconditions.notNull(model);
+
+        fullNameField.setText(model.getFirstName());
+        phoneField.setText(model.getPhone());
+        positionField.setText(model.getPosition());
+        degreeField.setText(model.getDegree());
+        startDatePicker.setValue(DateUtils.tryToLocal(model.getStartDate()));
     }
 
     @FXML
@@ -84,7 +106,15 @@ public final class CreateTeacherController {
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .doOnCompleted(() -> departmentComboBox.getSelectionModel().selectFirst())
-                .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
+                .subscribe(departments -> {
+
+                            for (val d : departments) {
+                                departmentComboBox.getItems().add(d);
+                                if (model.getDepartment() == d.getId()) {
+                                    departmentComboBox.getSelectionModel().select(d);
+                                }
+                            }
+                        }
                         , th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
                             log.log(Level.WARNING, "Failed to fetch departments", th);

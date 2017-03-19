@@ -1,14 +1,17 @@
-package department.ui.controller.create;
+package department.ui.controller.edit;
 
 import department.model.IDepartmentModel;
 import department.model.ITeacherModel;
 import department.model.ITopicModel;
-import department.model.form.TopicCreateForm;
+import department.model.form.TopicUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.TeacherViewModel;
+import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
+import department.utils.DateUtils;
+import department.utils.Preconditions;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
@@ -34,25 +37,51 @@ import static department.ui.utils.UiUtils.startDayFactory;
  */
 @Log
 @Controller
-public final class CreateTopicController {
+public final class EditTopicController {
 
-    @FXML private Parent viewRoot;
-    @FXML private TextField titleField;
-    @FXML private ComboBox<DepartmentViewModel> departmentComboBox;
-    @FXML private TextField clientField;
-    @FXML private DatePicker startDatePicker;
-    @FXML private DatePicker endDatePicker;
-    @FXML private ComboBox<TeacherViewModel> teacherComboBox;
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private TextField titleField;
+    @FXML
+    private ComboBox<DepartmentViewModel> departmentComboBox;
+    @FXML
+    private TextField clientField;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private ComboBox<TeacherViewModel> teacherComboBox;
 
     private final IDepartmentModel departmentModel;
     private final ITopicModel topicModel;
     private final ITeacherModel teacherModel;
 
+    private TopicViewModel model;
+
     @Autowired
-    public CreateTopicController(IDepartmentModel departmentModel, ITopicModel topicModel, ITeacherModel teacherModel) {
+    public EditTopicController(IDepartmentModel departmentModel, ITopicModel topicModel, ITeacherModel teacherModel) {
         this.departmentModel = departmentModel;
         this.topicModel = topicModel;
         this.teacherModel = teacherModel;
+    }
+
+    public TopicViewModel getModel() {
+        return model;
+    }
+
+    public void setModel(TopicViewModel model) {
+        this.model = Preconditions.notNull(model);
+
+        startDatePicker.setValue(DateUtils.tryToLocal(model.getStartDate()));
+        endDatePicker.setValue(DateUtils.tryToLocal(model.getEndDate()));
+
+        /*departmentComboBox.setValue(new DepartmentViewModel(model.getDepartment(), model.getDepartmentTitle(), null));
+        teacherComboBox.setValue();*/
+
+        titleField.setText(model.getName());
+        clientField.setText(model.getClient());
     }
 
     @FXML
@@ -155,8 +184,9 @@ public final class CreateTopicController {
             return;
         }
 
-        val form = new TopicCreateForm();
+        val form = new TopicUpdateForm();
 
+        form.setId(model.getId());
         form.setName(name);
         form.setClient(client);
         form.setDepartment(department.getId());
@@ -164,8 +194,8 @@ public final class CreateTopicController {
         form.setEndDate(Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         form.setChiefScientist(chief.getId());
 
-        topicModel.create(form).subscribe(master -> {
-            log.log(Level.INFO, "Model created");
+        topicModel.update(form, model, () -> {
+            log.log(Level.INFO, "Model updated");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())

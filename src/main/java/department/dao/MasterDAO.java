@@ -257,8 +257,8 @@ public class MasterDAO implements IMasterDAO{
                         .name(rs.getString("master_name"))
 					    .phone(rs.getString("master_phone"))
                         .topic(rs.getString("master_topic"))
-					    .startDate(rs.getDate("master_start_date"))
-                        .endDate(rs.getDate("master_end_date"))
+					    .startDate(rs.getTimestamp("master_start_date"))
+                        .endDate(rs.getTimestamp("master_end_date"))
 					    .teacher(Teacher
                                 .builder()
                                     .id(rs.getInt("teacher_id"))
@@ -266,7 +266,7 @@ public class MasterDAO implements IMasterDAO{
 							        .phone(rs.getString("teacher_phone"))
                                     .position(rs.getString("teacher_position"))
 							        .degree(rs.getString("teacher_degree"))
-                                    .startDate(rs.getDate("teacher_start_date"))
+                                    .startDate(rs.getTimestamp("teacher_start_date"))
 							        .department(Department
                                             .builder()
                                                 .id(rs.getInt("teacher_department_id"))

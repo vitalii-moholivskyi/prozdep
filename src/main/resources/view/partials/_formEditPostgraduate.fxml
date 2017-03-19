@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<AnchorPane prefHeight="453.0" prefWidth="491.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.BasePostrgraduateController">
+<AnchorPane prefHeight="453.0" fx:id="viewRoot" prefWidth="491.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditPostgraduateController">
    <children>
       <TabPane layoutX="-1.0">
          <tabs>
@@ -147,7 +147,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </HBox>
-                        <Label fx:id="editStatus" text="error" />
+                        <Label fx:id="errorLabel" text="error" />
                           </children>
                      <padding>
                         <Insets left="25.0" right="25.0" />

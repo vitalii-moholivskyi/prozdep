@@ -1,6 +1,8 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.model.IPaperModel;
+import department.ui.controller.DefaultProgressMessage;
+import department.ui.controller.MainController;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.UiConstants;
 import department.utils.RxUtils;

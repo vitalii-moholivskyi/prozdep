@@ -1,4 +1,4 @@
-package department.ui.controller.update;
+package department.ui.controller.edit;
 
 import department.model.IDepartmentModel;
 import department.model.IPostgraduateModel;

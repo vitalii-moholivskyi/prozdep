@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.controller.create;
 
 import department.model.IDepartmentModel;
 import department.model.ITeacherModel;

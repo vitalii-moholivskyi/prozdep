@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<TabPane prefHeight="384.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreateTopicController">
+<TabPane prefHeight="384.0" fx:id="viewRoot" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTopicController">
    <tabs>
       <Tab text="Редагування">
          <content>

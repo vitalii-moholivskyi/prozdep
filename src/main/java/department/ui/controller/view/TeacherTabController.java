@@ -1,6 +1,8 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.model.ITeacherModel;
+import department.ui.controller.DefaultProgressMessage;
+import department.ui.controller.MainController;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.utils.UiConstants;
 import department.utils.RxUtils;

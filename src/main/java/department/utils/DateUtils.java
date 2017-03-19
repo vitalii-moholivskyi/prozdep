@@ -22,4 +22,12 @@ public final class DateUtils {
         return local == null ? null : fromLocal(local);
     }
 
+    public static LocalDate toLocal(@NotNull Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static LocalDate tryToLocal(Date date) {
+        return date == null ? null : toLocal(date);
+    }
+
 }
