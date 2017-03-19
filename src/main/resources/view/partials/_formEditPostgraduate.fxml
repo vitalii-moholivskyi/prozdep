@@ -12,21 +12,16 @@
          <tabs>
             <Tab text="Редагування">
                <content>
-                      <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="50.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="407.0" prefWidth="491.0">
+                      <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="50.0" maxWidth="1.7976931348623157E308">
                           <children>
                               <Label text="Редагувати аспіранта">
                                   <font>
                                       <Font size="18.0" />
                                   </font>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="30.0" top="30.0" />
                            </VBox.margin>
                               </Label>
-                              <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Кафедра">
-                           <VBox.margin>
-                              <Insets bottom="5.0" top="30.0" />
-                           </VBox.margin>
-                        </ComboBox>
                               <Label text="ПІБ">
                            <padding>
                               <Insets top="3.0" />
@@ -37,6 +32,11 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </TextField>
+                              <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Кафедра">
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="10.0" />
+                           </VBox.margin>
+                        </ComboBox>
                         <HBox>
                            <children>
                               <VBox maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="222.0">
@@ -63,7 +63,7 @@
                                           <Insets top="3.0" />
                                        </padding>
                                     </Label>
-                                          <DatePicker fx:id="defenceDatePicker" maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="25.0" prefWidth="204.0">
+                                          <DatePicker fx:id="defenceDatePicker" maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="25.0" prefWidth="229.0">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
@@ -78,7 +78,7 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </HBox>
-                        <HBox maxWidth="1.7976931348623157E308">
+                        <HBox maxWidth="1.7976931348623157E308" minWidth="-Infinity">
                            <children>
                               <VBox maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="224.0">
                                  <children>
@@ -87,7 +87,7 @@
                                           <Insets top="3.0" />
                                        </padding>
                                     </Label>
-                                          <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="210.0">
+                                          <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308" minWidth="-Infinity">
                                        <VBox.margin>
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
@@ -104,7 +104,7 @@
                                           <Insets top="3.0" />
                                        </padding>
                                     </Label>
-                                          <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="210.0" />
+                                          <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="229.0" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="5.0" />
@@ -144,7 +144,7 @@
                               </Button>
                            </children>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets bottom="30.0" top="30.0" />
                            </VBox.margin>
                         </HBox>
                         <Label fx:id="editStatus" text="error" />

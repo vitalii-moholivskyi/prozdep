@@ -6,23 +6,23 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreatePaperController">
    <tabs>
       <Tab text="Редагування роботи">
          <content>
             <VBox>
                <children>
-                  <Label text="Керівник" />
-                  <HBox alignment="TOP_CENTER" GridPane.columnIndex="2">
-                     <children>
-                        <Label text="Редагування роботи" GridPane.columnIndex="2">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
+                  <Label text="Редагування роботи" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="30.0" />
+                     </HBox.margin>
+                     <VBox.margin>
+                        <Insets bottom="30.0" top="30.0" />
+                     </VBox.margin>
+                  </Label>
                   <Label text="Тема роботи" />
                   <TextField fx:id="titleField" />
                   <HBox prefHeight="54.0" prefWidth="389.0">
@@ -56,15 +56,19 @@
                      </VBox.margin>
                   </HBox>
                   <Label text="Виконавець" />
-                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
-                  <TextField />
+                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" />
+                  <Label text="Керівник" />
+                  <ComboBox fx:id="chiefBox" editable="true" layoutX="35.0" layoutY="185.0" maxWidth="1.7976931348623157E308" />
                   <FlowPane prefHeight="86.0" prefWidth="389.0" />
                   <HBox alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onCreatePaper" text="Додати роботу" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Button mnemonicParsing="false" onAction="#onCreatePaper" text="Зберегти зміни" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="30.0" top="30.0" />
+                     </VBox.margin>
                   </HBox>
-                  <Label fx:id="editStatus" text="тут  може бути ваша помилка">
+                  <Label fx:id="editStatus" text="some error here">
                      <font>
                         <Font size="14.0" />
                      </font>
