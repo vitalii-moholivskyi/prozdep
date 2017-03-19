@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package department.model;
 
@@ -16,6 +16,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -48,7 +49,7 @@ public class TopicModel implements ITopicModel {
 			}
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TopicMapper::toViewModel);
 	}
-	
+
 	@Override
 	public Observable<Collection<? extends TopicViewModel>> fetchTopics(@Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Topic>>) sub -> {
@@ -102,7 +103,7 @@ public class TopicModel implements ITopicModel {
 	}
 
 	@Override
-	public void update(TopicUpdateForm form, TopicViewModel model, Action1<? super Throwable> errCallback) {
+	public void update(@NotNull(message = "form cannot be null") TopicUpdateForm form, @NotNull(message = "model cannot be null") TopicViewModel model, @NotNull(message = "model cannot be null") Action0 resultCallback, @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Topic>) sub -> {
 
 			sub.onStart();
@@ -119,14 +120,16 @@ public class TopicModel implements ITopicModel {
 				sub.onError(e);
 			} finally {
 				sub.onCompleted();
-			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
-			model.setChiefScientist(result.getChiefScientist().getId());
-			model.setStartDate(result.getStartDate());
-			model.setName(result.getName());
-			model.setEndDate(result.getEndDate());
-		} , errCallback::call);
-	}
+            }
+        })).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread())
+                .doOnCompleted(resultCallback)
+                .subscribe(result -> {
+                    model.setChiefScientist(result.getChiefScientist().getId());
+                    model.setStartDate(result.getStartDate());
+                    model.setName(result.getName());
+                    model.setEndDate(result.getEndDate());
+                }, errCallback::call);
+    }
 
 	@Override
 	public Observable<? extends Integer> count() {

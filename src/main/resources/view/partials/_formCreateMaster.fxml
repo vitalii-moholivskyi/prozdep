@@ -6,84 +6,113 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane fx:controller="department.ui.controller.create.CreateMasterController" fx:id="viewRoot" prefHeight="357.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-    <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
-    </rowConstraints>
-    <children>
-        <HBox alignment="CENTER" prefHeight="322.0" prefWidth="326.0">
-            <children>
-                <VBox alignment="BASELINE_CENTER" maxWidth="200.0" prefHeight="334.0" prefWidth="200.0">
-                    <children>
-                        <Label text="Додати магістра" fx:id="titleLabel">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
+<AnchorPane minWidth="400.0" fx:id="viewRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.create.CreateMasterController">
+   <children>
+          <VBox layoutY="6.0" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                  <Label fx:id="titleLabel" text="Додати магістра">
+                      <font>
+                          <Font size="18.0" />
+                      </font>
+               <VBox.margin>
+                  <Insets bottom="30.0" top="30.0" />
+               </VBox.margin>
+                  </Label>
+                  <Label text="ПІБ">
+               <VBox.margin>
+                  <Insets top="3.0" />
+               </VBox.margin>
+            </Label>
+                  <TextField fx:id="fullNameField" maxWidth="1.7976931348623157E308">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </TextField>
+                  <ComboBox fx:id="departmentComboBox" maxWidth="1.7976931348623157E308" minWidth="-Infinity" promptText="Кафедра">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </ComboBox>
+                  <Label text="Телефон">
+               <VBox.margin>
+                  <Insets top="3.0" />
+               </VBox.margin>
+            </Label>
+                  <TextField fx:id="phoneField">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </TextField>
+            <HBox>
+               <children>
+                  <VBox maxWidth="1.7976931348623157E308">
+                     <children>
+                              <Label layoutX="10.0" layoutY="10.0" text="Дата з">
+                           <VBox.margin>
+                              <Insets top="3.0" />
+                           </VBox.margin>
                         </Label>
-                        <ComboBox minWidth="200.0" promptText="Кафедра" fx:id="departmentComboBox">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin></ComboBox>
-                        <Label text="ПІБ" >
-                     <VBox.margin>
-                        <Insets top="3.0" />
-                     </VBox.margin></Label>
-                        <TextField fx:id="fullNameField">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin></TextField>
-                        <Label text="Телефон">
-                     <VBox.margin>
-                        <Insets top="3.0" />
-                     </VBox.margin></Label>
-                        <TextField fx:id="phoneField">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin></TextField>
-                        <Label layoutX="10.0" layoutY="10.0" text="Дата з">
-                     <VBox.margin>
-                        <Insets top="3.0" />
-                     </VBox.margin></Label>
-                        <DatePicker minWidth="200.0" fx:id="startDatePicker">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin></DatePicker>
-                        <Label layoutX="20.0" layoutY="20.0" text="Дата по">
-                     <VBox.margin>
-                        <Insets top="3.0" />
-                     </VBox.margin></Label>
-                        <DatePicker minWidth="200.0" fx:id="endDatePicker">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin></DatePicker>
-                        <Button mnemonicParsing="false" text="Додати" fx:id="actionButton" onAction="#onCreate">
+                              <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </DatePicker>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox maxWidth="1.7976931348623157E308">
+                     <children>
+                              <Label layoutX="20.0" layoutY="20.0" text="Дата по">
+                           <VBox.margin>
+                              <Insets top="3.0" />
+                           </VBox.margin>
+                        </Label>
+                              <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </DatePicker>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER">
+               <children>
+                        <Button fx:id="actionButton" mnemonicParsing="false" onAction="#onCreate" text="Додати">
                      <VBox.margin>
                         <Insets top="5.0" />
-                     </VBox.margin></Button>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
-    </children>
-    <padding>
-        <Insets top="50.0" />
-    </padding>
-</GridPane>
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="30.0" top="30.0" />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="statusCreate" text="Error" />
+              </children>
+         <padding>
+            <Insets left="25.0" right="25.0" />
+         </padding>
+          </VBox>
+   </children>
+</AnchorPane>

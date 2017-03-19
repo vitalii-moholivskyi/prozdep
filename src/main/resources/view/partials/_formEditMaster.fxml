@@ -18,6 +18,9 @@
                                   <font>
                                       <Font size="18.0" />
                                   </font>
+                           <VBox.margin>
+                              <Insets bottom="30.0" top="30.0" />
+                           </VBox.margin>
                               </Label>
                               <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Кафедра">
                            <opaqueInsets>
@@ -109,6 +112,9 @@
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>
+                                 <HBox.margin>
+                                    <Insets bottom="30.0" top="30.0" />
+                                 </HBox.margin>
                               </Button>
                            </children>
                         </HBox>

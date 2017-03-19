@@ -19,29 +19,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <TabPane prefHeight="384.0" fx:id="viewRoot" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTopicController">
    <tabs>
-      <Tab text="Редагування">
+      <Tab text="Редагувати">
          <content>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <VBox maxWidth="1.7976931348623157E308">
                <children>
-                  <HBox alignment="TOP_CENTER" GridPane.columnIndex="2">
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Редагування теми" GridPane.columnIndex="2">
+                        <Label text="Редагування теми">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets bottom="30.0" top="30.0" />
+                           </VBox.margin>
                         </Label>
-                     </children>
-                  </HBox>
-                  <Label GridPane.columnIndex="2">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                     <children>
                         <Label text="Назва теми" />
                         <TextField fx:id="titleField" />
                         <Label text="Замовник" />
@@ -80,7 +73,7 @@
                         <ComboBox fx:id="departmentComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
                         <FlowPane prefHeight="62.0" prefWidth="389.0" />
                         <Label text="Керівник" />
-                        <ComboBox fx:id="teacherComboBox" editable="true" maxWidth="1.7976931348623157E308" styleClass="combo-box1" stylesheets="@../style.css" />
+                        <ComboBox fx:id="teacherComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Керівник" />
                         <FlowPane prefHeight="62.0" prefWidth="389.0" />
                      </children>
                   </VBox>
@@ -99,6 +92,11 @@
                </padding>
             </VBox>
          </content>
+      </Tab>
+      <Tab text="Перелік наукових праць">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
       </Tab>
    </tabs>
 </TabPane>
