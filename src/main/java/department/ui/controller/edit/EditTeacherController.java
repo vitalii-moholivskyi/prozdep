@@ -9,6 +9,7 @@ import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
+import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
 import department.utils.Preconditions;
@@ -85,7 +86,7 @@ public final class EditTeacherController {
         degreeField.setText(model.getDegree());
         startDatePicker.setValue(DateUtils.tryToLocal(model.getStartDate()));
 
-        topicModel.fetchByScientist(model.getId())
+        topicModel.fetchByScientist(model.getId(), 0, UiConstants.RESULTS_PER_PAGE)
                 .subscribe(topicsListView.getItems()::setAll,
                         th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список наукових тем").showAndWait();

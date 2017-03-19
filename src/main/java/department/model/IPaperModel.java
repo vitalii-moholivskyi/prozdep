@@ -85,7 +85,7 @@ public interface IPaperModel {
 
 	Observable<Collection<? extends PaperViewModel>> fetchByScientist(int id);
 
-	Observable<Collection<? extends PaperViewModel>> fetchByTopic(int id);
+	Observable<Collection<? extends PaperViewModel>> fetchByTopic(int id, @Min(0) long offset, @Min(0) long limit);
 
 	// add other methods below...
 }

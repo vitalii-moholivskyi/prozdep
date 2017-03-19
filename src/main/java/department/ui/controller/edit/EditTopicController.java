@@ -90,7 +90,7 @@ public final class EditTopicController {
 
         titleField.setText(model.getName());
         clientField.setText(model.getClient());
-        paperModel.fetchByTopic(model.getId())
+        paperModel.fetchByTopic(model.getId(), 0, UiConstants.RESULTS_PER_PAGE)
                 .subscribe(paperListView.getItems()::setAll,
                         th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
