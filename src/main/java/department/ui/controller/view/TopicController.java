@@ -1,15 +1,23 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.model.ITopicModel;
+import department.ui.controller.DefaultProgressMessage;
+import department.ui.controller.MainController;
+import department.ui.controller.edit.EditTopicController;
 import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.UiConstants;
+import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.stage.Stage;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
@@ -50,6 +58,31 @@ public class TopicController extends ListTabController<TopicViewModel> {
         departmentCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDepartmentTitleObs().map(NULLABLE_FLD_MAPPER)));
         // setup table columns and content
         tableView.getColumns().addAll(titleCol, chiefCol, departmentCol, startDateCol, endDateCol);
+
+        tableView.setRowFactory(tv -> {
+            val row = new TableRow<TopicViewModel>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+
+                    val stage = new Stage();
+                    val loader = UiUtils.newLoader("/view/partials/_formEditTopic.fxml", EditTopicController.class);
+
+                    try {
+                        stage.setScene(new Scene(loader.load()));
+
+                        EditTopicController controller = loader.getController();
+
+                        controller.setModel(row.getItem());
+                        stage.centerOnScreen();
+                        stage.show();
+                        stage.sizeToScene();
+                    } catch (final IOException e) {
+                        log.log(Level.SEVERE, "Failed to open form", e);
+                    }
+                }
+            });
+            return row;
+        });
 
         val size = tableView.getColumns().size();
 

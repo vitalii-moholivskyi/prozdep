@@ -17,4 +17,6 @@ public class PaperCreateForm {
     private String name;
     private String type;
     private Integer year;
+    private Integer supervisor;
+    private Integer executor;
 }

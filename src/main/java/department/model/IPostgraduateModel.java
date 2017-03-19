@@ -78,5 +78,11 @@ public interface IPostgraduateModel {
 	
 	Observable<? extends Integer> count();
 
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends PostgraduateViewModel> fetch(int id);
+
 	// add other methods below...
 }

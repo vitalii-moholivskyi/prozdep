@@ -1,7 +1,10 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.model.IMasterModel;
+import department.ui.controller.DefaultProgressMessage;
+import department.ui.controller.MainController;
 import department.ui.controller.model.MasterViewModel;
+import department.ui.controller.edit.EditMasterController;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
@@ -61,7 +64,7 @@ public final class MasterTabController extends ListTabController<MasterViewModel
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
 
                     val stage = new Stage();
-                    val loader = UiUtils.newLoader("/view/partials/_formMaster.fxml", EditMasterController.class);
+                    val loader = UiUtils.newLoader("/view/partials/_formEditMaster.fxml", EditMasterController.class);
 
                     try {
                         stage.setScene(new Scene(loader.load()));

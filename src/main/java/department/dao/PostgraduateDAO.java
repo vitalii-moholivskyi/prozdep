@@ -282,9 +282,9 @@ public class PostgraduateDAO implements IPostgraduateDAO{
                     .name(rs.getString("postgraduate_name"))
                     .phone(rs.getString("postgraduate_phone"))
                     .topic(rs.getString("postgraduate_topic"))
-                    .startDate(rs.getDate("postgraduate_start_date"))
-                    .endDate(rs.getDate("postgraduate_end_date"))
-                    .protectionDate(rs.getDate("postgraduate_protection_date"))
+                    .startDate(rs.getTimestamp("postgraduate_start_date"))
+                    .endDate(rs.getTimestamp("postgraduate_end_date"))
+                    .protectionDate(rs.getTimestamp("postgraduate_protection_date"))
                     .teacher(Teacher
                             .builder()
                             .id(rs.getInt("teacher_id"))
@@ -292,7 +292,7 @@ public class PostgraduateDAO implements IPostgraduateDAO{
                             .phone(rs.getString("teacher_phone"))
                             .position(rs.getString("teacher_position"))
                             .degree(rs.getString("teacher_degree"))
-                            .startDate(rs.getDate("teacher_start_date"))
+                            .startDate(rs.getTimestamp("teacher_start_date"))
                             .department(Department
                                     .builder()
                                     .id(rs.getInt("teacher_department_id"))

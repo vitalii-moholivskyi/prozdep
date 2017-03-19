@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.CreateTeacherController">
+<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:id="viewRoot" fx:controller="department.ui.controller.edit.EditTeacherController">
    <tabs>
       <Tab text="Редагувати">
          <content>
@@ -122,7 +122,7 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <Label text="error" />
+                  <Label fx:id="errorLabel" text="error" />
                     </children>
                <padding>
                   <Insets left="25.0" right="25.0" />

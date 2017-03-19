@@ -78,5 +78,11 @@ public interface IScientistModel {
 
 	Observable<? extends Integer> count();
 
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends ScientistViewModel> fetch(int id);
+
 	// add other methods below...
 }

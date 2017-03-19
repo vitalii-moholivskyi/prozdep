@@ -1,10 +1,5 @@
 package department.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import department.model.bo.Department;
 import department.model.bo.Teacher;
 import department.model.bo.Topic;
@@ -15,6 +10,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import util.DateUtil;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class TopicDAO implements ITopicDAO{
@@ -209,8 +209,8 @@ public class TopicDAO implements ITopicDAO{
                         .id(rs.getInt("id"))
                         .name(rs.getString("name"))
                         .client(rs.getString("client"))
-                        .startDate(rs.getDate("start_date"))
-                        .endDate(rs.getDate("end_date"))
+                        .startDate(rs.getTimestamp("start_date"))
+                        .endDate(rs.getTimestamp("end_date"))
                         .department(Department.builder().id(rs.getInt("department_id")).build())
                         .chiefScientist(Teacher.builder().id(rs.getInt("chief_scientist_id")).build())
                     .build();
@@ -248,8 +248,8 @@ public class TopicDAO implements ITopicDAO{
                         .id(rs.getInt("topic_id"))
                         .name(rs.getString("topic_name"))
                         .client(rs.getString("topic_client"))
-                        .startDate(rs.getDate("topic_start_date"))
-                        .endDate(rs.getDate("topic_end_date"))
+                        .startDate(rs.getTimestamp("topic_start_date"))
+                        .endDate(rs.getTimestamp("topic_end_date"))
                         .department(Department
                                 .builder()
                                     .id(rs.getInt("department_id"))
@@ -263,7 +263,7 @@ public class TopicDAO implements ITopicDAO{
                                     .phone(rs.getString("teacher_phone"))
                                     .position(rs.getString("teacher_position"))
                                     .degree(rs.getString("teacher_degree"))
-                                    .startDate(rs.getDate("teacher_start_date"))
+                                    .startDate(rs.getTimestamp("teacher_start_date"))
                                 .build())
                     .build();
         }

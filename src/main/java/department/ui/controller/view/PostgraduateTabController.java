@@ -1,7 +1,10 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.model.IPostgraduateModel;
+import department.ui.controller.DefaultProgressMessage;
+import department.ui.controller.MainController;
 import department.ui.controller.model.PostgraduateViewModel;
+import department.ui.controller.edit.EditPostgraduateController;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
@@ -63,7 +66,7 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
 
                     val stage = new Stage();
-                    val loader = UiUtils.newLoader("/view/partials/_formPostgraduate.fxml", EditPostgraduateController.class);
+                    val loader = UiUtils.newLoader("/view/partials/_formEditPostgraduate.fxml", EditPostgraduateController.class);
 
                     try {
                         stage.setScene(new Scene(loader.load()));

@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.controller.create;
 
 import department.model.IDepartmentModel;
 import department.model.IPostgraduateModel;
@@ -8,26 +8,52 @@ import department.model.form.PostgraduateCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
-import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
+import department.ui.utils.UiUtils;
+import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
 
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.logging.Level;
+
+import static department.ui.utils.UiUtils.defenceDayFactory;
+import static department.ui.utils.UiUtils.endDayFactory;
+import static department.ui.utils.UiUtils.startDayFactory;
 
 /**
  * Created by Максим on 2/19/2017.
  */
 @Log
 @Controller
-public final class CreatePostgraduateController extends BasePostrgraduateController {
+public final class CreatePostgraduateController {
+
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private ComboBox<DepartmentViewModel> departmentComboBox;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private DatePicker defenceDatePicker;
+    @FXML
+    private ComboBox<TeacherViewModel> teacherComboBox;
+    @FXML
+    private ComboBox<TopicViewModel> topicComboBox;
 
     private final IPostgraduateModel postgraduateModel;
     private final IDepartmentModel departmentModel;
@@ -42,38 +68,37 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         this.topicModel = topicModel;
     }
 
-    @Override
-    protected void initialize() {
+    @FXML
+    private void initialize() {
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        defenceDatePicker.setEditable(false);
 
-        departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
-            @Override
-            public String toString(DepartmentViewModel object) {
-                return object == null ? "Кафедра" : String.format("%d %s", object.getId(), object.getName());
-            }
+        startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+        defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
 
-        });
+        startDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+                    defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+                });
+        endDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+                    defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+                });
 
-        topicComboBox.setConverter(new DefaultStringConverter<TopicViewModel>() {
-            @Override
-            public String toString(TopicViewModel object) {
-                return object == null ? "Тема" : object.getName();
-            }
-        });
-
-        teacherComboBox.setConverter(new DefaultStringConverter<TeacherViewModel>() {
-            @Override
-            public String toString(TeacherViewModel object) {
-                return object == null ? "" : object.getFirstName();
-            }
-        });
+        defenceDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+                    endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+                });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
                         , th -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Помилка");
-                            alert.setContentText("Не вдалося завантажити список кафедр");
-                            alert.showAndWait();
+                            UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
@@ -94,19 +119,22 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
                 topicModel.fetchTopics(newValue, 0, UiConstants.HINT_RESULT)
                         .doOnCompleted(topicComboBox::show)
                         .subscribe(topicComboBox.getItems()::setAll,
-                                th -> log.log(Level.WARNING, "Failed to fetch topics"));
+                                th -> {
+                                    log.log(Level.WARNING, "Failed to fetch topics");
+                                    UiUtils.createErrDialog("Не вдалося завантажити список тем").showAndWait();
+                                });
             }
         });
 
     }
 
-    @Override
-    protected void onCreatePostgraduate() {
+    @FXML
+    private void onCreatePostgraduate() {
 
         val department = departmentComboBox.valueProperty().get();
 
         if (department == null) {
-            showWarning("Не обрано кафедру", "Для того, аби продовжити, виберіть кафедру зі списку");
+            UiUtils.createWarnDialog("Для того, аби продовжити, виберіть кафедру зі списку").showAndWait();
             departmentComboBox.requestFocus();
             return;
         }
@@ -114,7 +142,7 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         val name = fullNameField.getText();
 
         if (TextUtils.isEmpty(name)) {
-            showWarning(null, "ФІБ не вказано");
+            UiUtils.createWarnDialog("ФІБ не вказано").showAndWait();
             fullNameField.requestFocus();
             return;
         }
@@ -122,7 +150,7 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         val start = startDatePicker.getValue();
 
         if (start == null) {
-            showWarning(null, "Дату вступу не вказано");
+            UiUtils.createWarnDialog("Дату вступу не вказано").showAndWait();
             startDatePicker.requestFocus();
             return;
         }
@@ -130,7 +158,7 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         val teacher = teacherComboBox.getValue();
 
         if (teacher == null) {
-            showWarning("Не обрано викладача", "Для того, аби продовжити, виберіть викладача зі списку");
+            UiUtils.createWarnDialog("Для того, аби продовжити, виберіть викладача зі списку").showAndWait();
             teacherComboBox.requestFocus();
             return;
         }
@@ -138,7 +166,7 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         val topic = topicComboBox.getValue();
 
         if (topic == null) {
-            showWarning("Не обрано наукову тему", "Для того, аби продовжити, виберіть тему зі списку");
+            UiUtils.createWarnDialog("Для того, аби продовжити, виберіть тему зі списку").showAndWait();
             topicComboBox.requestFocus();
             return;
         }
@@ -153,12 +181,12 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         form.setPhone(phoneField.getText());
         form.setTeacher(teacher.getId());
         form.setTopic(topic.getName());
-        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        form.setEndDate(end == null ? null : Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        form.setProtectionDate(defence == null ? null : Date.from(defence.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setStartDate(DateUtils.fromLocal(start));
+        form.setEndDate(DateUtils.tryFromLocal(end));
+        form.setProtectionDate(DateUtils.tryFromLocal(defence));
 
         postgraduateModel.create(form).subscribe(master -> {
-            log.log(Level.SEVERE, "Model created");
+            log.log(Level.INFO, "Model created");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -173,10 +201,7 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Помилка");
-            alert.setContentText("Не вдалося створити аспіранта");
-            alert.showAndWait();
+            UiUtils.createErrDialog("Не вдалося створити аспіранта").showAndWait();
         });
     }
 

@@ -79,5 +79,11 @@ public interface IMasterModel {
 	@NotNull
 	Observable<? extends Integer> count();
 
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends MasterViewModel> fetch(int id);
+
 	// add other methods below...
 }

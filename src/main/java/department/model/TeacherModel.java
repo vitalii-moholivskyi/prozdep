@@ -13,6 +13,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -30,6 +31,23 @@ public class TeacherModel implements ITeacherModel {
 	@Autowired
 	ITeacherDAO teacherDao;
 
+	@Override
+	public Observable<? extends TeacherViewModel> fetch(
+			@NotNull(message = "id cannot be null") int id) {
+
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Teacher>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(teacherDao.find(id));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TeacherMapper::toViewModel);
+	}
+	
 	@Override
 	public Observable<Collection<? extends TeacherViewModel>> fetchTeachers(@Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Teacher>>) sub -> {
@@ -82,7 +100,7 @@ public class TeacherModel implements ITeacherModel {
 	}
 
 	@Override
-	public void update(TeacherUpdateForm form, TeacherViewModel model, Action1<? super Throwable> errCallback) {
+	public void update(@NotNull(message = "form cannot be null") TeacherUpdateForm form, @NotNull(message = "model cannot be null") TeacherViewModel model, Action0 resultcallback, @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Teacher>) sub -> {
 
 			sub.onStart();
@@ -98,14 +116,16 @@ public class TeacherModel implements ITeacherModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
-			model.setFirstName(result.getName());
-			model.setStartDate(result.getStartDate());
-			model.setPhone(result.getPhone());
-			model.setDegree(result.getDegree());
-			model.setDepartment(result.getDepartment().getId());
-			model.setPosition(result.getPosition());
-		} , errCallback::call);
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread())
+				.doOnCompleted(resultcallback)
+				.subscribe(result -> {
+					model.setFirstName(result.getName());
+					model.setStartDate(result.getStartDate());
+					model.setPhone(result.getPhone());
+					model.setDegree(result.getDegree());
+					model.setDepartment(result.getDepartment().getId());
+					model.setPosition(result.getPosition());
+				}, errCallback::call);
 	}
 
 	@Override

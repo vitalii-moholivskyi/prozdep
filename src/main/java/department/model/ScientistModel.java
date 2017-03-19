@@ -32,6 +32,23 @@ public class ScientistModel implements IScientistModel {
 	IScientistDAO scientistDao;
 
 	@Override
+	public Observable<? extends ScientistViewModel> fetch(
+			@NotNull(message = "id cannot be null") int id) {
+
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Scientist>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(scientistDao.find(id));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(ScientistMapper::toViewModel);
+	}
+	
+	@Override
 	public Observable<Collection<? extends ScientistViewModel>> fetchScientists(@Min(0) long offset,
 			@Min(0) long limit) {
 		return Observable

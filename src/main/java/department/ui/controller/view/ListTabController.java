@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.utils.Tuple;
 import javafx.fxml.FXML;

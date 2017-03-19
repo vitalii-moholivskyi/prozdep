@@ -32,7 +32,24 @@ public class PostgraduateModel implements IPostgraduateModel {
 
 	@Autowired
 	IPostgraduateDAO postgraduateDao;
+	
+	@Override
+	public Observable<? extends PostgraduateViewModel> fetch(
+			@NotNull(message = "id cannot be null") int id) {
 
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Postgraduate>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(postgraduateDao
+						.find(id));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PostgraduateMapper::toViewModel);
+	}
 	@Override
 	public Observable<Collection<? extends PostgraduateViewModel>> fetchPostgraduates(@Min(0) long offset,
 			@Min(0) long limit) {

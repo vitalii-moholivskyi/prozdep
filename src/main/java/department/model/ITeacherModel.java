@@ -6,6 +6,7 @@ import department.model.form.TeacherUpdateForm;
 
 import org.springframework.validation.annotation.Validated;
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 import javax.validation.constraints.Min;
@@ -72,8 +73,15 @@ public interface ITeacherModel {
 	@NotNull
 	void update(@NotNull(message = "form cannot be null") TeacherUpdateForm form,
 			@NotNull(message = "model cannot be null") TeacherViewModel model,
+				Action0 resultcallback,
 			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 	Observable<? extends Integer> count();
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends TeacherViewModel> fetch(int id);
 
 	// add other methods below...
 }
