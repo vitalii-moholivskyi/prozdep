@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.controller.update;
 
 import department.model.IDepartmentModel;
 import department.model.IMasterModel;
@@ -10,6 +10,9 @@ import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import lombok.val;
@@ -19,12 +22,34 @@ import org.springframework.stereotype.Controller;
 import java.time.ZoneId;
 import java.util.logging.Level;
 
+import static department.ui.utils.UiUtils.endDayFactory;
+import static department.ui.utils.UiUtils.startDayFactory;
+
 /**
  * Created by Максим on 2/7/2017.
  */
 @Controller
 @Log
-public final class EditMasterController extends MasterBaseController {
+public final class EditMasterController {
+
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private ComboBox<DepartmentViewModel> departmentComboBox;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private Button actionButton;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label errorLabel;
 
     private final IMasterModel model;
     private final IDepartmentModel departmentModel;
@@ -56,9 +81,16 @@ public final class EditMasterController extends MasterBaseController {
         phoneField.setText(dataModel.getPhone());
     }
 
-    @Override
     protected void initialize() {
-        super.initialize();
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        startDatePicker.setDayCellFactory(startDayFactory(endDatePicker));
+        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker));
+
+        startDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> endDatePicker.setDayCellFactory(endDayFactory(startDatePicker)));
+        endDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> startDatePicker.setDayCellFactory(startDayFactory(endDatePicker)));
 
         titleLabel.setText("Редагувати магістра");
         actionButton.setText("Зберегти");
@@ -80,13 +112,14 @@ public final class EditMasterController extends MasterBaseController {
                             }
                         }, th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список кафедр");
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
     }
 
-    @Override
-    protected void onCreate() {
+    @FXML
+    private void onCreate() {
 
         val department = departmentComboBox.valueProperty().get();
 
@@ -141,6 +174,7 @@ public final class EditMasterController extends MasterBaseController {
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
+            errorLabel.setText("Не вдалося оновити дані про магістра");
             UiUtils.createErrDialog("Не вдалося оновити дані про магістра").showAndWait();
         });
     }

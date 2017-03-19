@@ -1,50 +1,155 @@
-package department.ui.controller;
+package department.ui.controller.update;
 
 import department.model.IDepartmentModel;
 import department.model.IPostgraduateModel;
 import department.model.ITeacherModel;
 import department.model.ITopicModel;
-import department.model.form.PostgraduateCreateForm;
+import department.model.form.PostgraduateUpdateForm;
+import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.PostgraduateViewModel;
+import department.ui.controller.model.TeacherViewModel;
+import department.ui.controller.model.TopicViewModel;
+import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
 
+import java.time.ZoneId;
 import java.util.logging.Level;
+
+import static department.ui.utils.UiUtils.*;
 
 /**
  * Created by Максим on 2/19/2017.
  */
 @Log
 @Controller
-public final class CreatePostgraduateController extends BasePostrgraduateController {
+public final class EditPostgraduateController {
+
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private ComboBox<DepartmentViewModel> departmentComboBox;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private DatePicker defenceDatePicker;
+    @FXML
+    private ComboBox<TeacherViewModel> teacherComboBox;
+    @FXML
+    private ComboBox<TopicViewModel> topicComboBox;
+    @FXML
+    private Label errorLabel;
 
     private final IPostgraduateModel postgraduateModel;
     private final IDepartmentModel departmentModel;
     private final ITeacherModel teacherModel;
     private final ITopicModel topicModel;
 
-    public CreatePostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
-                                        ITeacherModel teacherModel, ITopicModel topicModel) {
+    private PostgraduateViewModel data;
+
+    public EditPostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
+                                      ITeacherModel teacherModel, ITopicModel topicModel) {
         this.postgraduateModel = postgraduateModel;
         this.departmentModel = departmentModel;
         this.teacherModel = teacherModel;
         this.topicModel = topicModel;
     }
 
-    @Override
-    protected void initialize() {
-        super.initialize();
+    public PostgraduateViewModel getData() {
+        return data;
+    }
+
+    public void setData(PostgraduateViewModel data) {
+        this.data = data;
+
+
+        fullNameField.setText(data.getFirstName());
+        if (data.getStartDate() != null) {
+            startDatePicker.setValue(data.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+
+        if (data.getEndDate() != null) {
+            endDatePicker.setValue(data.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        if (data.getProtectionDate() != null) {
+            defenceDatePicker.setValue(data.getProtectionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        phoneField.setText(data.getPhone());
+    }
+
+    @FXML
+    private void initialize() {
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        defenceDatePicker.setEditable(false);
+
+        startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+        defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+
+        startDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+                    defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+                });
+        endDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+                    defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+                });
+
+        defenceDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+                    endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+                });
+
+        departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
+            @Override
+            public String toString(DepartmentViewModel object) {
+                return object == null ? "Кафедра" : String.format("%d %s", object.getId(), object.getName());
+            }
+
+        });
+
+        topicComboBox.setConverter(new DefaultStringConverter<TopicViewModel>() {
+            @Override
+            public String toString(TopicViewModel object) {
+                return object == null ? "Тема" : object.getName();
+            }
+        });
+
+        teacherComboBox.setConverter(new DefaultStringConverter<TeacherViewModel>() {
+            @Override
+            public String toString(TeacherViewModel object) {
+                return object == null ? "" : object.getFirstName();
+            }
+        });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
                         , th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список кафедр");
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
@@ -74,8 +179,8 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
 
     }
 
-    @Override
-    protected void onCreatePostgraduate() {
+    @FXML
+    private void onCreatePostgraduate() {
 
         val department = departmentComboBox.valueProperty().get();
 
@@ -120,8 +225,9 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         val end = endDatePicker.getValue();
         val defence = defenceDatePicker.getValue();
 
-        val form = new PostgraduateCreateForm();
+        val form = new PostgraduateUpdateForm();
 
+        form.setId(data.getId());
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
@@ -131,8 +237,8 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
         form.setEndDate(DateUtils.tryFromLocal(end));
         form.setProtectionDate(DateUtils.tryFromLocal(defence));
 
-        postgraduateModel.create(form).subscribe(master -> {
-            log.log(Level.INFO, "Model created");
+        postgraduateModel.update(form, data, aVoid -> {
+            log.log(Level.INFO, "Model updated");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -147,6 +253,7 @@ public final class CreatePostgraduateController extends BasePostrgraduateControl
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
+            errorLabel.setText("Не вдалося створити аспіранта");
             UiUtils.createErrDialog("Не вдалося створити аспіранта").showAndWait();
         });
     }

@@ -9,6 +9,9 @@ import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import lombok.val;
@@ -17,12 +20,28 @@ import org.springframework.stereotype.Controller;
 
 import java.util.logging.Level;
 
+import static department.ui.utils.UiUtils.endDayFactory;
+import static department.ui.utils.UiUtils.startDayFactory;
+
 /**
  * Created by Максим on 2/7/2017.
  */
 @Controller
 @Log
-public final class CreateMasterController extends MasterBaseController {
+public final class CreateMasterController {
+
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private ComboBox<DepartmentViewModel> departmentComboBox;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
 
     private final IMasterModel model;
     private final IDepartmentModel departmentModel;
@@ -33,9 +52,18 @@ public final class CreateMasterController extends MasterBaseController {
         this.departmentModel = departmentModel;
     }
 
-    @Override
-    protected void initialize() {
-        super.initialize();
+    @FXML
+    private void initialize() {
+
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        startDatePicker.setDayCellFactory(startDayFactory(endDatePicker));
+        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker));
+
+        startDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> endDatePicker.setDayCellFactory(endDayFactory(startDatePicker)));
+        endDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> startDatePicker.setDayCellFactory(startDayFactory(endDatePicker)));
 
         departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
             @Override
@@ -53,8 +81,8 @@ public final class CreateMasterController extends MasterBaseController {
                 );
     }
 
-    @Override
-    protected void onCreate() {
+    @FXML
+    private void onCreate() {
 
         val department = departmentComboBox.valueProperty().get();
 

@@ -4,68 +4,96 @@ import department.model.IDepartmentModel;
 import department.model.IPostgraduateModel;
 import department.model.ITeacherModel;
 import department.model.ITopicModel;
-import department.model.form.PostgraduateUpdateForm;
-import department.ui.controller.model.PostgraduateViewModel;
+import department.model.form.PostgraduateCreateForm;
+import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.TeacherViewModel;
+import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
 
-import java.time.ZoneId;
 import java.util.logging.Level;
+
+import static department.ui.utils.UiUtils.defenceDayFactory;
+import static department.ui.utils.UiUtils.endDayFactory;
+import static department.ui.utils.UiUtils.startDayFactory;
 
 /**
  * Created by Максим on 2/19/2017.
  */
 @Log
 @Controller
-public final class EditPostgraduateController extends BasePostrgraduateController {
+public final class CreatePostgraduateController {
+
+    @FXML
+    private Parent viewRoot;
+    @FXML
+    private ComboBox<DepartmentViewModel> departmentComboBox;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private DatePicker defenceDatePicker;
+    @FXML
+    private ComboBox<TeacherViewModel> teacherComboBox;
+    @FXML
+    private ComboBox<TopicViewModel> topicComboBox;
 
     private final IPostgraduateModel postgraduateModel;
     private final IDepartmentModel departmentModel;
     private final ITeacherModel teacherModel;
     private final ITopicModel topicModel;
 
-    private PostgraduateViewModel data;
-
-    public EditPostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
-                                      ITeacherModel teacherModel, ITopicModel topicModel) {
+    public CreatePostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
+                                        ITeacherModel teacherModel, ITopicModel topicModel) {
         this.postgraduateModel = postgraduateModel;
         this.departmentModel = departmentModel;
         this.teacherModel = teacherModel;
         this.topicModel = topicModel;
     }
 
-    public PostgraduateViewModel getData() {
-        return data;
-    }
+    @FXML
+    private void initialize() {
+        startDatePicker.setEditable(false);
+        endDatePicker.setEditable(false);
+        defenceDatePicker.setEditable(false);
 
-    public void setData(PostgraduateViewModel data) {
-        this.data = data;
+        startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+        defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
 
+        startDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+                    defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+                });
+        endDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+                    defenceDatePicker.setDayCellFactory(defenceDayFactory(endDatePicker, startDatePicker));
+                });
 
-        fullNameField.setText(data.getFirstName());
-        if (data.getStartDate() != null) {
-            startDatePicker.setValue(data.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-
-        if (data.getEndDate() != null) {
-            endDatePicker.setValue(data.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-        if (data.getProtectionDate() != null) {
-            defenceDatePicker.setValue(data.getProtectionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-        phoneField.setText(data.getPhone());
-    }
-
-    @Override
-    protected void initialize() {
-        super.initialize();
+        defenceDatePicker.dayCellFactoryProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    startDatePicker.setDayCellFactory(startDayFactory(endDatePicker, defenceDatePicker));
+                    endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
+                });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
@@ -100,8 +128,8 @@ public final class EditPostgraduateController extends BasePostrgraduateControlle
 
     }
 
-    @Override
-    protected void onCreatePostgraduate() {
+    @FXML
+    private void onCreatePostgraduate() {
 
         val department = departmentComboBox.valueProperty().get();
 
@@ -146,9 +174,8 @@ public final class EditPostgraduateController extends BasePostrgraduateControlle
         val end = endDatePicker.getValue();
         val defence = defenceDatePicker.getValue();
 
-        val form = new PostgraduateUpdateForm();
+        val form = new PostgraduateCreateForm();
 
-        form.setId(data.getId());
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
@@ -158,8 +185,8 @@ public final class EditPostgraduateController extends BasePostrgraduateControlle
         form.setEndDate(DateUtils.tryFromLocal(end));
         form.setProtectionDate(DateUtils.tryFromLocal(defence));
 
-        postgraduateModel.update(form, data, aVoid -> {
-            log.log(Level.INFO, "Model updated");
+        postgraduateModel.create(form).subscribe(master -> {
+            log.log(Level.INFO, "Model created");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
