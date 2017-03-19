@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:id="viewRoot" fx:controller="department.ui.controller.edit.EditTeacherController">
+<TabPane fx:id="viewRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTeacherController">
    <tabs>
       <Tab text="Редагувати">
          <content>
@@ -132,13 +132,31 @@
       </Tab>
       <Tab text="Наукові теми">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                   <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                       <children>
+                           <ListView fx:id="paperListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                           <Pagination fx:id="paginationPaper" maxPageIndicatorCount="5" maxWidth="1.7976931348623157E308" pageCount="1" prefHeight="30.0" />
+                       </children>
+                   </VBox>
+               </children>
+            </AnchorPane>
         </content>
       </Tab>
       <Tab text="Наукові праці">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-        </content>
+          <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                 <children>
+                     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                         <children>
+                             <ListView fx:id="paperListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                             <Pagination fx:id="paginationPaper" maxPageIndicatorCount="5" maxWidth="1.7976931348623157E308" pageCount="1" prefHeight="30.0" />
+                         </children>
+                     </VBox>
+                 </children>
+              </AnchorPane>
+          </content>
       </Tab>
    </tabs>
 </TabPane>
