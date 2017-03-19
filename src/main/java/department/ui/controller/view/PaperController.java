@@ -3,15 +3,21 @@ package department.ui.controller.view;
 import department.model.IPaperModel;
 import department.ui.controller.DefaultProgressMessage;
 import department.ui.controller.MainController;
+import department.ui.controller.edit.EditPaperController;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.UiConstants;
+import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.stage.Stage;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiUtils.NULLABLE_FLD_MAPPER;
@@ -48,6 +54,31 @@ public class PaperController extends ListTabController<PaperViewModel> {
                 .map(year -> year == null ? "N/a" : year.toString())));
         // setup table columns and content
         tableView.getColumns().addAll(titleCol, typeCol, yearCol);
+
+        tableView.setRowFactory(tv -> {
+            TableRow<PaperViewModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+
+                    val stage = new Stage();
+                    val loader = UiUtils.newLoader("/view/partials/_formEditPaper.fxml", EditPaperController.class);
+
+                    try {
+                        stage.setScene(new Scene(loader.load()));
+
+                        EditPaperController controller = loader.getController();
+
+                        controller.setPaper(row.getItem());
+                        stage.centerOnScreen();
+                        stage.show();
+                        stage.sizeToScene();
+                    } catch (final IOException e) {
+                        log.log(Level.SEVERE, "Failed to open form", e);
+                    }
+                }
+            });
+            return row;
+        });
 
         val size = tableView.getColumns().size();
 

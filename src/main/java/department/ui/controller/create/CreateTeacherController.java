@@ -5,11 +5,15 @@ import department.model.ITeacherModel;
 import department.model.form.TeacherCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.utils.UiUtils;
+import department.utils.DateUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -18,8 +22,6 @@ import lombok.val;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
@@ -141,7 +143,7 @@ public final class CreateTeacherController {
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
-        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setStartDate(DateUtils.fromLocal(start));
         form.setDegree(degree);
         form.setPosition(position);
 

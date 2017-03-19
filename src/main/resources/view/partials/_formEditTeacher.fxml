@@ -122,7 +122,7 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <Label text="error" />
+                  <Label fx:id="errorLabel" text="error" />
                     </children>
                <padding>
                   <Insets left="25.0" right="25.0" />

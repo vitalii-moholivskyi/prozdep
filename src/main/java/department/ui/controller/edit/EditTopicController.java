@@ -1,10 +1,12 @@
 package department.ui.controller.edit;
 
 import department.model.IDepartmentModel;
+import department.model.IPaperModel;
 import department.model.ITeacherModel;
 import department.model.ITopicModel;
 import department.model.form.TopicUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.PaperViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.DefaultStringConverter;
@@ -18,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
@@ -53,18 +56,23 @@ public final class EditTopicController {
     private DatePicker endDatePicker;
     @FXML
     private ComboBox<TeacherViewModel> teacherComboBox;
+    @FXML
+    private ListView<PaperViewModel> paperListView;
 
     private final IDepartmentModel departmentModel;
     private final ITopicModel topicModel;
     private final ITeacherModel teacherModel;
+    private final IPaperModel paperModel;
 
     private TopicViewModel model;
 
     @Autowired
-    public EditTopicController(IDepartmentModel departmentModel, ITopicModel topicModel, ITeacherModel teacherModel) {
+    public EditTopicController(IDepartmentModel departmentModel, ITopicModel topicModel, ITeacherModel teacherModel,
+                               IPaperModel paperModel) {
         this.departmentModel = departmentModel;
         this.topicModel = topicModel;
         this.teacherModel = teacherModel;
+        this.paperModel = paperModel;
     }
 
     public TopicViewModel getModel() {
@@ -82,6 +90,12 @@ public final class EditTopicController {
 
         titleField.setText(model.getName());
         clientField.setText(model.getClient());
+        paperModel.fetchByTopic(model.getId())
+                .subscribe(paperListView.getItems()::setAll,
+                        th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
+                            log.log(Level.WARNING, "Failed to fetch topics", th);
+                        });
     }
 
     @FXML

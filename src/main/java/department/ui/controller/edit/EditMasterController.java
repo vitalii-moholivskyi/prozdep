@@ -2,9 +2,11 @@ package department.ui.controller.edit;
 
 import department.model.IDepartmentModel;
 import department.model.IMasterModel;
+import department.model.IPaperModel;
 import department.model.form.MasterUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.MasterViewModel;
+import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
@@ -19,7 +21,6 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.time.ZoneId;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiUtils.endDayFactory;
@@ -50,16 +51,20 @@ public final class EditMasterController {
     private Label titleLabel;
     @FXML
     private Label errorLabel;
+    @FXML
+    private ListView<PaperViewModel> paperListView;
 
     private final IMasterModel model;
     private final IDepartmentModel departmentModel;
+    private final IPaperModel paperModel;
 
     private MasterViewModel dataModel;
 
     @Autowired
-    public EditMasterController(IMasterModel model, IDepartmentModel departmentModel) {
+    public EditMasterController(IMasterModel model, IDepartmentModel departmentModel, IPaperModel paperModel) {
         this.model = model;
         this.departmentModel = departmentModel;
+        this.paperModel = paperModel;
     }
 
     public MasterViewModel getDataModel() {
@@ -71,14 +76,17 @@ public final class EditMasterController {
 
         fullNameField.setText(dataModel.getFirstName());
 
-        if (dataModel.getStartDate() != null) {
-            startDatePicker.setValue(dataModel.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-
-        if (dataModel.getEndDate() != null) {
-            endDatePicker.setValue(dataModel.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
+        startDatePicker.setValue(DateUtils.tryToLocal(dataModel.getStartDate()));
+        endDatePicker.setValue(DateUtils.tryToLocal(dataModel.getEndDate()));
         phoneField.setText(dataModel.getPhone());
+
+        paperModel.fetchByScientist(dataModel.getId())
+                .subscribe(paperListView.getItems()::setAll,
+                        th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список наукових робіт");
+                            log.log(Level.WARNING, "Failed to fetch topics", th);
+                        });
     }
 
     protected void initialize() {

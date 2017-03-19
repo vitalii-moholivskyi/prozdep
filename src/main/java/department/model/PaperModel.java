@@ -14,6 +14,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -96,7 +97,22 @@ public class PaperModel implements IPaperModel {
 	}
 
 	@Override
-	public void update(PaperUpdateForm form, PaperViewModel model, Action1<? super Throwable> errCallback) {
+	public Observable<? extends Integer> count() {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Integer>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(paperDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+	}
+
+	@Override
+	public void update(@NotNull(message = "form cannot be null") PaperUpdateForm form, @NotNull(message = "model cannot be null") PaperViewModel model, Action0 callback, @NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Paper>) sub -> {
 
 			sub.onStart();
@@ -110,27 +126,13 @@ public class PaperModel implements IPaperModel {
 			} finally {
 				sub.onCompleted();
 			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
-           model.setName(result.getName());
-           model.setYear(result.getYear());
-           model.setType(result.getType());
-        }, errCallback::call);
-		
-	}
-
-	@Override
-	public Observable<? extends Integer> count() {
-		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Integer>) sub -> {
-
-			sub.onStart();
-			try {
-				sub.onNext(paperDao.count());
-			} catch (Exception e) {
-				sub.onError(e);
-			} finally {
-				sub.onCompleted();
-			}
-		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread())
+				.doOnCompleted(callback)
+				.subscribe(result -> {
+					model.setName(result.getName());
+					model.setYear(result.getYear());
+					model.setType(result.getType());
+				}, errCallback::call);
 	}
 
 }

@@ -84,5 +84,7 @@ public interface ITopicModel {
 	 */
 	Observable<? extends TopicViewModel> fetch(int id);
 
+	Observable<Collection<? extends TopicViewModel>> fetchByScientist(int id);
+
 	// add other methods below...
 }

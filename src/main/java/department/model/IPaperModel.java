@@ -1,16 +1,16 @@
 package department.model;
 
-import java.util.Collection;
 import department.model.form.PaperCreateForm;
 import department.model.form.PaperUpdateForm;
+import department.ui.controller.model.PaperViewModel;
+import org.springframework.validation.annotation.Validated;
+import rx.Observable;
+import rx.functions.Action0;
+import rx.functions.Action1;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import org.springframework.validation.annotation.Validated;
-
-import department.ui.controller.model.PaperViewModel;
-import rx.Observable;
-import rx.functions.Action1;
+import java.util.Collection;
 
 /**
  * @author Nikolay
@@ -74,6 +74,7 @@ public interface IPaperModel {
 	@NotNull
 	void update(@NotNull(message = "form cannot be null") PaperUpdateForm form,
 			@NotNull(message = "model cannot be null") PaperViewModel model,
+				Action0 callback,
 			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 
 	/**
@@ -81,6 +82,10 @@ public interface IPaperModel {
 	 * @return
 	 */
 	Observable<? extends PaperViewModel> fetch(int id);
+
+	Observable<Collection<? extends PaperViewModel>> fetchByScientist(int id);
+
+	Observable<Collection<? extends PaperViewModel>> fetchByTopic(int id);
 
 	// add other methods below...
 }

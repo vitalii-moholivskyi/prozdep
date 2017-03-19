@@ -1,14 +1,8 @@
 package department.ui.controller.edit;
 
-import department.model.IDepartmentModel;
-import department.model.IPostgraduateModel;
-import department.model.ITeacherModel;
-import department.model.ITopicModel;
+import department.model.*;
 import department.model.form.PostgraduateUpdateForm;
-import department.ui.controller.model.DepartmentViewModel;
-import department.ui.controller.model.PostgraduateViewModel;
-import department.ui.controller.model.TeacherViewModel;
-import department.ui.controller.model.TopicViewModel;
+import department.ui.controller.model.*;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
@@ -17,16 +11,12 @@ import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
 
-import java.time.ZoneId;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiUtils.*;
@@ -58,20 +48,24 @@ public final class EditPostgraduateController {
     private ComboBox<TopicViewModel> topicComboBox;
     @FXML
     private Label errorLabel;
+    @FXML
+    private ListView<PaperViewModel> paperListView;
 
     private final IPostgraduateModel postgraduateModel;
     private final IDepartmentModel departmentModel;
     private final ITeacherModel teacherModel;
     private final ITopicModel topicModel;
+    private final IPaperModel paperModel;
 
     private PostgraduateViewModel data;
 
     public EditPostgraduateController(IPostgraduateModel postgraduateModel, IDepartmentModel departmentModel,
-                                      ITeacherModel teacherModel, ITopicModel topicModel) {
+                                      ITeacherModel teacherModel, ITopicModel topicModel, IPaperModel paperModel) {
         this.postgraduateModel = postgraduateModel;
         this.departmentModel = departmentModel;
         this.teacherModel = teacherModel;
         this.topicModel = topicModel;
+        this.paperModel = paperModel;
     }
 
     public PostgraduateViewModel getData() {
@@ -83,17 +77,18 @@ public final class EditPostgraduateController {
 
 
         fullNameField.setText(data.getFirstName());
-        if (data.getStartDate() != null) {
-            startDatePicker.setValue(data.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-
-        if (data.getEndDate() != null) {
-            endDatePicker.setValue(data.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-        if (data.getProtectionDate() != null) {
-            defenceDatePicker.setValue(data.getProtectionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
+        startDatePicker.setValue(DateUtils.tryToLocal(data.getStartDate()));
+        endDatePicker.setValue(DateUtils.tryToLocal(data.getEndDate()));
+        defenceDatePicker.setValue(DateUtils.tryToLocal(data.getProtectionDate()));
         phoneField.setText(data.getPhone());
+
+        paperModel.fetchByScientist(data.getId())
+                .subscribe(paperListView.getItems()::setAll,
+                        th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список наукових робіт");
+                            log.log(Level.WARNING, "Failed to fetch topics", th);
+                        });
     }
 
     @FXML

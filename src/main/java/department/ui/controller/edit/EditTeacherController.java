@@ -1,10 +1,14 @@
 package department.ui.controller.edit;
 
 import department.model.IDepartmentModel;
+import department.model.IPaperModel;
 import department.model.ITeacherModel;
-import department.model.form.TeacherCreateForm;
+import department.model.ITopicModel;
+import department.model.form.TeacherUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
+import department.ui.controller.model.PaperViewModel;
 import department.ui.controller.model.TeacherViewModel;
+import department.ui.controller.model.TopicViewModel;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
 import department.utils.Preconditions;
@@ -12,10 +16,7 @@ import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -24,8 +25,6 @@ import lombok.val;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
@@ -36,9 +35,6 @@ import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
 @Log
 @Controller
 public final class EditTeacherController {
-
-    private final ITeacherModel teacherModel;
-    private final IDepartmentModel departmentModel;
 
     @FXML
     private Parent viewRoot;
@@ -54,12 +50,26 @@ public final class EditTeacherController {
     private TextField degreeField;
     @FXML
     private DatePicker startDatePicker;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private ListView<TopicViewModel> topicsListView;
+    @FXML
+    private ListView<PaperViewModel> paperListView;
+
+    private final ITeacherModel teacherModel;
+    private final IDepartmentModel departmentModel;
+    private final ITopicModel topicModel;
+    private final IPaperModel paperModel;
 
     private TeacherViewModel model;
 
-    public EditTeacherController(ITeacherModel teacherModel, IDepartmentModel departmentModel) {
+    public EditTeacherController(ITeacherModel teacherModel, IDepartmentModel departmentModel,
+                                 ITopicModel topicModel, IPaperModel paperModel) {
         this.teacherModel = teacherModel;
         this.departmentModel = departmentModel;
+        this.topicModel = topicModel;
+        this.paperModel = paperModel;
     }
 
     public TeacherViewModel getModel() {
@@ -74,6 +84,22 @@ public final class EditTeacherController {
         positionField.setText(model.getPosition());
         degreeField.setText(model.getDegree());
         startDatePicker.setValue(DateUtils.tryToLocal(model.getStartDate()));
+
+        topicModel.fetchByScientist(model.getId())
+                .subscribe(topicsListView.getItems()::setAll,
+                        th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити список наукових тем").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список наукових тем");
+                            log.log(Level.WARNING, "Failed to fetch papers", th);
+                        });
+
+        paperModel.fetchByScientist(model.getId())
+                .subscribe(paperListView.getItems()::setAll,
+                        th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список наукових робіт");
+                            log.log(Level.WARNING, "Failed to fetch topics", th);
+                        });
     }
 
     @FXML
@@ -117,6 +143,7 @@ public final class EditTeacherController {
                         }
                         , th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
+                            errorLabel.setText("Не вдалося завантажити список кафедр");
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
@@ -166,17 +193,18 @@ public final class EditTeacherController {
             return;
         }
 
-        val form = new TeacherCreateForm();
+        val form = new TeacherUpdateForm();
 
+        form.setId(model.getId());
         form.setDepartment(department.getId());
         form.setName(name);
         form.setPhone(phoneField.getText());
-        form.setStartDate(Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        form.setStartDate(DateUtils.fromLocal(start));
         form.setDegree(degree);
         form.setPosition(position);
 
-        teacherModel.create(form).subscribe(master -> {
-            log.log(Level.INFO, "Model created");
+        teacherModel.update(form, model, () -> {
+            log.log(Level.INFO, "Model updated");
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -191,7 +219,8 @@ public final class EditTeacherController {
             }
         }, th -> {
             log.log(Level.SEVERE, "Failed to create model", th);
-            UiUtils.createErrDialog("Не вдалося створити викладача").showAndWait();
+            errorLabel.setText("Не вдалося оновити дані про викладача");
+            UiUtils.createErrDialog("Не вдалося оновити дані про викладача").showAndWait();
         });
     }
 
