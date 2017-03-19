@@ -78,5 +78,11 @@ public interface ITopicModel {
 
 	Observable<? extends Integer> count();
 
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends TopicViewModel> fetch(int id);
+
 	// add other methods below...
 }
