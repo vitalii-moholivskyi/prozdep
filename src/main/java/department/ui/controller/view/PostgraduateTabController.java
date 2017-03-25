@@ -1,15 +1,23 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.model.IPostgraduateModel;
+import department.ui.controller.DefaultProgressMessage;
+import department.ui.controller.MainController;
 import department.ui.controller.model.PostgraduateViewModel;
+import department.ui.controller.edit.EditPostgraduateController;
 import department.ui.utils.UiConstants;
+import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.stage.Stage;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
@@ -52,6 +60,31 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
         // setup table columns and content
         tableView.getColumns().addAll(firstNameCol, phoneCol, topicCol, startDateCol, endDateCol, protectionDateCol);
 
+        tableView.setRowFactory(tv -> {
+            TableRow<PostgraduateViewModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+
+                    val stage = new Stage();
+                    val loader = UiUtils.newLoader("/view/partials/_formEditPostgraduate.fxml", EditPostgraduateController.class);
+
+                    try {
+                        stage.setScene(new Scene(loader.load()));
+
+                        EditPostgraduateController controller = loader.getController();
+
+                        controller.setData(row.getItem());
+                        stage.centerOnScreen();
+                        stage.show();
+                        stage.sizeToScene();
+                    } catch (final IOException e) {
+                        log.log(Level.SEVERE, "Failed to open form", e);
+                    }
+                }
+            });
+            return row;
+        });
+
         val size = tableView.getColumns().size();
 
         for (val column : tableView.getColumns()) {
@@ -79,10 +112,23 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
     }
 
     @Override
+    protected void onRefresh() {
+        val indx = pagination.currentPageIndexProperty().get();
+
+        if (indx >= 0) {
+            doLoad(indx);
+        }
+    }
+
+    @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(newIndex);
+    }
+
+    private void doLoad(int indx) {
         val toastId = mainController.showProgress("Завантаження списку аспірантів...");
 
-        model.fetchPostgraduates(newIndex * RESULTS_PER_PAGE, RESULTS_PER_PAGE)
+        model.fetchPostgraduates(indx * RESULTS_PER_PAGE, RESULTS_PER_PAGE)
                 .doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }

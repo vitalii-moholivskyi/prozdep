@@ -80,6 +80,12 @@ public interface IDepartmentModel {
 	 */
 	Observable<? extends Integer> count();
 
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends DepartmentViewModel> fetch(int id);
+
 
 	// add other methods below...
 }

@@ -1,11 +1,15 @@
 package department.ui.controller;
 
 import department.model.IMasterModel;
+import department.ui.controller.create.CreateMasterController;
+import department.ui.controller.create.CreatePostgraduateController;
+import department.ui.controller.view.*;
 import department.ui.utils.FxSchedulers;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -34,6 +38,8 @@ public final class MainController {
     private static final String MASTERS_VIEW_TAB_ID = "id_view_masters";
     private static final String TEACHERS_VIEW_TAB_ID = "id_view_teachers";
     private static final String POSTGRADUATES_VIEW_TAB_ID = "id_view_postgraduates";
+    private static final String TOPICS_VIEW_TAB_ID = "id_view_topics";
+    private static final String PAPERS_VIEW_TAB_ID = "id_view_papers";
     private static final String MASTERS_CREATE_TAB_ID = "id_create_masters";
 
     private static long idGenerator;
@@ -131,27 +137,27 @@ public final class MainController {
 
     @FXML
     private void onCreateMaster() {
-        loadCreationView("/view/partials/_formMaster.fxml");
+        loadCreationView("/view/partials/_formCreateMaster.fxml", CreateMasterController.class);
     }
 
     @FXML
     private void onCreateTeacher() {
-        loadCreationView("/view/partials/_formTeacher.fxml");
+        loadCreationView("/view/partials/_formCreateTeacher.fxml");
     }
 
     @FXML
     private void onCreatePostgraduate() {
-        loadCreationView("/view/partials/_formPostgraduate.fxml");
+        loadCreationView("/view/partials/_formCreatePostgraduate.fxml", CreatePostgraduateController.class);
     }
 
     @FXML
     private void onCreateTopic() {
-        loadCreationView("/view/partials/_formTopic.fxml");
+        loadCreationView("/view/partials/_formCreateTopic.fxml");
     }
 
     @FXML
     private void onCreatePaper() {
-        loadCreationView("/view/partials/_formPaper.fxml");
+        loadCreationView("/view/partials/_formCreatePaper.fxml");
     }
 
     @FXML
@@ -172,10 +178,28 @@ public final class MainController {
                 "/view/partials/_listTemplate.fxml", PostgraduateTabController.class);
     }
 
-    private void loadCreationView(String filepath) {
+    @FXML
+    private void onViewTopic() {
+        loadTab(MainController.TOPICS_VIEW_TAB_ID, "Наукові теми",
+                "/view/partials/_listTemplate.fxml", TopicController.class);
+    }
+
+    @FXML
+    private void onViewPapers() {
+        loadTab(MainController.PAPERS_VIEW_TAB_ID, "Наукові роботи",
+                "/view/partials/_listTemplate.fxml", PaperController.class);
+    }
+
+    private void loadCreationView(String filepath, Class<?> controller) {
 
         val stage = new Stage();
-        val loader = UiUtils.newLoader(filepath);
+        final FXMLLoader loader;
+
+        if(controller == null) {
+            loader = UiUtils.newLoader(filepath);
+        } else {
+            loader = UiUtils.newLoader(filepath, controller);
+        }
 
         try {
             stage.setScene(new Scene(loader.load()));
@@ -186,6 +210,10 @@ public final class MainController {
         } catch (final IOException e) {
             log.log(Level.SEVERE, "Failed to open form", e);
         }
+    }
+
+    private void loadCreationView(String filepath) {
+        loadCreationView(filepath, null);
     }
 
     private void loadTab(String tabId, String title, String filePath, Class<?> controller) {
@@ -199,6 +227,7 @@ public final class MainController {
 
             tab.setId(tabId);
             contentTabPane.getTabs().add(tab);
+            contentTabPane.getSelectionModel().selectLast();
         } catch (final IOException e) {
             log.log(Level.SEVERE, String.format("Failed to open %s tab", title), e);
         }

@@ -73,10 +73,17 @@ public interface IMasterModel {
 	@NotNull
 	void update(@NotNull(message = "form cannot be null") MasterUpdateForm master,
 			@NotNull(message = "model cannot be null") MasterViewModel model,
+				@NotNull(message = "error callback cannot be null") Action1<? super Void> finishCallback,
 			@NotNull(message = "error callback cannot be null") Action1<? super Throwable> errCallback);
 
 	@NotNull
 	Observable<? extends Integer> count();
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	Observable<? extends MasterViewModel> fetch(int id);
 
 	// add other methods below...
 }

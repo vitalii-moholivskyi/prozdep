@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" fx:id="viewRoot" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.create.CreatePaperController">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="145.0" text="Додавання роботи" GridPane.columnIndex="2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="30.0" top="30.0" />
+               </VBox.margin>
+            </Label>
+            <VBox layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <Label text="Тема роботи" />
+                  <TextField fx:id="titleField" editable="false" />
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="205.0">
+                           <children>
+                              <Label text="Тип">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="typeField" prefHeight="25.0" prefWidth="218.0" />
+                           </children>
+                        </VBox>
+                        <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="143.0">
+                           <children>
+                              <Label text="Рік">
+                                 <HBox.margin>
+                                    <Insets left="30.0" right="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="yearField" prefHeight="25.0" prefWidth="120.0" />
+                           </children>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Керівник" />
+                  <ComboBox fx:id="supervisorBox" editable="true" layoutX="10.0" layoutY="158.0" maxWidth="1.7976931348623157E308" />
+                  <Label text="Виконавець" />
+                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" />
+                  <FlowPane prefHeight="86.0" prefWidth="389.0" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER">
+               <children>
+                  <Button layoutX="145.0" layoutY="314.0" mnemonicParsing="false" onAction="#onCreatePaper" text="Додати роботу" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="30.0" top="30.0" />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="statusCreate" text="error" />
+         </children>
+         <padding>
+            <Insets left="25.0" right="25.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

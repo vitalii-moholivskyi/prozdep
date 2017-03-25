@@ -1,14 +1,18 @@
 package department.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import department.model.bo.*;
+import department.model.bo.Department;
+import department.model.bo.Postgraduate;
+import department.model.bo.Scientist;
+import department.model.bo.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import util.DateUtil;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class PostgraduateDAO implements IPostgraduateDAO{
@@ -226,9 +230,9 @@ public class PostgraduateDAO implements IPostgraduateDAO{
                     .name(rs.getString("name"))
                     .phone(rs.getString("phone"))
                     .topic(rs.getString("topic"))
-                    .startDate(rs.getDate("start_date"))
-                    .endDate(rs.getDate("end_date"))
-                    .protectionDate(rs.getDate("protection_date"))
+                    .startDate(rs.getTimestamp("start_date"))
+                    .endDate(rs.getTimestamp("end_date"))
+                    .protectionDate(rs.getTimestamp("protection_date"))
                     .teacher(Teacher
                             .builder()
                             .id(rs.getInt("teacher_id"))
@@ -278,9 +282,9 @@ public class PostgraduateDAO implements IPostgraduateDAO{
                     .name(rs.getString("postgraduate_name"))
                     .phone(rs.getString("postgraduate_phone"))
                     .topic(rs.getString("postgraduate_topic"))
-                    .startDate(rs.getDate("postgraduate_start_date"))
-                    .endDate(rs.getDate("postgraduate_end_date"))
-                    .protectionDate(rs.getDate("postgraduate_protection_date"))
+                    .startDate(rs.getTimestamp("postgraduate_start_date"))
+                    .endDate(rs.getTimestamp("postgraduate_end_date"))
+                    .protectionDate(rs.getTimestamp("postgraduate_protection_date"))
                     .teacher(Teacher
                             .builder()
                             .id(rs.getInt("teacher_id"))
@@ -288,7 +292,7 @@ public class PostgraduateDAO implements IPostgraduateDAO{
                             .phone(rs.getString("teacher_phone"))
                             .position(rs.getString("teacher_position"))
                             .degree(rs.getString("teacher_degree"))
-                            .startDate(rs.getDate("teacher_start_date"))
+                            .startDate(rs.getTimestamp("teacher_start_date"))
                             .department(Department
                                     .builder()
                                     .id(rs.getInt("teacher_department_id"))

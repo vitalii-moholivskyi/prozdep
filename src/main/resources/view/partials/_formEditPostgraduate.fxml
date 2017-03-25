@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane fx:id="viewRoot" prefHeight="453.0" prefWidth="491.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditPostgraduateController">
+   <children>
+      <TabPane layoutX="-1.0">
+         <tabs>
+            <Tab text="Редагування">
+               <content>
+                      <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="50.0" maxWidth="1.7976931348623157E308">
+                          <children>
+                              <Label text="Редагувати аспіранта">
+                                  <font>
+                                      <Font size="18.0" />
+                                  </font>
+                           <VBox.margin>
+                              <Insets bottom="30.0" top="30.0" />
+                           </VBox.margin>
+                              </Label>
+                              <Label text="ПІБ">
+                           <padding>
+                              <Insets top="3.0" />
+                           </padding>
+                        </Label>
+                              <TextField fx:id="fullNameField">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                              <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Кафедра">
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="10.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <HBox>
+                           <children>
+                              <VBox maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="222.0">
+                                 <children>
+                                          <Label text="Телефон">
+                                       <padding>
+                                          <Insets top="3.0" />
+                                       </padding>
+                                    </Label>
+                                          <TextField fx:id="phoneField" prefHeight="25.0" prefWidth="195.0">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="5.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                          <Label text="Дата захисту">
+                                       <padding>
+                                          <Insets top="3.0" />
+                                       </padding>
+                                    </Label>
+                                          <DatePicker fx:id="defenceDatePicker" maxWidth="1.7976931348623157E308" minWidth="200.0" prefHeight="25.0" prefWidth="229.0">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </DatePicker>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="5.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox maxWidth="1.7976931348623157E308" minWidth="-Infinity">
+                           <children>
+                              <VBox maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="224.0">
+                                 <children>
+                                          <Label text="Дата з">
+                                       <padding>
+                                          <Insets top="3.0" />
+                                       </padding>
+                                    </Label>
+                                          <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308" minWidth="-Infinity">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                    </DatePicker>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox maxWidth="1.7976931348623157E308">
+                                 <children>
+                                          <Label text="Дата по">
+                                       <padding>
+                                          <Insets top="3.0" />
+                                       </padding>
+                                    </Label>
+                                          <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="229.0" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Label text="Викладач">
+                           <padding>
+                              <Insets top="3.0" />
+                           </padding>
+                        </Label>
+                        <ComboBox fx:id="teacherComboBox" editable="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" promptText="Викладач">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label text="Тема наукової роботи">
+                           <padding>
+                              <Insets top="3.0" />
+                           </padding>
+                        </Label>
+                              <ComboBox fx:id="topicComboBox" editable="true" maxWidth="1.7976931348623157E308" minWidth="200.0" promptText="Тема">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </ComboBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                                    <Button mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Зберегти зміни">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="30.0" top="30.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Label fx:id="errorLabel" text="error" />
+                          </children>
+                     <padding>
+                        <Insets left="25.0" right="25.0" />
+                     </padding>
+                      </VBox>
+               </content>
+            </Tab>
+            <Tab text="Список робіт">
+              <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                         <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                             <children>
+                                 <ListView fx:id="paperListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="465.0" prefWidth="513.0" />
+                                 <Pagination fx:id="paginationPaper" maxPageIndicatorCount="5" maxWidth="1.7976931348623157E308" pageCount="1" prefHeight="30.0" />
+                             </children>
+                         </VBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

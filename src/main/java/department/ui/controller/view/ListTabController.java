@@ -1,4 +1,4 @@
-package department.ui.controller;
+package department.ui.controller.view;
 
 import department.utils.Tuple;
 import javafx.fxml.FXML;
@@ -45,6 +45,10 @@ public abstract class ListTabController<T> {
     }
 
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+    }
+
+    @FXML
+    protected void onRefresh() {
     }
 
     protected final void setTableContent(Collection<? extends T> data) {

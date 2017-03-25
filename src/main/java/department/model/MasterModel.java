@@ -27,12 +27,31 @@ public class MasterModel implements IMasterModel {
 	IMasterDAO masterDao;
 
 	@Override
+	public Observable<? extends MasterViewModel> fetch(@NotNull(message = "id cannot be null") int id) {
+
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
+
+			sub.onStart();
+			try {
+                sub.onNext(masterDao.find(id));
+            } catch (final Exception e) {
+                sub.onError(e);
+                e.printStackTrace();
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(MasterMapper::toViewModel);
+	}
+	
+	@Override
 	public Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Master>>) sub -> {
 
 			sub.onStart();
 			try {
 				sub.onNext(masterDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -47,6 +66,8 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 				sub.onNext(masterDao.findAll(limit, offset));
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -82,7 +103,9 @@ public class MasterModel implements IMasterModel {
 	}
 
 	@Override
-	public void update(MasterUpdateForm form, MasterViewModel model, Action1<? super Throwable> errCallback) {
+	public void update(MasterUpdateForm form, MasterViewModel model,
+					   Action1<? super Void> finishCallback,
+					   Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
 			sub.onStart();
@@ -93,6 +116,8 @@ public class MasterModel implements IMasterModel {
 						.phone(form.getPhone()).build();
 				masterDao.update(master);
 				sub.onNext(master);
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
@@ -101,8 +126,10 @@ public class MasterModel implements IMasterModel {
 			model.setFirstName(result.getName());
 			model.setPhone(result.getPhone());
 			model.setTopic(result.getTopic());
+			model.setDepartment(result.getDepartment().getId());
 			model.setEndDate(result.getEndDate());
 			model.setStartDate(result.getStartDate());
+			finishCallback.call(null);
 		} , errCallback::call);
 	}
 
@@ -113,6 +140,8 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 				sub.onNext(masterDao.count());
+			} catch (Exception e) {
+				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}

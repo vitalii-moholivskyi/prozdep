@@ -1,9 +1,5 @@
 package department.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import department.model.bo.Department;
 import department.model.bo.Scientist;
 import department.model.bo.Teacher;
@@ -12,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import util.DateUtil;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class TeacherDAO implements ITeacherDAO{
@@ -211,7 +211,7 @@ public class TeacherDAO implements ITeacherDAO{
                         .phone(rs.getString("phone"))
                         .position(rs.getString("position"))
                         .degree(rs.getString("degree"))
-                        .startDate(rs.getDate("start_date"))
+                        .startDate(rs.getTimestamp("start_date"))
                     .department(Department
                             .builder()
                                 .id(rs.getInt("department_id"))
@@ -242,7 +242,7 @@ public class TeacherDAO implements ITeacherDAO{
                         .phone(rs.getString("teacher_phone"))
                         .position(rs.getString("teacher_position"))
                         .degree(rs.getString("teacher_degree"))
-                        .startDate(rs.getDate("teacher_start_date"))
+                        .startDate(rs.getTimestamp("teacher_start_date"))
                     .department(Department
                             .builder()
                                 .id(rs.getInt("department_id"))

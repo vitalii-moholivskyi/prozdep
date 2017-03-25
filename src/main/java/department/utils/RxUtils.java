@@ -21,7 +21,7 @@ public final class RxUtils {
         throw new IllegalStateException("shouldn't be called");
     }
 
-    public static <T> ObservableValue<T> fromRx(@NotNull Observable<T> obs, @Nullable T initial) {
+    public static <T> ObservableValue<T> fromRx(@NotNull Observable<T> obs, T initial) {
         Preconditions.notNull(obs);
         val property = new SimpleObjectProperty<T>(initial);
         obs.subscribe(new Subscriber<T>() {
