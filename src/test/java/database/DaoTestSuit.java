@@ -57,6 +57,11 @@ public class DaoTestSuit {
         System.out.println("Find All:");
         System.out.println("Count:" + departmentDAO.count());
         System.out.println("Find all with limit, offset:" + departmentDAO.findAll(2,1));
+
+        System.out.println("Find All with name 'Math':");
+        System.out.println("Count:" + departmentDAO.count("Math"));
+        System.out.println("Find all:" + departmentDAO.findAll("Math"));
+        System.out.println("Find all with limit, offset:" + departmentDAO.findAll("Math",2,0));
     }
 
     @Test
@@ -85,6 +90,10 @@ public class DaoTestSuit {
         System.out.println("Find All:" + scientistDAO.findAll());
         System.out.println("Count:" + scientistDAO.count());
         System.out.println("Find all with limit, offset:" + scientistDAO.findAll(5,10));
+
+        System.out.println("Find All:" + scientistDAO.findAll("ергієн"));
+        System.out.println("Count:" + scientistDAO.count("ергієн"));
+        System.out.println("Find all with limit, offset:" + scientistDAO.findAll("ергієн", 10, 0));
     }
 
     @Test
@@ -114,6 +123,20 @@ public class DaoTestSuit {
         System.out.println("Find All:" + paperDAO.findAll());
         System.out.println("Count:" + paperDAO.count());
         System.out.println("Find all with limit, offset:" + paperDAO.findAll(5,10));
+
+        System.out.println("Find All:" + paperDAO.findAll("Основи асинхронної комінікації"));
+        System.out.println("Count:" + paperDAO.count("Основи асинхронної комінікації"));
+        System.out.println("Find all with limit, offset:" + paperDAO.findAll("Основи асинхронної комінікації", 10, 0));
+
+        System.out.println("Find All from to Year:" + paperDAO.findAll(1990, 2030));
+        System.out.println("Count from to Year:" + paperDAO.count(1990, 2030));
+        System.out.println("Find all with limit, offset from to Year:" + paperDAO.findAll(1990, 2030));
+
+        System.out.println("Find By Department:" + paperDAO.getPapersByDepartmentId(1));
+        System.out.println("Find By Topic:" + paperDAO.getPapersByTopicId(1, true));
+        System.out.println("Find By Scientist:" + paperDAO.getPapersByScientistId(5));
+        System.out.println("Find By Year:" + paperDAO.getPapersByYear(2012));
+
     }
 
     @Test
@@ -151,6 +174,20 @@ public class DaoTestSuit {
         System.out.println("Find All:" + topicDAO.findAll());
         System.out.println("Count:" + topicDAO.count());
         System.out.println("Find all with limit, offset:" + topicDAO.findAll(5,10));
+
+        System.out.println("Find All:" + topicDAO.findAll("Застосування інформаціних технологій"));
+        System.out.println("Count:" + topicDAO.count("Застосування інформаціних технологій"));
+        System.out.println("Find all with limit, offset:" + topicDAO.findAll("Застосування інформаціних технологій", 10, 0));
+
+
+        System.out.println("Find All from to Date:" + topicDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
+        System.out.println("Count from to Date:" + topicDAO.count(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
+        System.out.println("Find all with limit, offset from to Date:" + topicDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030"), 10, 0));
+
+        System.out.println("Find By Chief Scientist:" + topicDAO.getTopicsByChiefScientistId(1,true));
+        System.out.println("Find By Department:" + topicDAO.getTopicsByDepartmentId(1,true));
+        System.out.println("Find By Paper:" + topicDAO.getTopicsByPaperId(1, true));
+        System.out.println("Find By Scientist:" + topicDAO.getTopicsByScientistId(2, true));
     }
 
     @Test
@@ -188,6 +225,18 @@ public class DaoTestSuit {
         System.out.println("Find All:" + teacherDAO.findAll());
         System.out.println("Count:" + teacherDAO.count());
         System.out.println("Find all with limit, offset:" + teacherDAO.findAll(1,1));
+
+        System.out.println("Find All:" + teacherDAO.findAll("ергієн"));
+        System.out.println("Count:" + teacherDAO.count("ергієн"));
+        System.out.println("Find all with limit, offset:" + teacherDAO.findAll("ергієн", 10, 0));
+
+        System.out.println("Find All from Date:" + teacherDAO.findAll(DateUtil.getDate("31.09.1990")));
+        System.out.println("Count from Date:" + teacherDAO.count(DateUtil.getDate("31.09.1990")));
+        System.out.println("Find all with limit, offset from Date:" + teacherDAO.findAll(DateUtil.getDate("31.09.1990"), 10, 0));
+
+        System.out.println("Find By Department:" + teacherDAO.getTeachersByDepartmentId(1));
+        System.out.println("Find By Topic:" + teacherDAO.getTeachersByTopicId(2));
+        System.out.println("Find By Paper:" + teacherDAO.getTeachersByPaperId(3, true));
     }
 
 
@@ -229,6 +278,20 @@ public class DaoTestSuit {
         System.out.println("Find All:" + postgraduateDAO.findAll());
         System.out.println("Count:" + postgraduateDAO.count());
         System.out.println("Find all with limit, offset:" + postgraduateDAO.findAll(1,2));
+
+        System.out.println("Find All:" + postgraduateDAO.findAll("Мельн"));
+        System.out.println("Count:" + postgraduateDAO.count("Мельн"));
+        System.out.println("Find all with limit, offset:" + postgraduateDAO.findAll("Мельн", 10, 0));
+
+        System.out.println("Find All from Date:" + postgraduateDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
+        System.out.println("Count from Date:" + postgraduateDAO.count(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
+        System.out.println("Find all with limit, offset from Date:" + postgraduateDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030"), 10, 0));
+
+        System.out.println("Find By Department:" + postgraduateDAO.getPostgraduatesByDepartmentId(1));
+        System.out.println("Find By Topic:" + postgraduateDAO.getPostgraduatesByTopicId(6));
+        System.out.println("Find By Paper:" + postgraduateDAO.getPostgraduatesByPaperId(8));
+        System.out.println("Find By Protection Date:" + postgraduateDAO.getPostgraduatesByProtectionDate(DateUtil.getDate("31.05.2030")));
+        System.out.println("Find By Teacher:" + postgraduateDAO.getPostgraduatesByTeacherId(1));
     }
     @Test
     public void testMasterDao(){
@@ -267,6 +330,19 @@ public class DaoTestSuit {
         System.out.println("Find All:" + masterDAO.findAll());
         System.out.println("Count:" + masterDAO.count());
         System.out.println("Find all with limit, offset:" + masterDAO.findAll(2,2));
+
+        System.out.println("Find All:" + masterDAO.findAll("ергієн"));
+        System.out.println("Count:" + masterDAO.count("ергієн"));
+        System.out.println("Find all with limit, offset:" + masterDAO.findAll("ергієн", 10, 0));
+
+        System.out.println("Find All from Date:" + masterDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2020")));
+        System.out.println("Count from Date:" + masterDAO.count(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2020")));
+        System.out.println("Find all with limit, offset from Date:" + masterDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2020"), 10, 0));
+
+        System.out.println("Find By Department:" + masterDAO.getMastersByDepartmentId(1));
+        System.out.println("Find By Topic:" + masterDAO.getMastersByTopicId(6));
+        System.out.println("Find By Paper:" + masterDAO.getMastersByPaperId(8, true));
+        System.out.println("Find By Teacher:" + masterDAO.getMastersByTeacherId(1, true));
     }
 
 

@@ -4,9 +4,8 @@ import java.util.List;
 
 public interface IDAOGeneric<T> {
 
-	List<T> findAll();
-
 	int count();
+	List<T> findAll();
 	List<T> findAll(long limit, long offset);
 
 	int count(String name);

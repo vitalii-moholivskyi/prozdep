@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import department.model.bo.Paper;
+import department.model.bo.Topic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,10 +23,55 @@ public class PaperDAO implements IPaperDAO{
             "FROM paper " +
             "ORDER BY id " +
             "LIMIT ? OFFSET ?;";
+
+    private final static String COUNT_WIHT_NAME_LIKE = "SELECT COUNT(*) " +
+            "FROM paper " +
+            "WHERE name LIKE CONCAT('%', ? , '%')  COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE= "SELECT * " +
+            "FROM paper " +
+            "WHERE name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = "SELECT * " +
+            "FROM paper " +
+            "WHERE name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
+
+    private final static String COUNT_FROM_TO_YEAR = "SELECT COUNT(*) " +
+            "FROM paper " +
+            "WHERE year >= ? AND year <= ?;";
+    private final static String FIND_ALL_FROM_TO_YEAR = "SELECT * " +
+            "FROM paper " +
+            "WHERE year >= ? AND year <= ?;";
+    private final static String FIND_ALL_FROM_TO_YEAR_WITH_PAGINATION = "SELECT * " +
+            "FROM paper " +
+            "WHERE year >= ? AND year <= ? " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
+
     private final static String FIND = "SELECT * FROM paper WHERE id=?;";
     private final static String INSERT = "INSERT INTO paper (id, name, type, year) VALUES(DEFAULT,?,?,?);";
     private final static String UPDATE = "UPDATE paper SET name=?, type=?, year=? WHERE id = ?;";
     private final static String REMOVE = "DELETE FROM paper WHERE id=?;";
+
+    private final static String FIND_BY_DEPARTMENT = "SELECT * " +
+            "FROM paper p " +
+            "INNER JOIN paper_topic p_t ON p.id = p_t.paper_id " +
+            "INNER JOIN topic t ON p_t.topic_id = t.id " +
+            "WHERE t.department_id = ?;";
+    private final static String EAGER_FIND_BY_DEPARTMENT = FIND_BY_DEPARTMENT;
+
+    private final static String FIND_BY_TOPIC = "SELECT * " +
+            "FROM paper p INNER JOIN paper_topic p_t ON p.id = p_t.paper_id " +
+            "WHERE p_t.topic_id = ?;";
+    private final static String EAGER_FIND_BY_TOPIC = FIND_BY_TOPIC;
+
+    private final static String FIND_BY_SCIENTIST = "SELECT * " +
+            "FROM paper p INNER JOIN scientist_paper s_p ON p.id = s_p.paper_id " +
+            "WHERE s_p.scientist_id = ?;";
+    private final static String EAGER_FIND_BY_SCIENTIST = FIND_BY_SCIENTIST;
+
+    private final static String FIND_BY_YEAR = "SELECT * FROM paper WHERE year = ?;";
+    private final static String EAGER_FIND_BY_YEAR = FIND_BY_YEAR;
 
     private final PaperMapper paperMapper = new PaperMapper();
     @Autowired
@@ -48,19 +94,16 @@ public class PaperDAO implements IPaperDAO{
 
     @Override
     public int count(String name) {
-        // TODO
-        return count();
+        return jdbcTemplate.queryForObject(COUNT_WIHT_NAME_LIKE, new Object[] {name}, Integer.class);
     }
     @Override
     public List<Paper> findAll(String name) {
-        // TODO
-        return findAll();
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE, new Object[] {name}, paperMapper);
     }
 
     @Override
     public List<Paper> findAll(String name, long limit, long offset) {
-        // TODO
-        return findAll(limit, offset);
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, paperMapper);
     }
 
     @Override
@@ -106,32 +149,73 @@ public class PaperDAO implements IPaperDAO{
 
     @Override
     public List<Paper> getPapersByDepartmentId(int departmentId, boolean isEager) {
-        return null;
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_DEPARTMENT, new Object[]{departmentId}, paperMapper);
+        } else {
+            return getPapersByDepartmentId(departmentId);
+        }
     }
 
     @Override
     public List<Paper> getPapersByScientistId(int scientistId, boolean isEager) {
-        return null;
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_SCIENTIST, new Object[]{scientistId}, paperMapper);
+        } else {
+            return getPapersByScientistId(scientistId);
+        }
     }
 
     @Override
     public List<Paper> getPapersByTopicId(int topicId, boolean isEager) {
-        return null;
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_TOPIC, new Object[]{topicId}, paperMapper);
+        } else {
+            return getPapersByTopicId(topicId);
+        }
+    }
+
+    @Override
+    public List<Paper> getPapersByYear(int year, boolean isEager) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_YEAR, new Object[]{year}, paperMapper);
+        } else {
+            return getPapersByYear(year);
+        }
+    }
+
+    @Override
+    public int count(int startYear, int endYear) {
+        return jdbcTemplate.queryForObject(COUNT_FROM_TO_YEAR, new Object[] { startYear, endYear}, Integer.class);
+    }
+
+    @Override
+    public List<Paper> findAll(int startYear, int endYear) {
+        return jdbcTemplate.query(FIND_ALL_FROM_TO_YEAR, new Object[] { startYear, endYear }, paperMapper);
+    }
+
+    @Override
+    public List<Paper> findAll(int startYear, int endYear, long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_FROM_TO_YEAR_WITH_PAGINATION, new Object[] { startYear, endYear, limit, offset }, paperMapper);
     }
 
     @Override
     public List<Paper> getPapersByDepartmentId(int departmentId) {
-        return null;
+        return jdbcTemplate.query(FIND_BY_DEPARTMENT, new Object[]{ departmentId }, paperMapper);
     }
 
     @Override
     public List<Paper> getPapersByScientistId(int scientistId) {
-        return null;
+        return jdbcTemplate.query(FIND_BY_SCIENTIST, new Object[]{ scientistId }, paperMapper);
     }
 
     @Override
     public List<Paper> getPapersByTopicId(int topicId) {
-        return null;
+        return jdbcTemplate.query(FIND_BY_TOPIC, new Object[]{ topicId }, paperMapper);
+    }
+
+    @Override
+    public List<Paper> getPapersByYear(int year) {
+        return jdbcTemplate.query(FIND_BY_YEAR, new Object[]{ year }, paperMapper);
     }
 
     private class PaperMapper implements RowMapper<Paper> {

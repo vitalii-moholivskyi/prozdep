@@ -11,6 +11,7 @@ import util.DateUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -41,12 +42,28 @@ public class TeacherDAO implements ITeacherDAO{
             "ORDER BY s.id " +
             "LIMIT ? OFFSET ?;";
 
-    private final static String FIND = "SELECT * " +
+    private final static String COUNT_FROM_DATE = "SELECT COUNT(*) " +
             "FROM teacher t " +
             "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "WHERE t.start_date >= ?;";
+    private final static String FIND_ALL_FROM_DATE = "SELECT * " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "WHERE t.start_date >= ?;";
+    private final static String FIND_ALL_FROM_DATE_WITH_PAGINATION = "SELECT * " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id " +
+            "WHERE t.start_date >= ? " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
+
+    private final static String FIND_SELECT = "SELECT * " +
+            "FROM teacher t " +
+            "INNER JOIN scientist s ON t.scientist_id = s.id ";
+    private final static String FIND = FIND_SELECT +
             "WHERE t.scientist_id=?;";
 
-    private final static String EAGER_FIND = "SELECT " +
+    private final static String EAGER_FIND_SELECT = "SELECT " +
             "t.scientist_id AS teacher_id, " +
             "s.name AS teacher_name, " +
             "s.phone AS teacher_phone, " +
@@ -58,7 +75,8 @@ public class TeacherDAO implements ITeacherDAO{
             "d.phone AS department_phone " +
             "FROM teacher t " +
             "INNER JOIN scientist s ON t.scientist_id = s.id " +
-            "INNER JOIN department d ON t.department_id = d.id " +
+            "INNER JOIN department d ON t.department_id = d.id ";
+    private final static String EAGER_FIND = EAGER_FIND_SELECT +
             "WHERE t.scientist_id=?;";
 
     private final static String INSERT = "INSERT INTO teacher (" +
@@ -73,6 +91,23 @@ public class TeacherDAO implements ITeacherDAO{
             "WHERE scientist_id = ?;";
 
     private final static String REMOVE = "DELETE FROM teacher WHERE scientist_id = ?;";
+
+    private final static String FIND_BY_DEPARTMENT = FIND_SELECT + "WHERE t.department_id = ?;";
+    private final static String EAGER_FIND_BY_DEPARTMENT = EAGER_FIND_SELECT + "WHERE t.department_id = ?;";
+
+    private final static String FIND_BY_TOPIC = FIND_SELECT +
+            "INNER JOIN scientist_topic s_t ON t.scientist_id = s_t.topic_id " +
+            "WHERE s_t.topic_id = ?;";
+    private final static String EAGER_FIND_BY_TOPIC = EAGER_FIND_SELECT +
+            "INNER JOIN scientist_topic s_t ON t.scientist_id = s_t.topic_id " +
+            "WHERE s_t.topic_id = ?;";
+
+    private final static String FIND_BY_PAPER = FIND_SELECT +
+            "INNER JOIN scientist_paper s_p ON t.scientist_id = s_p.paper_id " +
+            "WHERE s_p.paper_id = ?;";
+    private final static String EAGER_FIND_BY_PAPER = EAGER_FIND_SELECT +
+            "INNER JOIN scientist_paper s_p ON t.scientist_id = s_p.paper_id " +
+            "WHERE s_p.paper_id = ?;";
 
     private final TeacherMapper teacherMapper = new TeacherMapper();
     private final EagerTeacherMapper eagerTeacherMapper = new EagerTeacherMapper();
@@ -110,6 +145,21 @@ public class TeacherDAO implements ITeacherDAO{
     @Override
     public List<Teacher> findAll(String name, long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, teacherMapper);
+    }
+
+    @Override
+    public int count(Date startDate) {
+        return jdbcTemplate.queryForObject(COUNT_FROM_DATE, new Object[] { DateUtil.convertToSqlDate(startDate)}, Integer.class);
+    }
+
+    @Override
+    public List<Teacher> findAll(Date startDate) {
+        return jdbcTemplate.query(FIND_ALL_FROM_DATE, new Object[] { DateUtil.convertToSqlDate(startDate) }, teacherMapper);
+    }
+
+    @Override
+    public List<Teacher> findAll(Date startDate, long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_FROM_DATE_WITH_PAGINATION, new Object[] { DateUtil.convertToSqlDate(startDate), limit, offset }, teacherMapper);
     }
 
     @Override
@@ -163,33 +213,45 @@ public class TeacherDAO implements ITeacherDAO{
     }
 
     @Override
-    public List<Teacher> getTeachersByDepertmentId(int department) {
-        return null;
+    public List<Teacher> getTeachersByDepartmentId(int departmentId) {
+        return jdbcTemplate.query(FIND_BY_DEPARTMENT, new Object[]{ departmentId }, teacherMapper);
     }
 
     @Override
-    public List<Teacher> getTeachersByTopicId(int topic) {
-        return null;
+    public List<Teacher> getTeachersByTopicId(int topicId) {
+        return jdbcTemplate.query(FIND_BY_TOPIC, new Object[]{ topicId }, teacherMapper);
     }
 
     @Override
-    public List<Teacher> getTeachersByPaperId(int paper) {
-        return null;
+    public List<Teacher> getTeachersByPaperId(int paperId) {
+        return jdbcTemplate.query(FIND_BY_PAPER, new Object[]{ paperId }, teacherMapper);
     }
 
     @Override
-    public List<Teacher> getTeachersByDepertmentId(int department, boolean isEager) {
-        return null;
+    public List<Teacher> getTeachersByDepartmentId(int departmentId, boolean isEager) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_DEPARTMENT, new Object[]{departmentId}, eagerTeacherMapper);
+        } else {
+            return getTeachersByDepartmentId(departmentId);
+        }
     }
 
     @Override
-    public List<Teacher> getTeachersByTopicId(int topic, boolean isEager) {
-        return null;
+    public List<Teacher> getTeachersByTopicId(int topicId, boolean isEager) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_TOPIC, new Object[]{topicId}, eagerTeacherMapper);
+        } else {
+            return getTeachersByTopicId(topicId);
+        }
     }
 
     @Override
-    public List<Teacher> getTeachersByPaperId(int paper, boolean isEager) {
-        return null;
+    public List<Teacher> getTeachersByPaperId(int paperId, boolean isEager) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_PAPER, new Object[]{ paperId }, eagerTeacherMapper);
+        } else {
+            return getTeachersByPaperId(paperId);
+        }
     }
 
     private class TeacherMapper implements RowMapper<Teacher>{

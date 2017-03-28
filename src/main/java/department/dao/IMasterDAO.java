@@ -2,6 +2,7 @@ package department.dao;
 
 import department.model.bo.Master;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,14 +10,17 @@ import java.util.List;
  */
 public interface IMasterDAO extends IDAOGeneric<Master>{
 
-    List<Master> findMastersByDepartmentId(int departmentId, boolean isEager);
-    List<Master> findMastersByTeacherId(int teacherId, boolean isEager);
-    List<Master> findMastersByTopicId(int topicId, boolean isEager);
-    List<Master> findMastersByPaperId(int paperId, boolean isEager);
+    List<Master> getMastersByDepartmentId(int departmentId, boolean isEager);
+    List<Master> getMastersByTeacherId(int teacherId, boolean isEager);
+    List<Master> getMastersByTopicId(int topicId, boolean isEager);
+    List<Master> getMastersByPaperId(int paperId, boolean isEager);
+    int count(Date startDate, Date endDate);
+    List<Master> findAll(Date startDate, Date endDate);
+    List<Master> findAll(Date startDate, Date endDate, long limit, long offset);
 
-    List<Master> findMastersByDepartmentId(int departmentId);
-    List<Master> findMastersByTeacherId(int teacherId);
-    List<Master> findMastersByTopicId(int topicId);
-    List<Master> findMastersByPaperId(int paperId);
+    List<Master> getMastersByDepartmentId(int departmentId);
+    List<Master> getMastersByTeacherId(int teacherId);
+    List<Master> getMastersByTopicId(int topicId);
+    List<Master> getMastersByPaperId(int paperId);
 
 }

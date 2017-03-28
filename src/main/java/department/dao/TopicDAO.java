@@ -14,6 +14,7 @@ import util.DateUtil;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -25,8 +26,35 @@ public class TopicDAO implements ITopicDAO{
             "FROM topic " +
             "ORDER BY id " +
             "LIMIT ? OFFSET ?;";
-    private final static String FIND = "SELECT * FROM topic WHERE id=?;";
-    private final static String FIND_EAGER = "SELECT t.id AS topic_id, " +
+
+    private final static String COUNT_WIHT_NAME_LIKE = "SELECT COUNT(*) " +
+            "FROM topic " +
+            "WHERE name LIKE CONCAT('%', ? , '%')  COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE= "SELECT * " +
+            "FROM topic " +
+            "WHERE name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = "SELECT * " +
+            "FROM topic " +
+            "WHERE name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
+
+    private final static String COUNT_FROM_TO_DATE = "SELECT COUNT(*) " +
+            "FROM topic " +
+            "WHERE start_date >= ? AND end_date <= ?;";
+    private final static String FIND_ALL_FROM_TO_DATE = "SELECT * " +
+            "FROM topic " +
+            "WHERE start_date >= ? AND end_date <= ?;";
+    private final static String FIND_ALL_FROM_TO_DATE_WITH_PAGINATION = "SELECT * " +
+            "FROM topic " +
+            "WHERE start_date >= ? AND end_date <= ? " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
+
+    private final static String FIND_SELECT = "SELECT * FROM topic ";
+    private final static String FIND = FIND_SELECT + "WHERE id=?;";
+
+    private final static String EAGER_FIND_SELECT = "SELECT t.id AS topic_id, " +
             "t.name AS topic_name," +
             "t.client AS topic_client, " +
             "t.start_date AS topic_start_date, " +
@@ -43,7 +71,8 @@ public class TopicDAO implements ITopicDAO{
             "FROM topic t " +
             "INNER JOIN department d ON t.department_id = d.id " +
             "INNER JOIN teacher teach ON t.chief_scientist_id = teach.scientist_id " +
-            "INNER JOIN scientist s ON t.chief_scientist_id = s.id " +
+            "INNER JOIN scientist s ON t.chief_scientist_id = s.id ";
+    private final static String FIND_EAGER = EAGER_FIND_SELECT +
             "WHERE t.id=?;";
     private final static String INSERT = "INSERT INTO topic (id," +
             "name, " +
@@ -61,6 +90,30 @@ public class TopicDAO implements ITopicDAO{
             "chief_scientist_id = ? " +
             "WHERE id = ?;";
     private final static String REMOVE = "DELETE FROM topic WHERE id=?;";
+
+    private final static String FIND_BY_CHIEF_SCIENTIST = FIND_SELECT +
+            "WHERE chief_scientist_id = ?;";
+    private final static String EAGER_FIND_BY_CHIEF_SCIENTIST = EAGER_FIND_SELECT +
+            "WHERE t.chief_scientist_id = ?;";
+
+    private final static String FIND_BY_DEPARTMENT = FIND_SELECT +
+            "WHERE department_id = ?;";
+    private final static String EAGER_FIND_BY_DEPARTMENT = EAGER_FIND_SELECT +
+            "WHERE t.department_id = ?;";
+
+    private final static String FIND_BY_SCIENTIST = FIND_SELECT +
+            "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
+            "WHERE s_t.scientist_id = ?;";
+    private final static String EAGER_FIND_BY_SCIENTIST = EAGER_FIND_SELECT +
+            "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
+            "WHERE s_t.scientist_id = ?;";
+
+    private final static String FIND_BY_PAPER = FIND_SELECT +
+            "INNER JOIN paper_topic p_t ON t.id = p_t.topic_id " +
+            "WHERE p_t.paper_id = ?;";
+    private final static String EAGER_FIND_BY_PAPER = EAGER_FIND_SELECT +
+            "INNER JOIN paper_topic p_t ON t.id = p_t.topic_id " +
+            "WHERE p_t.paper_id = ?;";
 
     private final TopicMapper topicMapper = new TopicMapper();
     private final EagerTopicMapper eagerTopicMapper = new EagerTopicMapper();
@@ -84,20 +137,17 @@ public class TopicDAO implements ITopicDAO{
 
     @Override
     public int count(String name) {
-        // TODO
-        return count();
+        return jdbcTemplate.queryForObject(COUNT_WIHT_NAME_LIKE, new Object[] {name}, Integer.class);
     }
 
     @Override
     public List<Topic> findAll(String name) {
-        // TODO
-        return findAll();
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE, new Object[] {name}, topicMapper);
     }
 
     @Override
     public List<Topic> findAll(String name, long limit, long offset) {
-        // TODO
-        return findAll(limit, offset);
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, topicMapper);
     }
 
     @Override
@@ -153,43 +203,74 @@ public class TopicDAO implements ITopicDAO{
     }
 
     @Override
-    public List<Topic> getTopicsByChiefScientistId(int scientistId) {
-        return null;
+    public int count(Date startDate, Date endDate) {
+        return jdbcTemplate.queryForObject(COUNT_FROM_TO_DATE, new Object[] { DateUtil.convertToSqlDate(startDate), DateUtil.convertToSqlDate(endDate)}, Integer.class);
     }
 
     @Override
-    public List<Topic> getTopicsByDepartmentId(int departmentId) {
-        return null;
+    public List<Topic> findAll(Date startDate, Date endDate) {
+        return jdbcTemplate.query(FIND_ALL_FROM_TO_DATE, new Object[] { DateUtil.convertToSqlDate(startDate), DateUtil.convertToSqlDate(endDate) }, topicMapper);
     }
 
     @Override
-    public List<Topic> getTopicsByScientistId(int scientistId) {
-        return null;
-    }
-
-    @Override
-    public List<Topic> getTopicsByPapperId(int paperId) {
-        return null;
+    public List<Topic> findAll(Date startDate, Date endDate, long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_FROM_TO_DATE_WITH_PAGINATION, new Object[] { DateUtil.convertToSqlDate(startDate), DateUtil.convertToSqlDate(endDate), limit, offset }, topicMapper);
     }
 
     @Override
     public List<Topic> getTopicsByChiefScientistId(int scientistId, boolean isEager) {
-        return null;
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_CHIEF_SCIENTIST, new Object[]{scientistId}, eagerTopicMapper);
+        } else {
+            return getTopicsByChiefScientistId(scientistId);
+        }
     }
 
     @Override
     public List<Topic> getTopicsByDepartmentId(int departmentId, boolean isEager) {
-        return null;
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_DEPARTMENT, new Object[]{departmentId}, eagerTopicMapper);
+        } else {
+            return getTopicsByDepartmentId(departmentId);
+        }
     }
 
     @Override
     public List<Topic> getTopicsByScientistId(int scientistId, boolean isEager) {
-        return null;
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_SCIENTIST, new Object[]{ scientistId }, eagerTopicMapper);
+        } else {
+            return getTopicsByScientistId(scientistId);
+        }
     }
 
     @Override
-    public List<Topic> getTopicsByPapperId(int paperId, boolean isEager) {
-        return null;
+    public List<Topic> getTopicsByPaperId(int paperId, boolean isEager) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_PAPER, new Object[]{ paperId }, eagerTopicMapper);
+        } else {
+            return getTopicsByPaperId(paperId);
+        }
+    }
+
+    @Override
+    public List<Topic> getTopicsByChiefScientistId(int scientistId) {
+        return jdbcTemplate.query(FIND_BY_CHIEF_SCIENTIST, new Object[]{scientistId}, topicMapper);
+    }
+
+    @Override
+    public List<Topic> getTopicsByDepartmentId(int departmentId) {
+        return jdbcTemplate.query(FIND_BY_DEPARTMENT, new Object[]{departmentId}, topicMapper);
+    }
+
+    @Override
+    public List<Topic> getTopicsByScientistId(int scientistId) {
+        return jdbcTemplate.query(FIND_BY_SCIENTIST, new Object[]{ scientistId }, topicMapper);
+    }
+
+    @Override
+    public List<Topic> getTopicsByPaperId(int paperId) {
+        return jdbcTemplate.query(FIND_BY_PAPER, new Object[]{ paperId }, topicMapper);
     }
 
     private class TopicMapper implements RowMapper<Topic>{

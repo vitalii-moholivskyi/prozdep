@@ -2,6 +2,7 @@ package department.dao;
 
 import department.model.bo.Teacher;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,12 +10,15 @@ import java.util.List;
  */
 public interface ITeacherDAO extends IDAOGeneric<Teacher>{
 
-    List<Teacher> getTeachersByDepertmentId(int department);
-    List<Teacher> getTeachersByTopicId(int topic);
-    List<Teacher> getTeachersByPaperId(int paper);
+    List<Teacher> getTeachersByDepartmentId(int departmentId);
+    List<Teacher> getTeachersByTopicId(int topicId);
+    List<Teacher> getTeachersByPaperId(int paperId);
+    int count(Date startDate);
+    List<Teacher> findAll(Date startDate);
+    List<Teacher> findAll(Date startDate, long limit, long offset);
 
-    List<Teacher> getTeachersByDepertmentId(int department, boolean isEager);
-    List<Teacher> getTeachersByTopicId(int topic, boolean isEager);
-    List<Teacher> getTeachersByPaperId(int paper, boolean isEager);
+    List<Teacher> getTeachersByDepartmentId(int departmentId, boolean isEager);
+    List<Teacher> getTeachersByTopicId(int topicId, boolean isEager);
+    List<Teacher> getTeachersByPaperId(int paperId, boolean isEager);
 
 }

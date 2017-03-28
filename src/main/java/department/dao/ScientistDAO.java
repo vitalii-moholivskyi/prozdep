@@ -21,6 +21,19 @@ public class ScientistDAO implements IScientistDAO{
             "FROM scientist " +
             "ORDER BY id " +
             "LIMIT ? OFFSET ?;";
+
+    private final static String COUNT_WIHT_NAME_LIKE = "SELECT COUNT(*) " +
+            "FROM scientist " +
+            "WHERE name LIKE CONCAT('%', ? , '%')  COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE= "SELECT * " +
+            "FROM scientist " +
+            "WHERE name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci;";
+    private final static String FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = "SELECT * " +
+            "FROM scientist " +
+            "WHERE name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY id " +
+            "LIMIT ? OFFSET ?;";
+
     private final static String FIND = "SELECT * FROM scientist WHERE id=?;";
     private final static String INSERT = "INSERT INTO scientist (id, name, phone) VALUES(DEFAULT,?,?);";
     private final static String UPDATE = "UPDATE scientist SET name=?, phone=? WHERE id = ?;";
@@ -47,20 +60,17 @@ public class ScientistDAO implements IScientistDAO{
 
     @Override
     public int count(String name) {
-        // TODO
-        return count();
+        return jdbcTemplate.queryForObject(COUNT_WIHT_NAME_LIKE, new Object[] {name}, Integer.class);
     }
 
     @Override
     public List<Scientist> findAll(String name) {
-        // TODO
-        return findAll();
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE, new Object[] {name}, scientistMapper);
     }
 
     @Override
     public List<Scientist> findAll(String name, long limit, long offset) {
-        // TODO
-        return findAll(limit, offset);
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, scientistMapper);
     }
 
     @Override
