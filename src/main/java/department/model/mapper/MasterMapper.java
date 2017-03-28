@@ -20,8 +20,10 @@ public final class MasterMapper {
 		val department = master.getDepartment();
 		return new MasterViewModel.Builder(master.getId(), master.getName(), master.getStartDate())
 				.setTopic(master.getTopic()).setEndDate(master.getEndDate())
-				.setDepartmentId(department == null ? null : department.getId()).setPhone(master.getPhone())
-				.setTeacherId(teacher == null ? null : teacher.getId()).build();
+				.setDepartmentId(department == null ? null : department.getId())
+				.setPhone(master.getPhone())
+				.setTeacherId(teacher == null ? null : teacher.getId())
+				.build();
 	}
 
 	public static Collection<? extends MasterViewModel> toViewModel(Collection<? extends Master> masters) {

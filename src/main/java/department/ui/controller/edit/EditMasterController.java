@@ -89,6 +89,7 @@ public final class EditMasterController {
                         });
     }
 
+    @FXML
     protected void initialize() {
         startDatePicker.setEditable(false);
         endDatePicker.setEditable(false);

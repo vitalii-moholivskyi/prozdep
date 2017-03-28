@@ -102,14 +102,14 @@ public class TopicDAO implements ITopicDAO{
             "WHERE t.department_id = ?;";
 
     private final static String FIND_BY_SCIENTIST = FIND_SELECT +
-            "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
+            "INNER JOIN scientist_topic s_t ON topic.id = s_t.scientist_id " +
             "WHERE s_t.scientist_id = ?;";
     private final static String EAGER_FIND_BY_SCIENTIST = EAGER_FIND_SELECT +
             "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
             "WHERE s_t.scientist_id = ?;";
 
     private final static String FIND_BY_PAPER = FIND_SELECT +
-            "INNER JOIN paper_topic p_t ON t.id = p_t.topic_id " +
+            "INNER JOIN paper_topic p_t ON topic.id = p_t.topic_id " +
             "WHERE p_t.paper_id = ?;";
     private final static String EAGER_FIND_BY_PAPER = EAGER_FIND_SELECT +
             "INNER JOIN paper_topic p_t ON t.id = p_t.topic_id " +
