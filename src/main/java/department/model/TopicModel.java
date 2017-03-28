@@ -146,4 +146,22 @@ public class TopicModel implements ITopicModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread());
 	}
 
+	/* (non-Javadoc)
+	 * @see department.model.ITopicModel#fetchByScientist(int, long, long)
+	 */
+	@Override
+	public Observable<Collection<? extends TopicViewModel>> fetchByScientist(int id, int offset, int limit) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Topic>>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(topicDao.getTopicsByScientistId(id).subList(offset, limit+offset));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TopicMapper::toViewModel);
+	}
+
 }

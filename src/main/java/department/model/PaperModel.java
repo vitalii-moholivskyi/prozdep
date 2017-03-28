@@ -135,4 +135,40 @@ public class PaperModel implements IPaperModel {
 				}, errCallback::call);
 	}
 
+	/* (non-Javadoc)
+	 * @see department.model.IPaperModel#fetchByScientist(int)
+	 */
+	@Override
+	public Observable<Collection<? extends PaperViewModel>> fetchByScientist(int id) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Paper>>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(paperDao.getPapersByScientistId(id));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PaperMapper::toViewModel);
+	}
+
+	/* (non-Javadoc)
+	 * @see department.model.IPaperModel#fetchByTopic(int, long, long)
+	 */
+	@Override
+	public Observable<Collection<? extends PaperViewModel>> fetchByTopic(int id, int offset, int limit) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Paper>>) sub -> {
+
+			sub.onStart();
+			try {
+				sub.onNext(paperDao.getPapersByTopicId(id).subList(offset, offset+limit));
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(PaperMapper::toViewModel);
+	}
+
 }
