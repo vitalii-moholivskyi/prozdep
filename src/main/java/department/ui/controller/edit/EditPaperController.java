@@ -1,9 +1,6 @@
 package department.ui.controller.edit;
 
-import department.model.IMasterModel;
-import department.model.IPaperModel;
-import department.model.IPostgraduateModel;
-import department.model.ITeacherModel;
+import department.model.*;
 import department.model.form.PaperUpdateForm;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.controller.model.PaperViewModel;
@@ -59,29 +56,9 @@ public final class EditPaperController {
     private final IMasterModel masterModel;
     private final IPostgraduateModel postgraduateModel;
     private final ITeacherModel teacherModel;
+    private final IScientistModel scientistModel;
 
     private PaperViewModel paper;
-
-    @Autowired
-    public EditPaperController(IPaperModel paperModel, IMasterModel masterModel, IPostgraduateModel postgraduateModel,
-                               ITeacherModel teacherModel) {
-        this.paperModel = paperModel;
-        this.masterModel = masterModel;
-        this.postgraduateModel = postgraduateModel;
-        this.teacherModel = teacherModel;
-    }
-
-    public PaperViewModel getPaper() {
-        return paper;
-    }
-
-    public void setPaper(PaperViewModel paper) {
-        this.paper = Preconditions.notNull(paper);
-
-        typeField.setText(paper.getType());
-        titleField.setText(paper.getName());
-        yearField.setText(String.valueOf(paper.getYear()));
-    }
 
     private static final class Executor {
 
@@ -101,6 +78,36 @@ public final class EditPaperController {
             this(m.getId(), message);
         }
 
+    }
+
+    @Autowired
+    public EditPaperController(IScientistModel scientistModel, IPaperModel paperModel, IMasterModel masterModel,
+                               IPostgraduateModel postgraduateModel, ITeacherModel teacherModel) {
+        this.paperModel = paperModel;
+        this.masterModel = masterModel;
+        this.postgraduateModel = postgraduateModel;
+        this.teacherModel = teacherModel;
+        this.scientistModel = scientistModel;
+    }
+
+    public PaperViewModel getPaper() {
+        return paper;
+    }
+
+    public void setPaper(PaperViewModel paper) {
+        this.paper = Preconditions.notNull(paper);
+
+        typeField.setText(paper.getType());
+        titleField.setText(paper.getName());
+        yearField.setText(String.valueOf(paper.getYear()));
+
+        scientistModel.fetchScientistsByPaperId(paper.getId(), 0, 1).subscribe(models -> {
+
+            if (!models.isEmpty()) {
+                val m = models.iterator().next();
+                executorBox.setValue(new Executor(m.getId(), m.getFirstName()));
+            }
+        });
     }
 
     @FXML

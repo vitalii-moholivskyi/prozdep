@@ -155,7 +155,7 @@ public class TopicModel implements ITopicModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(topicDao.getTopicsByScientistId(id).subList(offset, limit+offset));
+//				sub.onNext(topicDao.getTopicsByScientistId(id).subList(offset, limit+offset));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

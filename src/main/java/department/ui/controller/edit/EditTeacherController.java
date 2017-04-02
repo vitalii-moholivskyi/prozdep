@@ -9,6 +9,8 @@ import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
+import department.ui.utils.Controllers;
+import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
@@ -20,7 +22,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
@@ -119,15 +120,10 @@ public final class EditTeacherController {
             }
         });
 
-        departmentComboBox.setConverter(new StringConverter<DepartmentViewModel>() {
+        departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
                 return String.format("%d %s", object.getId(), object.getName());
-            }
-
-            @Override
-            public DepartmentViewModel fromString(String string) {
-                return null;
             }
         });
 
@@ -148,6 +144,31 @@ public final class EditTeacherController {
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
+
+        paperListView.setCellFactory(new Callback<ListView<PaperViewModel>, ListCell<PaperViewModel>>() {
+            @Override
+            public ListCell<PaperViewModel> call(ListView<PaperViewModel> param) {
+                return new ListCell<PaperViewModel>() {
+                    @Override
+                    protected void updateItem(PaperViewModel item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+
+                            val holder = Controllers.createPaperItemView(item);
+
+                            setGraphic(holder.getView());
+                            holder.getView().setOnMouseClicked(event -> {
+
+                                if(event.getClickCount() == 2) {
+                                    Controllers.createPaperEditViewAndShow(item);
+                                }
+                            });
+                        }
+                    }
+                };
+            }
+        });
     }
 
     @FXML
