@@ -109,6 +109,29 @@ public class TeacherDAO implements ITeacherDAO{
             "INNER JOIN scientist_paper s_p ON t.scientist_id = s_p.paper_id " +
             "WHERE s_p.paper_id = ?;";
 
+    private final static String FIND_CHEIF_BY_PAPER = FIND_SELECT +
+            "INNER JOIN ((SELECT m.teacher_id AS \"teacher_id\" \n" +
+            "            FROM master m INNER JOIN (SELECT * \n" +
+            "            FROM scientist_paper s_p \n" +
+            "            WHERE s_p.paper_id = ?) AS temp ON m.scientist_id=temp.scientist_id)\n" +
+            "            UNION\n" +
+            "            (SELECT p.teacher_id AS \"teacher_id\" \n" +
+            "            FROM postgraduate p INNER JOIN (SELECT * \n" +
+            "            FROM scientist_paper s_p \n" +
+            "            WHERE s_p.paper_id = ?) AS temp " +
+            "ON p.scientist_id=temp.scientist_id)) AS ids ON t.scientist_id = ids.teacher_id; ";
+    private final static String EAGER_FIND_CHEIF_BY_PAPER = EAGER_FIND_SELECT +
+            "INNER JOIN ((SELECT m.teacher_id AS \"teacher_id\" \n" +
+            "            FROM master m INNER JOIN (SELECT * \n" +
+            "            FROM scientist_paper s_p \n" +
+            "            WHERE s_p.paper_id = ?) AS temp ON m.scientist_id=temp.scientist_id)\n" +
+            "            UNION\n" +
+            "            (SELECT p.teacher_id AS \"teacher_id\" \n" +
+            "            FROM postgraduate p INNER JOIN (SELECT * \n" +
+            "            FROM scientist_paper s_p \n" +
+            "            WHERE s_p.paper_id = ?) AS temp " +
+            "ON p.scientist_id=temp.scientist_id)) AS ids ON t.scientist_id = ids.teacher_id; ";
+
     private final TeacherMapper teacherMapper = new TeacherMapper();
     private final EagerTeacherMapper eagerTeacherMapper = new EagerTeacherMapper();
 
@@ -228,6 +251,11 @@ public class TeacherDAO implements ITeacherDAO{
     }
 
     @Override
+    public List<Teacher> getChiefTeachersByPaperId(int paperId) {
+        return jdbcTemplate.query(FIND_CHEIF_BY_PAPER, new Object[]{ paperId, paperId}, teacherMapper);
+    }
+
+    @Override
     public List<Teacher> getTeachersByDepartmentId(int departmentId, boolean isEager) {
         if(isEager){
             return jdbcTemplate.query(EAGER_FIND_BY_DEPARTMENT, new Object[]{departmentId}, eagerTeacherMapper);
@@ -251,6 +279,15 @@ public class TeacherDAO implements ITeacherDAO{
             return jdbcTemplate.query(EAGER_FIND_BY_PAPER, new Object[]{ paperId }, eagerTeacherMapper);
         } else {
             return getTeachersByPaperId(paperId);
+        }
+    }
+
+    @Override
+    public List<Teacher> getChiefTeachersByPaperId(int paperId, boolean isEager) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_CHEIF_BY_PAPER, new Object[]{ paperId, paperId }, eagerTeacherMapper);
+        } else {
+            return getChiefTeachersByPaperId(paperId);
         }
     }
 
