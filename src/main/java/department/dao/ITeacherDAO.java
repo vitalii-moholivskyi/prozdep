@@ -13,6 +13,7 @@ public interface ITeacherDAO extends IDAOGeneric<Teacher>{
     List<Teacher> getTeachersByDepartmentId(int departmentId);
     List<Teacher> getTeachersByTopicId(int topicId);
     List<Teacher> getTeachersByPaperId(int paperId);
+    List<Teacher> getChiefTeachersByPaperId(int paperId);
     int count(Date startDate);
     List<Teacher> findAll(Date startDate);
     List<Teacher> findAll(Date startDate, long limit, long offset);
@@ -20,5 +21,6 @@ public interface ITeacherDAO extends IDAOGeneric<Teacher>{
     List<Teacher> getTeachersByDepartmentId(int departmentId, boolean isEager);
     List<Teacher> getTeachersByTopicId(int topicId, boolean isEager);
     List<Teacher> getTeachersByPaperId(int paperId, boolean isEager);
+    List<Teacher> getChiefTeachersByPaperId(int paperId, boolean isEager);
 
 }

@@ -86,10 +86,6 @@ public class TopicController extends ListTabController<TopicViewModel> {
 
         val size = tableView.getColumns().size();
 
-        for (val column : tableView.getColumns()) {
-            column.prefWidthProperty().bind(tableView.widthProperty().divide(size));
-        }
-
         val progress = new DefaultProgressMessage(mainController);
         loadData(new ProgressCallback() {
                      @Override
