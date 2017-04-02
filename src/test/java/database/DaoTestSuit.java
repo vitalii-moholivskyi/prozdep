@@ -94,6 +94,8 @@ public class DaoTestSuit {
         System.out.println("Find All:" + scientistDAO.findAll("ергієн"));
         System.out.println("Count:" + scientistDAO.count("ергієн"));
         System.out.println("Find all with limit, offset:" + scientistDAO.findAll("ергієн", 10, 0));
+
+        System.out.println("Find By Paper:" + scientistDAO.getScientistsByPaperId(1));
     }
 
     @Test

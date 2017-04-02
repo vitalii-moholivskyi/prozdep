@@ -38,6 +38,10 @@ public class ScientistDAO implements IScientistDAO{
     private final static String INSERT = "INSERT INTO scientist (id, name, phone) VALUES(DEFAULT,?,?);";
     private final static String UPDATE = "UPDATE scientist SET name=?, phone=? WHERE id = ?;";
     private final static String REMOVE = "DELETE FROM scientist WHERE id=?;";
+    private final static String FIND_BY_PAPER = "SELECT * " +
+            "FROM scientist s " +
+            "INNER JOIN scientist_paper s_p ON s.id = s_p.paper_id " +
+            "WHERE s_p.paper_id = ?;";
 
     private final ScientistMapper scientistMapper = new ScientistMapper();
     @Autowired
@@ -109,6 +113,11 @@ public class ScientistDAO implements IScientistDAO{
     @Override
     public void remove(Scientist scientist) {
         jdbcTemplate.update(REMOVE, scientist.getId());
+    }
+
+    @Override
+    public List<Scientist> getScientistsByPaperId(int paperId) {
+        return jdbcTemplate.query(FIND_BY_PAPER, new Object[]{ paperId }, scientistMapper);
     }
 
     private class ScientistMapper implements RowMapper<Scientist>{

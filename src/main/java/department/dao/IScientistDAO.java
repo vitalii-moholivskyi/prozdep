@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface IScientistDAO extends IDAOGeneric<Scientist> {
 
+    List<Scientist> getScientistsByPaperId(int paperId);
 }
