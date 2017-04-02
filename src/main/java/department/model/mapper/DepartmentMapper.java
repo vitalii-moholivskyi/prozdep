@@ -21,8 +21,7 @@ public final class DepartmentMapper {
 	}
 
 	public static DepartmentViewModel toViewModel(Department department) {
-		Preconditions.notNull(department);
-		return new DepartmentViewModel(department.getId(), department.getName(), department.getPhone());
+		return department==null?null:new DepartmentViewModel(department.getId(), department.getName(), department.getPhone());
 	}
 
 	public static Collection<? extends DepartmentViewModel> toViewModel(Collection<? extends Department> masters) {

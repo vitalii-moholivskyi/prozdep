@@ -9,5 +9,5 @@ public class Paper {
     private String name;
     private String type;
     private int year;
-
+    
 }

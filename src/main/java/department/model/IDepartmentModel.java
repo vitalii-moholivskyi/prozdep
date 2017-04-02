@@ -86,6 +86,12 @@ public interface IDepartmentModel {
 	 */
 	Observable<? extends DepartmentViewModel> fetch(int id);
 
+	/**
+	 * @param paperId
+	 * @return
+	 */
+	Observable<? extends DepartmentViewModel> fetchDepartmentByPaperId(int paperId);
+
 
 	// add other methods below...
 }

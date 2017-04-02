@@ -4,6 +4,7 @@
 package department.model;
 
 import department.dao.IDepartmentDAO;
+import department.dao.ITeacherDAO;
 import department.model.bo.Department;
 import department.model.form.DepartmentCreateForm;
 import department.model.form.DepartmentUpdateForm;
@@ -30,6 +31,9 @@ public class DepartmentModel implements IDepartmentModel {
 
 	@Autowired
 	IDepartmentDAO departmentDao;
+	
+	@Autowired
+	ITeacherDAO teacherDao;
 
 	@Override
 	public Observable<? extends DepartmentViewModel> fetch(
@@ -49,6 +53,24 @@ public class DepartmentModel implements IDepartmentModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
 	}
 	
+	@Override
+	public Observable<? extends DepartmentViewModel> fetchDepartmentByPaperId(@Min(0) int paperId) {
+		return Observable
+				.defer(() -> Observable.create((Observable.OnSubscribe<? extends Department>) sub -> {
+
+					sub.onStart();
+					try {
+						val list=teacherDao.getChiefTeachersByPaperId(paperId,true);
+						val cht = !list.isEmpty()?list.get(0):null;
+						sub.onNext(cht==null?null:departmentDao.find(cht.getDepartment().getId()));						
+						
+					} catch (Exception e) {
+						sub.onError(e);
+					} finally {
+						sub.onCompleted();
+					}
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
+	}
 	@Override
 	public Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(@Min(0) long offset,
 			@Min(0) long limit) {
