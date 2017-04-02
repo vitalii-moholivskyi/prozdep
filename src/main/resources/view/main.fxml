@@ -37,38 +37,13 @@
                         <MenuItem mnemonicParsing="false" onAction="#onViewMaster" text="Магістри" />
                       <MenuItem mnemonicParsing="false" onAction="#onViewTeacher" text="Викладачі" />
                       <MenuItem mnemonicParsing="false" onAction="#onViewPostgraduate" text="Аспіранти" />
-                        <MenuItem mnemonicParsing="false" text="Наукові теми" onAction="#onViewTopic"/>
-                        <MenuItem mnemonicParsing="false" text="Наукові роботи" onAction="#onViewPapers"/>
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Призначити">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Наукова робота" />
+                        <MenuItem mnemonicParsing="false" onAction="#onViewTopic" text="Наукові теми" />
+                        <MenuItem mnemonicParsing="false" onAction="#onViewPapers" text="Наукові роботи" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
             <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-            <TextField prefHeight="25.0" prefWidth="208.0" promptText="Пошуковий запит..." />
-            <SplitMenuButton mnemonicParsing="false" text="Знайти">
-              <items>
-                <MenuItem mnemonicParsing="false">
-                     <graphic>
-                        <RadioButton mnemonicParsing="false" text="люди" />
-                     </graphic>
-                  </MenuItem>
-                <MenuItem mnemonicParsing="false">
-                     <graphic>
-                        <RadioButton mnemonicParsing="false" text="наукові теми" />
-                     </graphic>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false">
-                     <graphic>
-                        <RadioButton mnemonicParsing="false" text="наукові роботи" />
-                     </graphic>
-                  </MenuItem>
-              </items>
-            </SplitMenuButton>
         </items>
       </ToolBar>
    </top>
