@@ -84,5 +84,13 @@ public interface IScientistModel {
 	 */
 	Observable<? extends ScientistViewModel> fetch(int id);
 
+	/**
+	 * @param paperId
+	 * @param offset
+	 * @param limit
+	 * @return
+	 */
+	Observable<Collection<? extends ScientistViewModel>> fetchScientistsByPaperId(int paperId, int offset, int limit);
+
 	// add other methods below...
 }

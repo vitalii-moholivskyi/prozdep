@@ -47,7 +47,22 @@ public class ScientistModel implements IScientistModel {
 			}
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(ScientistMapper::toViewModel);
 	}
-	
+	@Override
+	public Observable<Collection<? extends ScientistViewModel>> fetchScientistsByPaperId(int paperId,@Min(0) int offset,
+			@Min(0) int limit) {
+		return Observable
+				.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Scientist>>) sub -> {
+
+					sub.onStart();
+					try {
+						sub.onNext(scientistDao.getScientistsByPaperId(paperId).subList(offset, limit+offset));
+					} catch (Exception e) {
+						sub.onError(e);
+					} finally {
+						sub.onCompleted();
+					}
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(ScientistMapper::toViewModel);
+	}
 	@Override
 	public Observable<Collection<? extends ScientistViewModel>> fetchScientists(@Min(0) long offset,
 			@Min(0) long limit) {
