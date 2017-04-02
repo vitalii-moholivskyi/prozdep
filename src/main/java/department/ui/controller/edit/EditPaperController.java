@@ -107,7 +107,16 @@ public final class EditPaperController {
                 val m = models.iterator().next();
                 executorBox.setValue(new Executor(m.getId(), m.getFirstName()));
             }
+        }, th -> {
+            UiUtils.createErrDialog("Не вдалося завантажити виконавця").showAndWait();
+            log.log(Level.WARNING, "Failed to fetch scientists");
         });
+
+        teacherModel.fetchChiefTeacherByPaperId(paper.getId())
+                .subscribe(supervisorBox::setValue, th -> {
+                    UiUtils.createErrDialog("Не вдалося завантажити виконавця").showAndWait();
+                    log.log(Level.WARNING, "Failed to fetch scientists");
+                });
     }
 
     @FXML
@@ -150,8 +159,10 @@ public final class EditPaperController {
                         (Func2<Collection<? extends MasterViewModel>, Collection<? extends PostgraduateViewModel>, Collection<Executor>>) (masterViewModels, postgraduateViewModels) -> {
                             val result = new ArrayList<Executor>(masterViewModels.size() + postgraduateViewModels.size());
 
-                            for (val m : masterViewModels) result.add(new Executor(m, String.format("%s - магістр", m.getFirstName())));
-                            for (val m : postgraduateViewModels) result.add(new Executor(m, String.format("%s - аспірант", m.getFirstName())));
+                            for (val m : masterViewModels)
+                                result.add(new Executor(m, String.format("%s - магістр", m.getFirstName())));
+                            for (val m : postgraduateViewModels)
+                                result.add(new Executor(m, String.format("%s - аспірант", m.getFirstName())));
                             return result;
                         })
                         .doOnCompleted(executorBox::show)
