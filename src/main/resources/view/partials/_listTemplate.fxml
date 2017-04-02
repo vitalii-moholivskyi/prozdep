@@ -19,42 +19,44 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.view.ListTabController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="485.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.view.ListTabController">
       <children>
-          <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0">
+          <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT">
               <items>
-                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Оновити" onAction="#onRefresh"/>
+                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onRefresh" text="Оновити" />
                   <Separator maxHeight="30.0" orientation="VERTICAL" prefHeight="20.0">
                       <padding>
                           <Insets left="50.0" right="50.0" />
                       </padding>
                   </Separator>
-                  <StackPane>
-                      <children>
-                          <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <children>
+                          <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" StackPane.alignment="TOP_CENTER">
                               <children>
-                                  <Label text="З">
+                                  <Label text="Пошук">
                                       <HBox.margin>
                                           <Insets left="5.0" right="5.0" />
                                       </HBox.margin>
                                   </Label>
-                                  <DatePicker layoutX="10.0" layoutY="10.0" />
-                                  <Label text="По">
-                                      <HBox.margin>
-                                          <Insets left="5.0" right="5.0" />
-                                      </HBox.margin>
-                                  </Label>
-                                  <DatePicker />
-                                  <Button mnemonicParsing="false" text="Фільтр">
-                                      <HBox.margin>
-                                          <Insets left="10.0" right="10.0" />
-                                      </HBox.margin>
-                                  </Button>
+                        <TextField fx:id="searchField" maxWidth="1.7976931348623157E308" prefHeight="25.0" />
+                        <Button fx:id="searchButton" mnemonicParsing="false" text="Знайти" />
                               </children>
+                     <StackPane.margin>
+                        <Insets top="1.0" />
+                     </StackPane.margin>
+                     <VBox.margin>
+                        <Insets left="1.0" right="1.0" />
+                     </VBox.margin>
                           </HBox>
-                      </children>
-                  </StackPane>
+               </children>
+               <padding>
+                  <Insets top="1.0" />
+               </padding>
+            </VBox>
               </items>
+         <VBox.margin>
+            <Insets top="1.0" />
+         </VBox.margin>
           </ToolBar>
           <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
          <columnResizePolicy>

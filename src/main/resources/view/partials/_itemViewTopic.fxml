@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0">
+         <children>
+            <HBox fx:id="nameTopiic" minWidth="25.0" prefWidth="25.0">
+               <children>
+                  <Label text="Назва:" />
+                  <Label fx:id="titleTopic" layoutX="10.0" layoutY="10.0" text="..." />
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox fx:id="dateTopic">
+               <children>
+                  <Label layoutX="10.0" layoutY="10.0" text="Дата:" />
+                  <Label fx:id="dateTopic" layoutX="10.0" layoutY="10.0" text="..." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>
