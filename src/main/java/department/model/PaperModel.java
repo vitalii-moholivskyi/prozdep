@@ -70,7 +70,7 @@ public class PaperModel implements IPaperModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(paperDao.findAll(limit, offset));
+				sub.onNext(paperDao.findAll(query,limit, offset));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

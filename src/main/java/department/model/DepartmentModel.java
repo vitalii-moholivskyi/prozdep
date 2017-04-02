@@ -96,7 +96,7 @@ public class DepartmentModel implements IDepartmentModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(departmentDao.findAll(limit, offset));
+						sub.onNext(departmentDao.findAll(query,limit, offset));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {

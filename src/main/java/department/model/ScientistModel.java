@@ -88,7 +88,7 @@ public class ScientistModel implements IScientistModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(scientistDao.findAll(limit, offset));
+						sub.onNext(scientistDao.findAll(query,limit, offset));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {
