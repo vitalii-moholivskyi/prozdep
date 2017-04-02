@@ -3,11 +3,12 @@ package department.ui.controller.view;
 import department.model.IPostgraduateModel;
 import department.ui.controller.DefaultProgressMessage;
 import department.ui.controller.MainController;
-import department.ui.controller.model.PostgraduateViewModel;
 import department.ui.controller.edit.EditPostgraduateController;
+import department.ui.controller.model.PostgraduateViewModel;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
+import department.utils.TextUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -16,11 +17,12 @@ import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.Observable;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 
-import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
 import static department.ui.utils.UiUtils.DATE_FLD_MAPPER;
 import static department.ui.utils.UiUtils.NULLABLE_FLD_MAPPER;
 
@@ -44,6 +46,7 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
     @Override
     @SuppressWarnings("unchecked")
     protected void initSubclasses() {
+        searchField.setPromptText("Знайти аспірантів");
 
         final TableColumn<PostgraduateViewModel, String> firstNameCol = new TableColumn<>("Ім'я"),
                 phoneCol = new TableColumn<>("Телефон"), topicCol = new TableColumn<>("Тема"),
@@ -112,20 +115,32 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
         val indx = pagination.currentPageIndexProperty().get();
 
         if (indx >= 0) {
-            doLoad(indx);
+            doLoad(searchField.getText(), indx);
         }
     }
 
     @Override
-    protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
-        doLoad(newIndex);
+    protected void onSearch(String query) {
+        doLoad(query, 0);
     }
 
-    private void doLoad(int indx) {
+    @Override
+    protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
+        doLoad(searchField.getText(), newIndex);
+    }
+
+    private void doLoad(String query, int indx) {
         val toastId = mainController.showProgress("Завантаження списку аспірантів...");
 
-        model.fetchPostgraduates(indx * RESULTS_PER_PAGE, RESULTS_PER_PAGE)
-                .doOnTerminate(() -> mainController.hideProgress(toastId))
+        final Observable<Collection<? extends PostgraduateViewModel>> observable;
+
+        if (TextUtils.isEmpty(query)) {
+            observable = model.fetchPostgraduates(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        } else {
+            observable = model.fetchPostgraduates(query, indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        }
+
+        observable.doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }
 

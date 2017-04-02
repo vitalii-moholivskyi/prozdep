@@ -39,7 +39,7 @@
                                       </HBox.margin>
                                   </Label>
                         <TextField fx:id="searchField" maxWidth="1.7976931348623157E308" prefHeight="25.0" />
-                        <Button fx:id="searchButton" mnemonicParsing="false" text="Знайти" />
+                        <Button fx:id="searchButton" mnemonicParsing="false" text="Знайти" onAction="#onSearch"/>
                               </children>
                      <StackPane.margin>
                         <Insets top="1.0" />

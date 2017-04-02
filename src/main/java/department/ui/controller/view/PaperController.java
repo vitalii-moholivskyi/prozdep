@@ -7,13 +7,16 @@ import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.Controllers;
 import department.ui.utils.UiConstants;
 import department.utils.RxUtils;
+import department.utils.TextUtils;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.Observable;
 
+import java.util.Collection;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiUtils.NULLABLE_FLD_MAPPER;
@@ -40,6 +43,7 @@ public class PaperController extends ListTabController<PaperViewModel> {
     @Override
     @SuppressWarnings("unchecked")
     protected void initSubclasses() {
+        searchField.setPromptText("Пошук наукових робіт");
 
         final TableColumn<PaperViewModel, String> titleCol = new TableColumn<>("Назва"),
                 typeCol = new TableColumn<>("Тип"), yearCol = new TableColumn<>("Рік написання");
@@ -86,7 +90,7 @@ public class PaperController extends ListTabController<PaperViewModel> {
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
-        doLoad(newIndex);
+        doLoad(searchField.getText(), newIndex);
     }
 
     @Override
@@ -94,15 +98,26 @@ public class PaperController extends ListTabController<PaperViewModel> {
         val indx = pagination.currentPageIndexProperty().get();
 
         if (indx >= 0) {
-            doLoad(indx);
+            doLoad(searchField.getText(), indx);
         }
     }
 
-    private void doLoad(int indx) {
-        val toastId = mainController.showProgress("Завантаження списку наукових робіт...");
+    @Override
+    protected void onSearch(String query) {
+        doLoad(searchField.getText(), 0);
+    }
 
-        paperModel.fetchPapers(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
-                .doOnTerminate(() -> mainController.hideProgress(toastId))
+    private void doLoad(String query, int indx) {
+        val toastId = mainController.showProgress("Завантаження списку наукових робіт...");
+        final Observable<Collection<? extends PaperViewModel>> observable;
+
+        if (TextUtils.isEmpty(query)) {
+            observable = paperModel.fetchPapers(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        } else {
+            observable = paperModel.fetchPapers(query, indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        }
+
+        observable.doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }
 
