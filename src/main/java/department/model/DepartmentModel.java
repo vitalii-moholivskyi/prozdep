@@ -72,6 +72,24 @@ public class DepartmentModel implements IDepartmentModel {
 				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
 	}
 	@Override
+	public Observable<? extends DepartmentViewModel> fetchDepartmentByTopicId(@Min(0) int topicId) {
+		return Observable
+				.defer(() -> Observable.create((Observable.OnSubscribe<? extends Department>) sub -> {
+
+					sub.onStart();
+					try {
+						val list=teacherDao.getTeachersByTopicId(topicId,true);
+						val cht = !list.isEmpty()?list.get(0):null;
+						sub.onNext(cht==null?null:departmentDao.find(cht.getDepartment().getId()));						
+						
+					} catch (Exception e) {
+						sub.onError(e);
+					} finally {
+						sub.onCompleted();
+					}
+				})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(DepartmentMapper::toViewModel);
+	}
+	@Override
 	public Observable<Collection<? extends DepartmentViewModel>> fetchDepartments(@Min(0) long offset,
 			@Min(0) long limit) {
 		return Observable
