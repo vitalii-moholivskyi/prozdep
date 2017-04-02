@@ -169,6 +169,32 @@ public final class EditTeacherController {
                 };
             }
         });
+
+        topicsListView.setCellFactory(new Callback<ListView<TopicViewModel>, ListCell<TopicViewModel>>() {
+            @Override
+            public ListCell<TopicViewModel> call(ListView<TopicViewModel> param) {
+                return new ListCell<TopicViewModel>() {
+
+                    @Override
+                    protected void updateItem(TopicViewModel item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+
+                            val holder = Controllers.createTopicItemView(item);
+
+                            setGraphic(holder.getView());
+                            holder.getView().setOnMouseClicked(event -> {
+
+                                if(event.getClickCount() == 2) {
+                                    Controllers.createTopicEditViewAndShow(item);
+                                }
+                            });
+                        }
+                    }
+                };
+            }
+        });
     }
 
     @FXML

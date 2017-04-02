@@ -28,7 +28,7 @@ import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
 @Getter(value = AccessLevel.NONE)
 public final class UiUtils {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     public static final Func1<? super String, ? extends String> NULLABLE_FLD_MAPPER =
             str -> TextUtils.isEmpty(str) ? "" : str;
