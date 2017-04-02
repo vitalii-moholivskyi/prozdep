@@ -238,7 +238,11 @@ public class DaoTestSuit {
 
         System.out.println("Find By Department:" + teacherDAO.getTeachersByDepartmentId(1));
         System.out.println("Find By Topic:" + teacherDAO.getTeachersByTopicId(2));
+        System.out.println("Find Eager Chief By Paper:" + teacherDAO.getChiefTeachersByPaperId(3, true));
+        System.out.println("Find Chief By Paper:" + teacherDAO.getChiefTeachersByPaperId(5));
         System.out.println("Find By Paper:" + teacherDAO.getTeachersByPaperId(3, true));
+
+
     }
 
 
