@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:id="viewRoot" fx:controller="department.ui.controller.edit.EditPaperController">
+<TabPane fx:id="viewRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditPaperController">
    <tabs>
       <Tab text="Редагування роботи">
          <content>
@@ -68,7 +68,7 @@
                         <Insets bottom="30.0" top="30.0" />
                      </VBox.margin>
                   </HBox>
-                  <Label fx:id="errorLabel" text="some error here">
+                  <Label fx:id="errorLabel">
                      <font>
                         <Font size="14.0" />
                      </font>

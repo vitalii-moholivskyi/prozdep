@@ -118,7 +118,7 @@
                               </Button>
                            </children>
                         </HBox>
-                        <Label fx:id="errorLabel" text="some error here" />
+                        <Label fx:id="errorLabel" />
                           </children>
                      <padding>
                         <Insets left="25.0" right="25.0" />

@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TabPane prefHeight="384.0" fx:id="viewRoot" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTopicController">
+<TabPane fx:id="viewRoot" prefHeight="384.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTopicController">
    <tabs>
       <Tab text="Редагувати">
          <content>
@@ -85,7 +85,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <Label fx:id="editStatus" text="Error" />
+                  <Label fx:id="editStatus" />
                </children>
                <padding>
                   <Insets left="25.0" right="25.0" />
@@ -97,14 +97,10 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                        AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8"
-                        xmlns:fx="http://javafx.com/fxml/1">
+                  <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                      <children>
-                        <ListView fx:id="paperListView" maxHeight="1.7976931348623157E308"
-                                  maxWidth="1.7976931348623157E308"/>
-                        <Pagination fx:id="paginationPaper" maxPageIndicatorCount="5" maxWidth="1.7976931348623157E308"
-                                    pageCount="1" prefHeight="30.0"/>
+                        <ListView fx:id="paperListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                        <Pagination fx:id="paginationPaper" maxPageIndicatorCount="5" maxWidth="1.7976931348623157E308" pageCount="1" prefHeight="30.0" />
                      </children>
                   </VBox>
                </children>
