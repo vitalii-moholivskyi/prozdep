@@ -2,6 +2,8 @@ package department.dao;
 
 import java.util.List;
 
+import department.model.bo.Paper;
+
 public interface IDAOGeneric<T> {
 
 	int count();

@@ -2,6 +2,7 @@ package department.dao;
 
 import department.model.bo.Topic;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -22,5 +23,7 @@ public interface ITopicDAO extends IDAOGeneric<Topic> {
     List<Topic> getTopicsByDepartmentId(int departmentId, boolean isEager);
     List<Topic> getTopicsByScientistId(int scientistId, boolean isEager);
     List<Topic> getTopicsByPaperId(int paperId, boolean isEager);
+
+    List<Topic> getTopicsByScientistId(int id, int limit, int offset);
 
 }

@@ -85,6 +85,17 @@ public final class EditTopicController {
         startDatePicker.setValue(DateUtils.tryToLocal(model.getStartDate()));
         endDatePicker.setValue(DateUtils.tryToLocal(model.getEndDate()));
 
+        teacherModel.fetchTeachersByTopicId(model.getId())
+                .doOnCompleted(teacherComboBox::show)
+                .subscribe(teacherViewModels -> {
+                            if (!teacherViewModels.isEmpty()) {
+                                teacherComboBox.setValue(teacherViewModels.iterator().next());
+                            }
+                        },
+                        th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
+                            log.log(Level.WARNING, "Failed to fetch teachers");
+                        });
         /*departmentComboBox.setValue(new DepartmentViewModel(model.getDepartment(), model.getDepartmentTitle(), null));
         teacherComboBox.setValue();*/
 
