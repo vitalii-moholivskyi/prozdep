@@ -23,5 +23,7 @@ public interface IPaperDAO extends IDAOGeneric<Paper>{
     List<Paper> getPapersByScientistId(int scientistId);
     List<Paper> getPapersByTopicId(int topicId);
     List<Paper> getPapersByYear(int year);
+	List<Paper> getPapersByTopicId(int topicId, boolean isEager, int limit, int offset);
+	List<Paper> getPapersByTopicId(int year, int limit, int offset);
 
 }

@@ -55,7 +55,7 @@ public class ScientistModel implements IScientistModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(scientistDao.getScientistsByPaperId(paperId).subList(offset, limit+offset));
+						sub.onNext(scientistDao.getScientistsByPaperId(paperId,limit,offset));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {

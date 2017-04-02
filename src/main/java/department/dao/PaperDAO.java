@@ -63,6 +63,11 @@ public class PaperDAO implements IPaperDAO{
     private final static String FIND_BY_TOPIC = "SELECT * " +
             "FROM paper p INNER JOIN paper_topic p_t ON p.id = p_t.paper_id " +
             "WHERE p_t.topic_id = ?;";
+    private final static String FIND_BY_TOPIC_WITH_LIMIT = "SELECT * " +
+            "FROM paper p INNER JOIN paper_topic p_t ON p.id = p_t.paper_id " +
+            "WHERE p_t.topic_id = ? LIMIT ? OFFSET ?;";
+    private final static String EAGER_FIND_BY_TOPIC_WITH_LIMIT = FIND_BY_TOPIC;
+
     private final static String EAGER_FIND_BY_TOPIC = FIND_BY_TOPIC;
 
     private final static String FIND_BY_SCIENTIST = "SELECT * " +
@@ -166,6 +171,25 @@ public class PaperDAO implements IPaperDAO{
     }
 
     @Override
+    public List<Paper> getPapersByTopicId(int topicId, boolean isEager,int limit, int offset) {
+        if(isEager){
+            return jdbcTemplate.query(EAGER_FIND_BY_TOPIC_WITH_LIMIT, new Object[]{topicId,limit,offset}, paperMapper);
+        } else {
+            return getPapersByTopicId(topicId,limit,offset);
+        }
+    }
+    
+    /**
+	 * @param topicId
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public List<Paper> getPapersByTopicId(int topicId, int limit, int offset) {
+		return jdbcTemplate.query(FIND_BY_TOPIC_WITH_LIMIT, new Object[]{topicId,limit,offset}, paperMapper);   
+	}
+
+	@Override
     public List<Paper> getPapersByTopicId(int topicId, boolean isEager) {
         if(isEager){
             return jdbcTemplate.query(EAGER_FIND_BY_TOPIC, new Object[]{topicId}, paperMapper);
