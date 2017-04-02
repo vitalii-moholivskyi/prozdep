@@ -64,6 +64,22 @@ public class TeacherModel implements ITeacherModel {
 	}
 
 	@Override
+	public Observable<? extends TeacherViewModel> fetchChiefTeacherByPaperId(@Min(0) int paperId) {
+		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Teacher>) sub -> {
+
+			sub.onStart();
+			try {
+				val list=teacherDao.getChiefTeachersByPaperId(paperId,true);
+				sub.onNext(!list.isEmpty()?list.get(0):null);
+			} catch (Exception e) {
+				sub.onError(e);
+			} finally {
+				sub.onCompleted();
+			}
+		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(TeacherMapper::toViewModel);
+	}
+	
+	@Override
 	public Observable<Collection<? extends TeacherViewModel>> fetchTeachers(
 			@NotNull(message = "query cannot be null") String query, @Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Teacher>>) sub -> {

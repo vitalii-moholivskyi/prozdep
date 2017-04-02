@@ -83,5 +83,11 @@ public interface ITeacherModel {
 	 */
 	Observable<? extends TeacherViewModel> fetch(int id);
 
+	/**
+	 * @param paperId
+	 * @return
+	 */
+	Observable<? extends TeacherViewModel> fetchChiefTeacherByPaperId(int paperId);
+
 	// add other methods below...
 }
