@@ -133,6 +133,7 @@ public class ScientistModel implements IScientistModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
 			model.setFirstName(result.getName());
 			model.setPhone(result.getPhone());
+			
 		} , errCallback::call);
 	}
 

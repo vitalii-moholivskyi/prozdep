@@ -131,6 +131,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 			model.setProtectionDate(result.getProtectionDate());
 			model.setTopic(result.getTopic());
 			model.setTeacherId(result.getTeacher().getId());
+			model.setDepartmentName(result.getDepartment()!=null?result.getDepartment().getName():null);
+			
 			callback.call(null);
 		} , errCallback::call);
 	}

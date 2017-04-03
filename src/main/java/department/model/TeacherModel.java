@@ -155,8 +155,11 @@ public class TeacherModel implements ITeacherModel {
 					model.setStartDate(result.getStartDate());
 					model.setPhone(result.getPhone());
 					model.setDegree(result.getDegree());
-					model.setDepartment(result.getDepartment().getId());
+					model.setDepartment(result.getDepartment()!=null?result.getDepartment().getId():null);
 					model.setPosition(result.getPosition());
+					model.setDepartmentName(result.getDepartment()!=null?result.getDepartment().getName():null);
+					
+					
 				}, errCallback::call);
 	}
 

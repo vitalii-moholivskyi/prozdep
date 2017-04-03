@@ -124,10 +124,12 @@ public class TopicModel implements ITopicModel {
         })).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread())
                 .doOnCompleted(resultCallback)
                 .subscribe(result -> {
-                    model.setChiefScientist(result.getChiefScientist().getId());
+                    model.setChiefScientist(result.getChiefScientist()!=null?result.getChiefScientist().getId():null);
                     model.setStartDate(result.getStartDate());
                     model.setName(result.getName());
                     model.setEndDate(result.getEndDate());
+                    model.setChiefScientistName(result.getChiefScientist()!=null?result.getChiefScientist().getName():null);
+                    model.setDepartmentTitle(result.getDepartment()!=null?result.getDepartment().getName():null);
                 }, errCallback::call);
     }
 

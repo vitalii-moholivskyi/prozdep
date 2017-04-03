@@ -132,6 +132,7 @@ public class PaperModel implements IPaperModel {
 					model.setName(result.getName());
 					model.setYear(result.getYear());
 					model.setType(result.getType());
+				
 				}, errCallback::call);
 	}
 
