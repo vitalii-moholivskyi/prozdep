@@ -1,9 +1,6 @@
 package department.ui.controller.edit;
 
-import department.model.IMasterModel;
-import department.model.IPaperModel;
-import department.model.IPostgraduateModel;
-import department.model.ITeacherModel;
+import department.model.*;
 import department.model.form.PaperUpdateForm;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.controller.model.PaperViewModel;
@@ -59,29 +56,9 @@ public final class EditPaperController {
     private final IMasterModel masterModel;
     private final IPostgraduateModel postgraduateModel;
     private final ITeacherModel teacherModel;
+    private final IScientistModel scientistModel;
 
     private PaperViewModel paper;
-
-    @Autowired
-    public EditPaperController(IPaperModel paperModel, IMasterModel masterModel, IPostgraduateModel postgraduateModel,
-                               ITeacherModel teacherModel) {
-        this.paperModel = paperModel;
-        this.masterModel = masterModel;
-        this.postgraduateModel = postgraduateModel;
-        this.teacherModel = teacherModel;
-    }
-
-    public PaperViewModel getPaper() {
-        return paper;
-    }
-
-    public void setPaper(PaperViewModel paper) {
-        this.paper = Preconditions.notNull(paper);
-
-        typeField.setText(paper.getType());
-        titleField.setText(paper.getName());
-        yearField.setText(String.valueOf(paper.getYear()));
-    }
 
     private static final class Executor {
 
@@ -101,6 +78,45 @@ public final class EditPaperController {
             this(m.getId(), message);
         }
 
+    }
+
+    @Autowired
+    public EditPaperController(IScientistModel scientistModel, IPaperModel paperModel, IMasterModel masterModel,
+                               IPostgraduateModel postgraduateModel, ITeacherModel teacherModel) {
+        this.paperModel = paperModel;
+        this.masterModel = masterModel;
+        this.postgraduateModel = postgraduateModel;
+        this.teacherModel = teacherModel;
+        this.scientistModel = scientistModel;
+    }
+
+    public PaperViewModel getPaper() {
+        return paper;
+    }
+
+    public void setPaper(PaperViewModel paper) {
+        this.paper = Preconditions.notNull(paper);
+
+        typeField.setText(paper.getType());
+        titleField.setText(paper.getName());
+        yearField.setText(String.valueOf(paper.getYear()));
+
+        scientistModel.fetchScientistsByPaperId(paper.getId(), 0, 1).subscribe(models -> {
+
+            if (!models.isEmpty()) {
+                val m = models.iterator().next();
+                executorBox.setValue(new Executor(m.getId(), m.getFirstName()));
+            }
+        }, th -> {
+            UiUtils.createErrDialog("Не вдалося завантажити виконавця").showAndWait();
+            log.log(Level.WARNING, "Failed to fetch scientists");
+        });
+
+        teacherModel.fetchChiefTeacherByPaperId(paper.getId())
+                .subscribe(supervisorBox::setValue, th -> {
+                    UiUtils.createErrDialog("Не вдалося завантажити виконавця").showAndWait();
+                    log.log(Level.WARNING, "Failed to fetch scientists");
+                });
     }
 
     @FXML
@@ -143,8 +159,10 @@ public final class EditPaperController {
                         (Func2<Collection<? extends MasterViewModel>, Collection<? extends PostgraduateViewModel>, Collection<Executor>>) (masterViewModels, postgraduateViewModels) -> {
                             val result = new ArrayList<Executor>(masterViewModels.size() + postgraduateViewModels.size());
 
-                            for (val m : masterViewModels) result.add(new Executor(m, String.format("%s - магістр", m.getFirstName())));
-                            for (val m : postgraduateViewModels) result.add(new Executor(m, String.format("%s - аспірант", m.getFirstName())));
+                            for (val m : masterViewModels)
+                                result.add(new Executor(m, String.format("%s - магістр", m.getFirstName())));
+                            for (val m : postgraduateViewModels)
+                                result.add(new Executor(m, String.format("%s - аспірант", m.getFirstName())));
                             return result;
                         })
                         .doOnCompleted(executorBox::show)

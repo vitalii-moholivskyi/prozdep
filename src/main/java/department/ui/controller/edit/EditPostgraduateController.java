@@ -3,6 +3,7 @@ package department.ui.controller.edit;
 import department.model.*;
 import department.model.form.PostgraduateUpdateForm;
 import department.ui.controller.model.*;
+import department.ui.utils.Controllers;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.stereotype.Controller;
@@ -89,6 +91,31 @@ public final class EditPostgraduateController {
                             errorLabel.setText("Не вдалося завантажити список наукових робіт");
                             log.log(Level.WARNING, "Failed to fetch topics", th);
                         });
+
+        paperListView.setCellFactory(new Callback<ListView<PaperViewModel>, ListCell<PaperViewModel>>() {
+            @Override
+            public ListCell<PaperViewModel> call(ListView<PaperViewModel> param) {
+                return new ListCell<PaperViewModel>() {
+                    @Override
+                    protected void updateItem(PaperViewModel item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+
+                            val holder = Controllers.createPaperItemView(item);
+
+                            setGraphic(holder.getView());
+                            holder.getView().setOnMouseClicked(event -> {
+
+                                if(event.getClickCount() == 2) {
+                                    Controllers.createPaperEditViewAndShow(item);
+                                }
+                            });
+                        }
+                    }
+                };
+            }
+        });
     }
 
     @FXML

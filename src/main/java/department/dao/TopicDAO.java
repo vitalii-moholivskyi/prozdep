@@ -114,6 +114,9 @@ public class TopicDAO implements ITopicDAO{
     private final static String EAGER_FIND_BY_SCIENTIST = EAGER_FIND_SELECT +
             "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
             "WHERE s_t.scientist_id = ?;";
+    private final static String EAGER_FIND_BY_SCIENTIST_WITH_LIMIT = EAGER_FIND_SELECT +
+            "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
+            "WHERE s_t.scientist_id = ? LIMIT ? OFFSET ?;";
 
     private final static String FIND_BY_PAPER = FIND_SELECT +
             "INNER JOIN paper_topic p_t ON topic.id = p_t.topic_id " +
@@ -362,5 +365,13 @@ public class TopicDAO implements ITopicDAO{
                     .build();
         }
     }
+
+	/* (non-Javadoc)
+	 * @see department.dao.ITopicDAO#getTopicsByScientistId(int, int, int)
+	 */
+	@Override
+	public List<Topic> getTopicsByScientistId(int scientistId, int limit, int offset) {
+		return jdbcTemplate.query(EAGER_FIND_BY_SCIENTIST_WITH_LIMIT, new Object[]{ scientistId,limit,offset }, eagerTopicMapper);
+	}
 
 }

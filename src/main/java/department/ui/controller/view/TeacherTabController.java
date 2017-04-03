@@ -8,6 +8,7 @@ import department.ui.controller.model.TeacherViewModel;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
+import department.utils.TextUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -16,8 +17,10 @@ import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.Observable;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiUtils.DATE_FLD_MAPPER;
@@ -45,6 +48,7 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
     @Override
     @SuppressWarnings("unchecked")
     protected void initSubclasses() {
+        searchField.setPromptText("Пошук викладачів");
 
         final TableColumn<TeacherViewModel, String> firstNameCol = new TableColumn<>("Повне ім'я"),
                 phoneCol = new TableColumn<>("Телефон"), startDateCol = new TableColumn<>("Початок роботи"),
@@ -85,10 +89,6 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
 
         val size = tableView.getColumns().size();
 
-        for (val column : tableView.getColumns()) {
-            column.prefWidthProperty().bind(tableView.widthProperty().divide(size).add(-4.));
-        }
-
         val progress = new DefaultProgressMessage(mainController);
         loadData(new ProgressCallback() {
                      @Override
@@ -111,7 +111,7 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
-        doLoad(newIndex);
+        doLoad(searchField.getText(), newIndex);
     }
 
     @Override
@@ -119,15 +119,26 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
         val indx = pagination.currentPageIndexProperty().get();
 
         if (indx >= 0) {
-            doLoad(indx);
+            doLoad(searchField.getText(), indx);
         }
     }
 
-    private void doLoad(int indx) {
-        val toastId = mainController.showProgress("Завантаження списку викладачів...");
+    @Override
+    protected void onSearch(String query) {
+        doLoad(searchField.getText(), 0);
+    }
 
-        model.fetchTeachers(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE)
-                .doOnTerminate(() -> mainController.hideProgress(toastId))
+    private void doLoad(String query, int indx) {
+        val toastId = mainController.showProgress("Завантаження списку викладачів...");
+        final Observable<Collection<? extends TeacherViewModel>> observable;
+
+        if (TextUtils.isEmpty(query)) {
+            observable = model.fetchTeachers(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        } else {
+            observable = model.fetchTeachers(query, indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        }
+
+        observable.doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }
 

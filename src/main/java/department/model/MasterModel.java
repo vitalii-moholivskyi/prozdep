@@ -33,16 +33,16 @@ public class MasterModel implements IMasterModel {
 
 			sub.onStart();
 			try {
-                sub.onNext(masterDao.find(id));
-            } catch (final Exception e) {
-                sub.onError(e);
-                e.printStackTrace();
+				sub.onNext(masterDao.find(id));
+			} catch (final Exception e) {
+				sub.onError(e);
+				e.printStackTrace();
 			} finally {
 				sub.onCompleted();
 			}
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).map(MasterMapper::toViewModel);
 	}
-	
+
 	@Override
 	public Observable<Collection<? extends MasterViewModel>> fetchMasters(@Min(0) long offset, @Min(0) long limit) {
 		return Observable.defer(() -> Observable.create((Observable.OnSubscribe<Collection<? extends Master>>) sub -> {
@@ -65,7 +65,7 @@ public class MasterModel implements IMasterModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(masterDao.findAll(limit, offset));
+				sub.onNext(masterDao.findAll(query, limit, offset));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -83,19 +83,18 @@ public class MasterModel implements IMasterModel {
 			sub.onStart();
 			try {
 
-                val builder = Master.builder()
-                        .department(Department.builder().id(form.getDepartment()).build()).endDate(form.getEndDate())
-                        .startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
-                        .phone(form.getPhone());
+				val builder = Master.builder().department(Department.builder().id(form.getDepartment()).build())
+						.endDate(form.getEndDate()).startDate(form.getStartDate()).topic(form.getTopic())
+						.name(form.getName()).phone(form.getPhone());
 
-                if (form.getTeacher() != null) {
-                    builder.teacher(Teacher.builder().id(form.getTeacher()).build());
-                }
+				if (form.getTeacher() != null) {
+					builder.teacher(Teacher.builder().id(form.getTeacher()).build());
+				}
 
-                sub.onNext(masterDao.insert(builder.build()));
-            } catch (final Exception e) {
-                sub.onError(e);
-                e.printStackTrace();
+				sub.onNext(masterDao.insert(builder.build()));
+			} catch (final Exception e) {
+				sub.onError(e);
+				e.printStackTrace();
 			} finally {
 				sub.onCompleted();
 			}
@@ -103,9 +102,8 @@ public class MasterModel implements IMasterModel {
 	}
 
 	@Override
-	public void update(MasterUpdateForm form, MasterViewModel model,
-					   Action1<? super Void> finishCallback,
-					   Action1<? super Throwable> errCallback) {
+	public void update(MasterUpdateForm form, MasterViewModel model, Action1<? super Void> finishCallback,
+			Action1<? super Throwable> errCallback) {
 		Observable.defer(() -> Observable.create((Observable.OnSubscribe<? extends Master>) sub -> {
 
 			sub.onStart();
