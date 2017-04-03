@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -21,9 +22,9 @@
 
 <TabPane fx:id="viewRoot" prefHeight="384.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTopicController">
    <tabs>
-      <Tab text="Редагувати">
+      <Tab closable="false" text="Редагувати">
          <content>
-            <VBox maxWidth="1.7976931348623157E308">
+            <VBox fx:id="progressBar" maxWidth="1.7976931348623157E308">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
@@ -70,7 +71,7 @@
                            </VBox.margin>
                         </HBox>
                         <Label text="Кафедра" />
-                        <ComboBox fx:id="departmentComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
+                        <ComboBox fx:id="departmentComboBox" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
                         <FlowPane prefHeight="62.0" prefWidth="389.0" />
                         <Label text="Керівник" />
                         <ComboBox fx:id="teacherComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Керівник" />
@@ -79,6 +80,7 @@
                   </VBox>
                   <HBox alignment="CENTER">
                      <children>
+                        <ProgressIndicator minHeight="30.0" prefWidth="30.0" stylesheets="@../style.css" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onCreateTopic" text="Зберегти" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>
@@ -93,7 +95,7 @@
             </VBox>
          </content>
       </Tab>
-      <Tab text="Перелік наукових праць">
+      <Tab closable="false" text="Перелік наукових праць">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

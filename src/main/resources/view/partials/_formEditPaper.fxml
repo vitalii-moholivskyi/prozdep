@@ -8,7 +8,7 @@
 
 <TabPane fx:id="viewRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditPaperController">
    <tabs>
-      <Tab text="Редагування роботи">
+      <Tab closable="false" text="Редагування роботи">
          <content>
             <VBox>
                <children>
@@ -62,6 +62,7 @@
                   <FlowPane prefHeight="86.0" prefWidth="389.0" />
                   <HBox alignment="CENTER">
                      <children>
+                        <ProgressIndicator prefHeight="30.0" prefWidth="30.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onCreatePaper" text="Зберегти зміни" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>

@@ -10,7 +10,7 @@
    <children>
       <TabPane layoutX="-1.0">
          <tabs>
-            <Tab text="Редагування">
+            <Tab closable="false" text="Редагування">
                <content>
                       <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="50.0" maxWidth="1.7976931348623157E308">
                           <children>
@@ -137,6 +137,7 @@
                         </ComboBox>
                         <HBox alignment="CENTER">
                            <children>
+                              <ProgressIndicator prefHeight="30.0" prefWidth="30.0" visible="false" />
                                     <Button mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Зберегти зміни">
                                  <VBox.margin>
                                     <Insets top="5.0" />
@@ -155,7 +156,7 @@
                       </VBox>
                </content>
             </Tab>
-            <Tab text="Список робіт">
+            <Tab closable="false" text="Список робіт">
               <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

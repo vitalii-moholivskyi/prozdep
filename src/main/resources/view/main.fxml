@@ -1,49 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
+<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
    <top>
-      <ToolBar minHeight="40.0" minWidth="640.0" BorderPane.alignment="CENTER">
+      <ToolBar minHeight="40.0" minWidth="640.0" prefHeight="77.0" prefWidth="707.0" BorderPane.alignment="CENTER">
         <items>
-            <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="Додати">
-                  <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onCreateTopic" text="Наукова тема" />
-                        <MenuItem mnemonicParsing="false" onAction="#onCreatePaper" text="Наукова робота" />
-                        <MenuItem mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Аспірант" />
-                        <MenuItem mnemonicParsing="false" onAction="#onCreateTeacher" text="Викладач" />
-                        <MenuItem mnemonicParsing="false" onAction="#onCreateMaster" text="Магістр" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Переглянути">
-                  <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onViewMaster" text="Магістри" />
-                      <MenuItem mnemonicParsing="false" onAction="#onViewTeacher" text="Викладачі" />
-                      <MenuItem mnemonicParsing="false" onAction="#onViewPostgraduate" text="Аспіранти" />
-                        <MenuItem mnemonicParsing="false" onAction="#onViewTopic" text="Наукові теми" />
-                        <MenuItem mnemonicParsing="false" onAction="#onViewPapers" text="Наукові роботи" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
+            <HBox>
+               <children>
+                  <VBox alignment="CENTER" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <MenuBar maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="38.0" stylesheets="@style.css" VBox.vgrow="ALWAYS">
+                          <menus>
+                            <Menu mnemonicParsing="false">
+                              <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#onCreateTopic" text="Наукова тема" />
+                                    <MenuItem mnemonicParsing="false" onAction="#onCreatePaper" text="Наукова робота" />
+                                    <MenuItem mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Аспірант" />
+                                    <MenuItem mnemonicParsing="false" onAction="#onCreateTeacher" text="Викладач" />
+                                    <MenuItem mnemonicParsing="false" onAction="#onCreateMaster" text="Магістр" />
+                              </items>
+                                 <graphic>
+                                    <ImageView fitHeight="35.0" fitWidth="35.0">
+                                       <image>
+                                          <Image url="@../img/add.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Додати...">
+                           <font>
+                              <Font name="System Bold" size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding></Separator>
+            <HBox alignment="CENTER" layoutX="25.0" layoutY="186.0" prefHeight="56.0" prefWidth="468.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="190.0">
+                <children>
+                    <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#onViewMaster" HBox.hgrow="ALWAYS">
+                        <children>
+                            <ImageView fitHeight="78.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/master.png" />
+                                </image>
+                            </ImageView>
+                            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Магістри">
+                                <font>
+                                    <Font name="System Bold" size="11.0" />
+                                </font>
+                            </Label>
+                        </children>
+                        <HBox.margin>
+                            <Insets left="15.0" right="15.0" />
+                        </HBox.margin>
+                    </VBox>
+                    <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#onViewPostgraduate" HBox.hgrow="ALWAYS">
+                        <children>
+                            <ImageView fitHeight="76.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/postgraduate.png" />
+                                </image>
+                            </ImageView>
+                            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Аспіранти">
+                                <font>
+                                    <Font name="System Bold" size="11.0" />
+                                </font>
+                            </Label>
+                        </children>
+                        <HBox.margin>
+                            <Insets left="15.0" right="15.0" />
+                        </HBox.margin>
+                    </VBox>
+                    <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#onViewTeacher" HBox.hgrow="ALWAYS">
+                        <children>
+                            <ImageView fitHeight="78.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/teacher.png" />
+                                </image>
+                            </ImageView>
+                            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Викладачі">
+                                <font>
+                                    <Font name="System Bold" size="11.0" />
+                                </font>
+                            </Label>
+                        </children>
+                        <HBox.margin>
+                            <Insets left="15.0" right="15.0" />
+                        </HBox.margin>
+                    </VBox>
+                    <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#onViewTopic" HBox.hgrow="ALWAYS">
+                        <children>
+                            <ImageView fitHeight="80.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/topic.png" />
+                                </image>
+                            </ImageView>
+                            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Наукові теми">
+                                <font>
+                                    <Font name="System Bold" size="11.0" />
+                                </font>
+                            </Label>
+                        </children>
+                        <HBox.margin>
+                            <Insets left="15.0" right="15.0" />
+                        </HBox.margin>
+                    </VBox>
+                    <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#onViewPapers" HBox.hgrow="ALWAYS">
+                        <children>
+                            <ImageView fitHeight="76.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/paper.png" />
+                                </image>
+                            </ImageView>
+                            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Наукові роботи">
+                                <font>
+                                    <Font name="System Bold" size="11.0" />
+                                </font>
+                            </Label>
+                        </children>
+                        <HBox.margin>
+                            <Insets left="15.0" right="15.0" />
+                        </HBox.margin>
+                    </VBox>
+                </children>
+            </HBox>
         </items>
       </ToolBar>
    </top>
@@ -59,7 +152,8 @@
    <center>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
          <children>
-            <TabPane fx:id="contentTabPane" layoutX="-6.0" layoutY="34.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" />
+            <TabPane fx:id="contentTabPane" layoutX="-6.0" layoutY="34.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+               </TabPane>
          </children>
       </VBox>
    </center>
