@@ -71,7 +71,7 @@
                            </VBox.margin>
                         </HBox>
                         <Label text="Кафедра" />
-                        <ComboBox fx:id="departmentComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
+                        <ComboBox fx:id="departmentComboBox" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
                         <FlowPane prefHeight="62.0" prefWidth="389.0" />
                         <Label text="Керівник" />
                         <ComboBox fx:id="teacherComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Керівник" />
@@ -80,7 +80,7 @@
                   </VBox>
                   <HBox alignment="CENTER">
                      <children>
-                        <ProgressIndicator minHeight="30.0" prefWidth="30.0" stylesheets="@../style.css" />
+                        <ProgressIndicator minHeight="30.0" prefWidth="30.0" stylesheets="@../style.css" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onCreateTopic" text="Зберегти" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>
