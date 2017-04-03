@@ -25,7 +25,8 @@ public final class PostgraduateMapper {
 		return new PostgraduateViewModel.Builder(postgraduate.getId(), postgraduate.getName(),
 				postgraduate.getStartDate()).setEndDate(postgraduate.getEndDate()).setPhone(postgraduate.getPhone())
 						.setTeacherId(postgraduate.getTeacher() == null ? null : postgraduate.getTeacher().getId())
-						.setTopic(postgraduate.getTopic()).build();
+						.setTopic(postgraduate.getTopic()).setDepartmentName(postgraduate.getDepartment()!=null?postgraduate.getDepartment().getName():null)
+						.setDepartmentId(postgraduate.getDepartment()!=null?postgraduate.getDepartment().getId():null).build();
 	}
 
 	public static Collection<? extends PostgraduateViewModel> toViewModel(Collection<? extends Postgraduate> masters) {

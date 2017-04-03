@@ -27,8 +27,9 @@ public final class TopicMapper {
 		val department = topic.getDepartment();
 		return new TopicViewModel.Builder(topic.getId(), topic.getClient(), topic.getStartDate(),
 				topic.getEndDate(), department.getId(), teacher.getId(), topic.getName())
-				.setChiefScientistName(teacher.getName())
-				.setDepartmentTitle(department.getName()).build();
+				.setChiefScientistName(teacher!=null?teacher.getName():null)
+				.setDepartmentTitle(department!=null?department.getName():null)
+				.build();
 	}
 
 	public static Collection<? extends TopicViewModel> toViewModel(Collection<? extends Topic> masters) {
