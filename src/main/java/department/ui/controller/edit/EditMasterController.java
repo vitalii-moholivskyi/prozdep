@@ -7,6 +7,7 @@ import department.model.form.MasterUpdateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.controller.model.PaperViewModel;
+import department.ui.utils.Controllers;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
@@ -16,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +81,31 @@ public final class EditMasterController {
         startDatePicker.setValue(DateUtils.tryToLocal(dataModel.getStartDate()));
         endDatePicker.setValue(DateUtils.tryToLocal(dataModel.getEndDate()));
         phoneField.setText(dataModel.getPhone());
+
+        paperListView.setCellFactory(new Callback<ListView<PaperViewModel>, ListCell<PaperViewModel>>() {
+            @Override
+            public ListCell<PaperViewModel> call(ListView<PaperViewModel> param) {
+                return new ListCell<PaperViewModel>() {
+                    @Override
+                    protected void updateItem(PaperViewModel item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+
+                            val holder = Controllers.createPaperItemView(item);
+
+                            setGraphic(holder.getView());
+                            holder.getView().setOnMouseClicked(event -> {
+
+                                if(event.getClickCount() == 2) {
+                                    Controllers.createPaperEditViewAndShow(item);
+                                }
+                            });
+                        }
+                    }
+                };
+            }
+        });
 
         paperModel.fetchByScientist(dataModel.getId())
                 .subscribe(paperListView.getItems()::setAll,

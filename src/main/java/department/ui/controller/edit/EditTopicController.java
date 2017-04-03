@@ -9,6 +9,7 @@ import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
+import department.ui.utils.Controllers;
 import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
@@ -18,11 +19,9 @@ import department.utils.RxUtils;
 import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +84,23 @@ public final class EditTopicController {
         startDatePicker.setValue(DateUtils.tryToLocal(model.getStartDate()));
         endDatePicker.setValue(DateUtils.tryToLocal(model.getEndDate()));
 
-        /*departmentComboBox.setValue(new DepartmentViewModel(model.getDepartment(), model.getDepartmentTitle(), null));
-        teacherComboBox.setValue();*/
+        departmentModel.fetchDepartmentByTopicId(model.getId())
+                .subscribe(departmentComboBox::setValue, th -> {
+                            UiUtils.createErrDialog("Не вдалося завантажити кафедру").showAndWait();
+                            log.log(Level.WARNING, "Failed to fetch department", th);
+                        }
+                );
+
+        teacherModel.fetchTeachersByTopicId(model.getId())
+                .doOnCompleted(teacherComboBox::show)
+                .subscribe(teacherViewModels -> {
+                    if (!teacherViewModels.isEmpty()) {
+                        teacherComboBox.setValue(teacherViewModels.iterator().next());
+                    }
+                }, th -> {
+                    UiUtils.createErrDialog("Не вдалося завантажити список викладача").showAndWait();
+                    log.log(Level.WARNING, "Failed to fetch teacher");
+                });
 
         titleField.setText(model.getName());
         clientField.setText(model.getClient());
@@ -143,6 +157,31 @@ public final class EditTopicController {
                                     UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
                                     log.log(Level.WARNING, "Failed to fetch teachers");
                                 });
+            }
+        });
+
+        paperListView.setCellFactory(new Callback<ListView<PaperViewModel>, ListCell<PaperViewModel>>() {
+            @Override
+            public ListCell<PaperViewModel> call(ListView<PaperViewModel> param) {
+                return new ListCell<PaperViewModel>() {
+                    @Override
+                    protected void updateItem(PaperViewModel item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+
+                            val holder = Controllers.createPaperItemView(item);
+
+                            setGraphic(holder.getView());
+                            holder.getView().setOnMouseClicked(event -> {
+
+                                if(event.getClickCount() == 2) {
+                                    Controllers.createPaperEditViewAndShow(item);
+                                }
+                            });
+                        }
+                    }
+                };
             }
         });
     }

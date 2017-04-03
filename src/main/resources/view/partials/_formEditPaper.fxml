@@ -59,7 +59,7 @@
                   <Label fx:id="executorLabel" />
                   <ComboBox fx:id="executorBox" disable="true" editable="true" maxWidth="1.7976931348623157E308" opacity="0.0" />
                   <Label text="Керівник" />
-                  <Label fx:id="supervisorLabel" />
+                  <Label fx:id="supervisorLabel" text="орпав" />
                   <ComboBox fx:id="supervisorBox" disable="true" editable="true" layoutX="35.0" layoutY="185.0" maxWidth="1.7976931348623157E308" opacity="0.0" />
                   <FlowPane prefHeight="86.0" prefWidth="389.0" />
                   <HBox alignment="CENTER">

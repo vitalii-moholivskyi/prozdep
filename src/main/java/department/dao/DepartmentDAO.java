@@ -67,7 +67,13 @@ public class DepartmentDAO implements IDepartmentDAO {
 
 	@Override
 	public List<Department> findAll(String name, long limit, long offset) {
-		return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, departmentMapper);
+		return findAll(name, limit, offset);
+	}
+
+	@Override
+	public List<Department> findAll(String name, long limit, long offset, boolean isEager) {
+		if(isEager) return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, departmentMapper);
+		else return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, departmentMapper);
 	}
 
 	@Override

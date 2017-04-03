@@ -218,7 +218,12 @@ public final class MainController {
 
     private void loadTab(String tabId, String title, String filePath, Class<?> controller) {
 
-        if (hasTabWithId(tabId)) return;
+        val index = getTabIndex(tabId);
+
+        if (index >= 0) {
+            contentTabPane.getSelectionModel().select(index);
+            return;
+        }
 
         val loader = UiUtils.newLoader(filePath, controller);
 
@@ -233,17 +238,21 @@ public final class MainController {
         }
     }
 
-    private boolean hasTabWithId(String tabId) {
+    private int getTabIndex(String tabId) {
 
-        for (val tab : contentTabPane.getTabs()) {
+        val tabs = contentTabPane.getTabs();
+
+        for (int i = 0; i < tabs.size(); ++i) {
+            val tab = tabs.get(i);
+
             if (!TextUtils.isEmpty(tab.getId())
                     && tab.getId().equalsIgnoreCase(tabId)) {
                 // trying to open a new tab again, skip
-                return true;
+                return i;
             }
         }
 
-        return false;
+        return -1;
     }
 
 }

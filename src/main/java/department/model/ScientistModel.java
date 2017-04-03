@@ -39,7 +39,7 @@ public class ScientistModel implements IScientistModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(scientistDao.find(id));
+				sub.onNext(scientistDao.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -55,7 +55,7 @@ public class ScientistModel implements IScientistModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(scientistDao.getScientistsByPaperId(paperId).subList(offset, limit+offset));
+						sub.onNext(scientistDao.getScientistsByPaperId(paperId,limit,offset));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {
@@ -88,7 +88,7 @@ public class ScientistModel implements IScientistModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(scientistDao.findAll(limit, offset));
+						sub.onNext(scientistDao.findAll(query,limit, offset,true));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {

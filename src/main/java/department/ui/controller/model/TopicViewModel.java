@@ -29,26 +29,21 @@ public class TopicViewModel {
 
         int id, department, chiefScientist;
         String client, name;
-        Date startDate;
+        Date startDate, endDate;
 
         @NonFinal String chiefScientistName, departmentTitle;
-        @NonFinal Date endDate;
 
-        public Builder(int id, String client, Date startDate, int department, int chiefScientist, String name) {
+        public Builder(int id, String client, Date startDate, Date endDate, int department, int chiefScientist, String name) {
             Preconditions.checkArgument(id > 0, "id <= 0");
             Preconditions.checkArgument(department > 0, "department <= 0");
             Preconditions.checkArgument(chiefScientist > 0, "chiefScientist <= 0");
             this.client = Preconditions.notNull(client);
             this.startDate = Preconditions.notNull(startDate);
+            this.endDate = Preconditions.notNull(endDate);
             this.name = Preconditions.notNull(name);
             this.department = department;
             this.chiefScientist = chiefScientist;
             this.id = id;
-        }
-
-        public Builder setEndDate(Date endDate) {
-            this.endDate = endDate;
-            return this;
         }
 
         public Builder setChiefScientistName(String chiefScientistName) {

@@ -3,6 +3,7 @@ package department. dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import department.model.bo.Scientist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,11 @@ public class ScientistDAO implements IScientistDAO{
             "FROM scientist s " +
             "INNER JOIN scientist_paper s_p ON s.id = s_p.paper_id " +
             "WHERE s_p.paper_id = ?;";
-
+    private final static String FIND_BY_PAPER_WITH_LIMIT = "SELECT * " +
+            "FROM scientist s " +
+            "INNER JOIN scientist_paper s_p ON s.id = s_p.paper_id " +
+            "WHERE s_p.paper_id = ? LIMIT ? OFFSET ?;";
+    
     private final ScientistMapper scientistMapper = new ScientistMapper();
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -74,6 +79,11 @@ public class ScientistDAO implements IScientistDAO{
 
     @Override
     public List<Scientist> findAll(String name, long limit, long offset) {
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, scientistMapper);
+    }
+
+    @Override
+    public List<Scientist> findAll(String name, long limit, long offset, boolean isEager) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, scientistMapper);
     }
 
@@ -136,5 +146,13 @@ public class ScientistDAO implements IScientistDAO{
                     .build();
         }
     }
+
+	/* (non-Javadoc)
+	 * @see department.dao.IScientistDAO#getScientistsByPaperId(int, int, int)
+	 */
+	@Override
+	public Collection<? extends Scientist> getScientistsByPaperId(int paperId, int limit, int offset) {
+		return jdbcTemplate.query(FIND_BY_PAPER_WITH_LIMIT, new Object[]{ paperId,limit,offset }, scientistMapper);
+	}
 
 }

@@ -72,6 +72,13 @@ public class TopicDAO implements ITopicDAO{
             "INNER JOIN department d ON t.department_id = d.id " +
             "INNER JOIN teacher teach ON t.chief_scientist_id = teach.scientist_id " +
             "INNER JOIN scientist s ON t.chief_scientist_id = s.id ";
+
+    private final static String EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = EAGER_FIND_SELECT +
+            "WHERE t.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY t.id " +
+            "LIMIT ? OFFSET ?;";
+
+
     private final static String FIND_EAGER = EAGER_FIND_SELECT +
             "WHERE t.id=?;";
     private final static String INSERT = "INSERT INTO topic (id," +
@@ -107,6 +114,9 @@ public class TopicDAO implements ITopicDAO{
     private final static String EAGER_FIND_BY_SCIENTIST = EAGER_FIND_SELECT +
             "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
             "WHERE s_t.scientist_id = ?;";
+    private final static String EAGER_FIND_BY_SCIENTIST_WITH_LIMIT = EAGER_FIND_SELECT +
+            "INNER JOIN scientist_topic s_t ON t.id = s_t.scientist_id " +
+            "WHERE s_t.scientist_id = ? LIMIT ? OFFSET ?;";
 
     private final static String FIND_BY_PAPER = FIND_SELECT +
             "INNER JOIN paper_topic p_t ON topic.id = p_t.topic_id " +
@@ -148,6 +158,12 @@ public class TopicDAO implements ITopicDAO{
     @Override
     public List<Topic> findAll(String name, long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, topicMapper);
+    }
+
+    @Override
+    public List<Topic> findAll(String name, long limit, long offset, boolean isEager) {
+        if(isEager) return jdbcTemplate.query(EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, eagerTopicMapper);
+        else return findAll(name, limit, offset);
     }
 
     @Override
@@ -349,5 +365,13 @@ public class TopicDAO implements ITopicDAO{
                     .build();
         }
     }
+
+	/* (non-Javadoc)
+	 * @see department.dao.ITopicDAO#getTopicsByScientistId(int, int, int)
+	 */
+	@Override
+	public List<Topic> getTopicsByScientistId(int scientistId, int limit, int offset) {
+		return jdbcTemplate.query(EAGER_FIND_BY_SCIENTIST_WITH_LIMIT, new Object[]{ scientistId,limit,offset }, eagerTopicMapper);
+	}
 
 }

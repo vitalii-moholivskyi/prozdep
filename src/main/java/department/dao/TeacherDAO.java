@@ -76,6 +76,12 @@ public class TeacherDAO implements ITeacherDAO{
             "FROM teacher t " +
             "INNER JOIN scientist s ON t.scientist_id = s.id " +
             "INNER JOIN department d ON t.department_id = d.id ";
+
+    private final static String EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = EAGER_FIND_SELECT +
+            "WHERE s.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY s.id " +
+            "LIMIT ? OFFSET ?;";
+
     private final static String EAGER_FIND = EAGER_FIND_SELECT +
             "WHERE t.scientist_id=?;";
 
@@ -168,6 +174,12 @@ public class TeacherDAO implements ITeacherDAO{
     @Override
     public List<Teacher> findAll(String name, long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, teacherMapper);
+    }
+
+    @Override
+    public List<Teacher> findAll(String name, long limit, long offset, boolean isEager) {
+        if(isEager) return jdbcTemplate.query(EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, eagerTeacherMapper);
+        else return findAll(name, limit, offset);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class TopicModel implements ITopicModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(topicDao.find(id));
+				sub.onNext(topicDao.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -72,7 +72,7 @@ public class TopicModel implements ITopicModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(topicDao.findAll(limit, offset));
+				sub.onNext(topicDao.findAll(query,limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -155,7 +155,7 @@ public class TopicModel implements ITopicModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(topicDao.getTopicsByScientistId(id).subList(offset, limit+offset));
+				sub.onNext(topicDao.getTopicsByScientistId(id,limit,offset));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

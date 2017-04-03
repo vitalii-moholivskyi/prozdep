@@ -2,8 +2,10 @@ package department.ui.controller.view;
 
 import department.utils.Tuple;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import lombok.extern.java.Log;
 import lombok.val;
 import rx.Observable;
@@ -19,6 +21,9 @@ import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
 @Log
 public abstract class ListTabController<T> {
 
+
+    @FXML protected TextField searchField;
+    @FXML protected Button searchButton;
     @FXML protected TableView<T> tableView;
     @FXML protected Pagination pagination;
 
@@ -50,6 +55,13 @@ public abstract class ListTabController<T> {
     @FXML
     protected void onRefresh() {
     }
+
+    @FXML
+    private void onSearch() {
+        onSearch(searchField.getText());
+    }
+
+    protected void onSearch(String query) {}
 
     protected final void setTableContent(Collection<? extends T> data) {
         tableView.getItems().setAll(data);

@@ -61,7 +61,7 @@
                   </VBox>
                   <VBox fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <Button fx:id="searchButton" mnemonicParsing="false" text="Знайти">
+                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#onSearch" text="Знайти">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>

@@ -3,21 +3,20 @@ package department.ui.controller.view;
 import department.model.ITopicModel;
 import department.ui.controller.DefaultProgressMessage;
 import department.ui.controller.MainController;
-import department.ui.controller.edit.EditTopicController;
 import department.ui.controller.model.TopicViewModel;
+import department.ui.utils.Controllers;
 import department.ui.utils.UiConstants;
-import department.ui.utils.UiUtils;
 import department.utils.RxUtils;
-import javafx.scene.Scene;
+import department.utils.TextUtils;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
-import javafx.stage.Stage;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import rx.Observable;
 
-import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 
 import static department.ui.utils.UiConstants.RESULTS_PER_PAGE;
@@ -46,6 +45,7 @@ public class TopicController extends ListTabController<TopicViewModel> {
     @Override
     @SuppressWarnings("unchecked")
     protected void initSubclasses() {
+        searchField.setPromptText("Пошук наукових тем");
 
         final TableColumn<TopicViewModel, String> titleCol = new TableColumn<>("Назва"),
                 chiefCol = new TableColumn<>("Керівник"), startDateCol = new TableColumn<>("Початок"),
@@ -62,23 +62,9 @@ public class TopicController extends ListTabController<TopicViewModel> {
         tableView.setRowFactory(tv -> {
             val row = new TableRow<TopicViewModel>();
             row.setOnMouseClicked(event -> {
+
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
-
-                    val stage = new Stage();
-                    val loader = UiUtils.newLoader("/view/partials/_formEditTopic.fxml", EditTopicController.class);
-
-                    try {
-                        stage.setScene(new Scene(loader.load()));
-
-                        EditTopicController controller = loader.getController();
-
-                        controller.setModel(row.getItem());
-                        stage.centerOnScreen();
-                        stage.show();
-                        stage.sizeToScene();
-                    } catch (final IOException e) {
-                        log.log(Level.SEVERE, "Failed to open form", e);
-                    }
+                    Controllers.createTopicEditViewAndShow(row.getItem());
                 }
             });
             return row;
@@ -108,7 +94,7 @@ public class TopicController extends ListTabController<TopicViewModel> {
 
     @Override
     protected void onNewPageIndexSelected(int oldIndex, int newIndex) {
-        doLoad(newIndex);
+        doLoad(searchField.getText(), newIndex);
     }
 
     @Override
@@ -116,15 +102,26 @@ public class TopicController extends ListTabController<TopicViewModel> {
         val indx = pagination.currentPageIndexProperty().get();
 
         if (indx >= 0) {
-            doLoad(indx);
+            doLoad(searchField.getText(), indx);
         }
     }
 
-    private void doLoad(int indx) {
-        val toastId = mainController.showProgress("Завантаження списку наукових тем...");
+    @Override
+    protected void onSearch(String query) {
+        doLoad(searchField.getText(), 0);
+    }
 
-        topicModel.fetchTopics(indx * RESULTS_PER_PAGE, RESULTS_PER_PAGE)
-                .doOnTerminate(() -> mainController.hideProgress(toastId))
+    private void doLoad(String query, int indx) {
+        val toastId = mainController.showProgress("Завантаження списку наукових тем...");
+        final Observable<Collection<? extends TopicViewModel>> observable;
+
+        if (TextUtils.isEmpty(query)) {
+            observable = topicModel.fetchTopics(indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        } else {
+            observable = topicModel.fetchTopics(query, indx * UiConstants.RESULTS_PER_PAGE, UiConstants.RESULTS_PER_PAGE);
+        }
+
+        observable.doOnTerminate(() -> mainController.hideProgress(toastId))
                 .subscribe(this::setTableContent, this::processError);
     }
 
