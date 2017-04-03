@@ -39,7 +39,7 @@ public class ScientistModel implements IScientistModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(scientistDao.find(id));
+				sub.onNext(scientistDao.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -88,7 +88,7 @@ public class ScientistModel implements IScientistModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(scientistDao.findAll(query,limit, offset));
+						sub.onNext(scientistDao.findAll(query,limit, offset,true));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {
