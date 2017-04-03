@@ -180,6 +180,7 @@ public class DaoTestSuit {
         System.out.println("Find All:" + topicDAO.findAll("Застосування інформаціних технологій"));
         System.out.println("Count:" + topicDAO.count("Застосування інформаціних технологій"));
         System.out.println("Find all with limit, offset:" + topicDAO.findAll("Застосування інформаціних технологій", 10, 0));
+        System.out.println("Eager Find all with limit, offset:" + topicDAO.findAll("Застосування інформаціних технологій", 10, 0, true));
 
 
         System.out.println("Find All from to Date:" + topicDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
@@ -231,6 +232,7 @@ public class DaoTestSuit {
         System.out.println("Find All:" + teacherDAO.findAll("ергієн"));
         System.out.println("Count:" + teacherDAO.count("ергієн"));
         System.out.println("Find all with limit, offset:" + teacherDAO.findAll("ергієн", 10, 0));
+        System.out.println("Eager Find all with limit, offset:" + teacherDAO.findAll("ергієн", 10, 0, true));
 
         System.out.println("Find All from Date:" + teacherDAO.findAll(DateUtil.getDate("31.09.1990")));
         System.out.println("Count from Date:" + teacherDAO.count(DateUtil.getDate("31.09.1990")));
@@ -288,6 +290,7 @@ public class DaoTestSuit {
         System.out.println("Find All:" + postgraduateDAO.findAll("Мельн"));
         System.out.println("Count:" + postgraduateDAO.count("Мельн"));
         System.out.println("Find all with limit, offset:" + postgraduateDAO.findAll("Мельн", 10, 0));
+        System.out.println("Eager Find all with limit, offset:" + postgraduateDAO.findAll("Мельн", 10, 0, true));
 
         System.out.println("Find All from Date:" + postgraduateDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
         System.out.println("Count from Date:" + postgraduateDAO.count(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2030")));
@@ -337,9 +340,10 @@ public class DaoTestSuit {
         System.out.println("Count:" + masterDAO.count());
         System.out.println("Find all with limit, offset:" + masterDAO.findAll(2,2));
 
-        System.out.println("Find All:" + masterDAO.findAll("ергієн"));
-        System.out.println("Count:" + masterDAO.count("ергієн"));
-        System.out.println("Find all with limit, offset:" + masterDAO.findAll("ергієн", 10, 0));
+        System.out.println("Find All:" + masterDAO.findAll("Іванов"));
+        System.out.println("Count:" + masterDAO.count("Іванов"));
+        System.out.println("Find all with limit, offset:" + masterDAO.findAll("Іванов", 10, 0));
+        System.out.println("Eager Find all with limit, offset:" + masterDAO.findAll("Іванов", 10, 0, true));
 
         System.out.println("Find All from Date:" + masterDAO.findAll(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2020")));
         System.out.println("Count from Date:" + masterDAO.count(DateUtil.getDate("31.09.1990"), DateUtil.getDate("31.09.2020")));

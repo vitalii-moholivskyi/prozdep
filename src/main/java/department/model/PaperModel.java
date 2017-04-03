@@ -39,7 +39,7 @@ public class PaperModel implements IPaperModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(paperDao.find(id));
+				sub.onNext(paperDao.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -70,7 +70,7 @@ public class PaperModel implements IPaperModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(paperDao.findAll(query,limit, offset));
+				sub.onNext(paperDao.findAll(query,limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

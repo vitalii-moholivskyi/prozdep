@@ -44,7 +44,7 @@ public class DepartmentModel implements IDepartmentModel {
 			sub.onStart();
 			try {
 				sub.onNext(
-						departmentDao.find(id));
+						departmentDao.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -114,7 +114,7 @@ public class DepartmentModel implements IDepartmentModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(departmentDao.findAll(query,limit, offset));
+						sub.onNext(departmentDao.findAll(query,limit, offset,true));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {

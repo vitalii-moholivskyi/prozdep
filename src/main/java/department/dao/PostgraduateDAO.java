@@ -88,6 +88,12 @@ public class PostgraduateDAO implements IPostgraduateDAO{
             "INNER JOIN teacher t ON p.teacher_id = t.scientist_id " +
             "INNER JOIN scientist ts ON t.scientist_id = ts.id " +
             "INNER JOIN department d ON p.department_id = d.id ";
+
+    private final static String EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = EAGER_FIND_SELECT +
+            "WHERE ps.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY ps.id " +
+            "LIMIT ? OFFSET ?;";
+
     private final static String EAGER_FIND = EAGER_FIND_SELECT +
             "WHERE p.scientist_id=?;";
 
@@ -167,6 +173,12 @@ public class PostgraduateDAO implements IPostgraduateDAO{
     @Override
     public List<Postgraduate> findAll(String name, long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, postgraduateMapper);
+    }
+
+    @Override
+    public List<Postgraduate> findAll(String name, long limit, long offset, boolean isEager) {
+        if(isEager) return jdbcTemplate.query(EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, eagerPostgraduateMapper);
+        else return findAll(name, limit, offset);
     }
 
     @Override

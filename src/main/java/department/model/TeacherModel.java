@@ -39,7 +39,7 @@ public class TeacherModel implements ITeacherModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(teacherDao.find(id));
+				sub.onNext(teacherDao.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -101,7 +101,7 @@ public class TeacherModel implements ITeacherModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(teacherDao.findAll(query,limit, offset));
+				sub.onNext(teacherDao.findAll(query,limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

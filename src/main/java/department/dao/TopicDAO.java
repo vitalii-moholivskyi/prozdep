@@ -72,6 +72,13 @@ public class TopicDAO implements ITopicDAO{
             "INNER JOIN department d ON t.department_id = d.id " +
             "INNER JOIN teacher teach ON t.chief_scientist_id = teach.scientist_id " +
             "INNER JOIN scientist s ON t.chief_scientist_id = s.id ";
+
+    private final static String EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = EAGER_FIND_SELECT +
+            "WHERE t.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY t.id " +
+            "LIMIT ? OFFSET ?;";
+
+
     private final static String FIND_EAGER = EAGER_FIND_SELECT +
             "WHERE t.id=?;";
     private final static String INSERT = "INSERT INTO topic (id," +
@@ -151,6 +158,12 @@ public class TopicDAO implements ITopicDAO{
     @Override
     public List<Topic> findAll(String name, long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, topicMapper);
+    }
+
+    @Override
+    public List<Topic> findAll(String name, long limit, long offset, boolean isEager) {
+        if(isEager) return jdbcTemplate.query(EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, eagerTopicMapper);
+        else return findAll(name, limit, offset);
     }
 
     @Override

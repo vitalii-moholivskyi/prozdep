@@ -112,6 +112,11 @@ public class PaperDAO implements IPaperDAO{
     }
 
     @Override
+    public List<Paper> findAll(String name, long limit, long offset, boolean isEager) {
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, paperMapper);
+    }
+
+    @Override
     public Paper find(int id) {
         List<Paper> papers = jdbcTemplate.query(FIND, new Object[]{id}, paperMapper);
         return (papers.isEmpty()) ? null : papers.get(0);

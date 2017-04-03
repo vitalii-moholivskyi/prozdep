@@ -42,6 +42,8 @@ public class MasterDAO implements IMasterDAO{
             "WHERE s.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
             "ORDER BY s.id " +
             "LIMIT ? OFFSET ?;";
+
+
     private final static String COUNT_FROM_TO_DATE = "SELECT COUNT(*) " +
             "FROM master m " +
             "INNER JOIN scientist s ON m.scientist_id = s.id " +
@@ -85,6 +87,11 @@ public class MasterDAO implements IMasterDAO{
             "INNER JOIN teacher t ON m.teacher_id = t.scientist_id " +
             "INNER JOIN scientist ts ON t.scientist_id = ts.id " +
             "INNER JOIN department d ON m.department_id = d.id ";
+
+    private final static String EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION = EAGER_FIND_SELECT +
+            "WHERE ms.name LIKE CONCAT('%', ? , '%') COLLATE utf8_general_ci " +
+            "ORDER BY ms.id " +
+            "LIMIT ? OFFSET ?;";
 
     private final static String EAGER_FIND = EAGER_FIND_SELECT +
             "WHERE m.scientist_id=?;";
@@ -160,6 +167,12 @@ public class MasterDAO implements IMasterDAO{
     @Override
     public List<Master> findAll(String name, long limit, long offset) {
         return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, masterMapper);
+    }
+
+    @Override
+    public List<Master> findAll(String name, long limit, long offset, boolean isEager) {
+        if(isEager) return jdbcTemplate.query(EAGER_FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, eagerMasterMapper);
+        else return findAll(name, limit, offset);
     }
 
     @Override

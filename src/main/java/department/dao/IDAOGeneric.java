@@ -13,6 +13,7 @@ public interface IDAOGeneric<T> {
 	int count(String name);
 	List<T> findAll(String name);
 	List<T> findAll(String name, long limit, long offset);
+	List<T> findAll(String name, long limit, long offset, boolean isEager);
 
 	T find(int id);
 	T find(int id, boolean isEager);

@@ -18,6 +18,8 @@ public interface IMasterDAO extends IDAOGeneric<Master>{
     List<Master> findAll(Date startDate, Date endDate);
     List<Master> findAll(Date startDate, Date endDate, long limit, long offset);
 
+
+
     List<Master> getMastersByDepartmentId(int departmentId);
     List<Master> getMastersByTeacherId(int teacherId);
     List<Master> getMastersByTopicId(int topicId);

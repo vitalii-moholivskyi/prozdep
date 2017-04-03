@@ -65,7 +65,7 @@ public class MasterModel implements IMasterModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(masterDao.findAll(query, limit, offset));
+				sub.onNext(masterDao.findAll(query, limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

@@ -42,7 +42,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 			sub.onStart();
 			try {
 				sub.onNext(postgraduateDao
-						.find(id));
+						.find(id,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -75,7 +75,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(postgraduateDao.findAll(query,limit, offset));
+						sub.onNext(postgraduateDao.findAll(query,limit, offset,true));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {
