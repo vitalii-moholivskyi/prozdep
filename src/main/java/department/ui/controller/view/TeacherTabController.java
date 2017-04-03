@@ -52,13 +52,15 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
 
         final TableColumn<TeacherViewModel, String> firstNameCol = new TableColumn<>("Повне ім'я"),
                 phoneCol = new TableColumn<>("Телефон"), startDateCol = new TableColumn<>("Початок роботи"),
-                positionCol = new TableColumn<>("Посада"), degreeCol = new TableColumn<>("Степінь");
+                positionCol = new TableColumn<>("Посада"), degreeCol = new TableColumn<>("Степінь"),
+                depCol = new TableColumn<>("Кафедра");
 
         firstNameCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getFirstNameObs()));
         phoneCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getPhoneObs().map(NULLABLE_FLD_MAPPER)));
         startDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getStartDateObs().map(DATE_FLD_MAPPER)));
         positionCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getPositionObs().map(NULLABLE_FLD_MAPPER)));
         degreeCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDegreeObs().map(NULLABLE_FLD_MAPPER)));
+        depCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDepartmentNameObs().map(NULLABLE_FLD_MAPPER)));
         // setup table columns and content
         tableView.getColumns().addAll(firstNameCol, phoneCol, startDateCol, positionCol, degreeCol);
 

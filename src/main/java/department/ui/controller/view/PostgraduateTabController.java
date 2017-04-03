@@ -49,11 +49,13 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
         searchField.setPromptText("Знайти аспірантів");
 
         final TableColumn<PostgraduateViewModel, String> firstNameCol = new TableColumn<>("Ім'я"),
+                departmentCol = new TableColumn<>("Кафедра"),
                 phoneCol = new TableColumn<>("Телефон"), topicCol = new TableColumn<>("Тема"),
                 startDateCol = new TableColumn<>("Вступ"), endDateCol = new TableColumn<>("Випуск"),
                 protectionDateCol = new TableColumn<>("Дата захисту");
 
         firstNameCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getFirstNameObs()));
+        departmentCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDepartmentNameObs()));
         phoneCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getPhoneObs().map(NULLABLE_FLD_MAPPER)));
         topicCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getTopicObs().map(NULLABLE_FLD_MAPPER)));
         startDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getStartDateObs().map(DATE_FLD_MAPPER)));

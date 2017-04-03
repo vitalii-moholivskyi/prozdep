@@ -25,6 +25,7 @@ public class MasterViewModel {
     BehaviorSubject<Date> endDate;
     BehaviorSubject<String> topic;
     BehaviorSubject<Integer> department;
+    BehaviorSubject<String> departmentName;
 
     @Getter
     @Value
@@ -39,6 +40,7 @@ public class MasterViewModel {
         @NonFinal String phone;
         @NonFinal Date endDate;
         @NonFinal String topic;
+        @NonFinal String departmentName;
 
         public Builder(int id, String firstName, Date startDate) {
             Preconditions.checkArgument(id > 0, "id <= 0");
@@ -72,6 +74,11 @@ public class MasterViewModel {
             return this;
         }
 
+        public Builder setDepartmentName(String departmentName) {
+            this.departmentName = departmentName;
+            return this;
+        }
+
         public MasterViewModel build() {
             return new MasterViewModel(this);
         }
@@ -87,6 +94,7 @@ public class MasterViewModel {
         this.endDate = BehaviorSubject.create(builder.getEndDate());
         this.topic = BehaviorSubject.create(builder.getTopic());
         this.department = BehaviorSubject.create(builder.getDepartmentId());
+        this.departmentName = BehaviorSubject.create(builder.getDepartmentName());
     }
 
     public int getId() {
@@ -171,6 +179,14 @@ public class MasterViewModel {
 
     public void setDepartment(Integer id) {
         this.department.onNext(id);
+    }
+
+    public Observable<String> getDepartmentNameObs() {
+        return departmentName.asObservable();
+    }
+
+    public String getDepartmentName() {
+        return departmentName.getValue();
     }
 
 }

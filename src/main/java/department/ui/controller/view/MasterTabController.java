@@ -5,7 +5,6 @@ import department.model.IMasterModel;
 import department.ui.controller.DefaultProgressMessage;
 import department.ui.controller.MainController;
 import department.ui.controller.edit.EditMasterController;
-import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.MasterViewModel;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
@@ -61,7 +60,7 @@ public final class MasterTabController extends ListTabController<MasterViewModel
 
         firstNameCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getFirstNameObs()));
         firstNameCol.setMinWidth(100.0);
-        departmentCol.setCellValueFactory(param -> RxUtils.fromRx(departmentModel.fetch(param.getValue().getDepartment()).map(DepartmentViewModel::getName)));
+        departmentCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDepartmentNameObs().map(NULLABLE_FLD_MAPPER)));
         phoneCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getPhoneObs().map(NULLABLE_FLD_MAPPER)));
         topicCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getTopicObs().map(NULLABLE_FLD_MAPPER)));
         startDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getStartDateObs().map(DATE_FLD_MAPPER)));

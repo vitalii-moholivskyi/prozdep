@@ -24,6 +24,7 @@ public class TeacherViewModel {
     BehaviorSubject<Integer> department;
     BehaviorSubject<String> position;
     BehaviorSubject<String> degree;
+    BehaviorSubject<String> departmentName;
 
     @Getter
     @Value
@@ -34,6 +35,7 @@ public class TeacherViewModel {
         Date startDate;
 
         @NonFinal String phone;
+        @NonFinal String departmentName;
 
         public Builder(int id, String firstName, Date startDate, int departmentId, String position, String degree) {
             Preconditions.checkArgument(id > 0, "id <= 0");
@@ -51,6 +53,11 @@ public class TeacherViewModel {
             return this;
         }
 
+        public Builder setDepartmentName(String departmentName) {
+            this.departmentName = departmentName;
+            return this;
+        }
+
         public TeacherViewModel build() {
             return new TeacherViewModel(this);
         }
@@ -65,6 +72,7 @@ public class TeacherViewModel {
         this.department = BehaviorSubject.create(builder.getDepartmentId());
         this.position = BehaviorSubject.create(builder.getPosition());
         this.degree = BehaviorSubject.create(builder.getDegree());
+        this.departmentName = BehaviorSubject.create(builder.getDepartmentName());
     }
 
     public int getId() {
@@ -141,6 +149,14 @@ public class TeacherViewModel {
 
     public Observable<Integer> getDepartmentObs() {
         return department.asObservable();
+    }
+
+    public Observable<String> getDepartmentNameObs() {
+        return departmentName.asObservable();
+    }
+
+    public String getDepartmentName() {
+        return departmentName.getValue();
     }
 
 }
