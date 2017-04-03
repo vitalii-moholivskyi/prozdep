@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -23,7 +24,7 @@
    <tabs>
       <Tab text="Редагувати">
          <content>
-            <VBox maxWidth="1.7976931348623157E308">
+            <VBox fx:id="progressBar" maxWidth="1.7976931348623157E308">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
@@ -79,6 +80,7 @@
                   </VBox>
                   <HBox alignment="CENTER">
                      <children>
+                        <ProgressIndicator minHeight="30.0" prefWidth="30.0" stylesheets="@../style.css" />
                         <Button mnemonicParsing="false" onAction="#onCreateTopic" text="Зберегти" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>

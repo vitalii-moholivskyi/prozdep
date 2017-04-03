@@ -137,6 +137,7 @@
                         </ComboBox>
                         <HBox alignment="CENTER">
                            <children>
+                              <ProgressIndicator prefHeight="30.0" prefWidth="30.0" />
                                     <Button mnemonicParsing="false" onAction="#onCreatePostgraduate" text="Зберегти зміни">
                                  <VBox.margin>
                                     <Insets top="5.0" />

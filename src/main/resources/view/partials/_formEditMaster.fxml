@@ -108,6 +108,7 @@
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
+                              <ProgressIndicator fx:id="progressBar" prefHeight="30.0" prefWidth="30.0" />
                                     <Button fx:id="actionButton" mnemonicParsing="false" onAction="#onCreate" text="Зберегти зміни">
                                  <VBox.margin>
                                     <Insets top="5.0" />

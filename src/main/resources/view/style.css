@@ -29,3 +29,14 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: 300px;
 }
+/*
+.progress-indicator .percentage {
+    -fx-font-size: 0.916667em;
+    -fx-fill: transparent;
+    visibility: hidden;
+    -fx-content-display: center;
+}
+
+.customProgressIndicator .percentage {
+    -fx-fill: null;
+}*/
