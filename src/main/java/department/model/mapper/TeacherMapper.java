@@ -25,7 +25,9 @@ public final class TeacherMapper {
 		return teacher == null ? null
 				: new TeacherViewModel.Builder(teacher.getId(), teacher.getName(), teacher.getStartDate(),
 						teacher.getDepartment() == null ? null : teacher.getDepartment().getId(), teacher.getPosition(),
-						teacher.getDegree()).setPhone(teacher.getPhone()).build();
+						teacher.getDegree()).setPhone(teacher.getPhone())
+				.setDepartmentName(teacher.getDepartment() == null ? null : teacher.getDepartment().getName())
+				.build();
 	}
 
 	public static Collection<? extends TeacherViewModel> toViewModel(Collection<? extends Teacher> masters) {

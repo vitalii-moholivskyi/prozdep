@@ -23,6 +23,7 @@ public final class MasterMapper {
 				.setDepartmentId(department == null ? null : department.getId())
 				.setPhone(master.getPhone())
 				.setTeacherId(teacher == null ? null : teacher.getId())
+				.setDepartmentName(department!=null?department.getName():null)
 				.build();
 	}
 

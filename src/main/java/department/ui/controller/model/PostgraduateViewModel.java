@@ -25,6 +25,8 @@ public class PostgraduateViewModel {
     BehaviorSubject<Date> endDate;
     BehaviorSubject<Date> protectionDate;
     BehaviorSubject<String> topic;
+    BehaviorSubject<Integer> department;
+    BehaviorSubject<String> departmentName;
 
     @Getter
     @Value
@@ -39,6 +41,8 @@ public class PostgraduateViewModel {
         @NonFinal Date endDate;
         @NonFinal Date protectionDate;
         @NonFinal String topic;
+        @NonFinal Integer departmentId;
+        @NonFinal String departmentName;
 
         public Builder(int id, String firstName, Date startDate) {
             Preconditions.checkArgument(id > 0, "id > 0");
@@ -72,6 +76,16 @@ public class PostgraduateViewModel {
             return this;
         }
 
+        public Builder setDepartmentId(Integer departmentId) {
+            this.departmentId = departmentId;
+            return this;
+        }
+
+        public Builder setDepartmentName(String departmentName) {
+            this.departmentName = departmentName;
+            return this;
+        }
+
         public PostgraduateViewModel build() {
             return new PostgraduateViewModel(this);
         }
@@ -87,6 +101,8 @@ public class PostgraduateViewModel {
         this.endDate = BehaviorSubject.create(builder.getEndDate());
         this.topic = BehaviorSubject.create(builder.getTopic());
         this.protectionDate = BehaviorSubject.create(builder.getProtectionDate());
+        this.department = BehaviorSubject.create(builder.getDepartmentId());
+        this.departmentName = BehaviorSubject.create(builder.getDepartmentName());
     }
 
     public int getId() {
@@ -171,6 +187,22 @@ public class PostgraduateViewModel {
 
     public Observable<String> getTopicObs() {
         return topic.asObservable();
+    }
+
+    public Observable<Integer> getDepartmentObs() {
+        return department.asObservable();
+    }
+
+    public Integer getDepartment() {
+        return department.getValue();
+    }
+
+    public Observable<String> getDepartmentNameObs() {
+        return departmentName.asObservable();
+    }
+
+    public String getDepartmentName() {
+        return departmentName.getValue();
     }
 
 }
