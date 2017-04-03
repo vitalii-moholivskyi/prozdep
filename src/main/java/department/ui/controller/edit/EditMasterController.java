@@ -55,6 +55,8 @@ public final class EditMasterController {
     private Label errorLabel;
     @FXML
     private ListView<PaperViewModel> paperListView;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private final IMasterModel model;
     private final IDepartmentModel departmentModel;
@@ -194,7 +196,9 @@ public final class EditMasterController {
         form.setStartDate(DateUtils.fromLocal(start));
         form.setEndDate(DateUtils.tryFromLocal(end));
 
+        progressIndicator.setVisible(true);
         model.update(form, dataModel, a -> {
+            progressIndicator.setVisible(false);
             log.log(Level.SEVERE, "Model updated");
 
             if (viewRoot.getScene() == null) {
@@ -209,6 +213,7 @@ public final class EditMasterController {
                 ((Stage) viewRoot.getScene().getWindow()).close();
             }
         }, th -> {
+            progressIndicator.setVisible(false);
             log.log(Level.SEVERE, "Failed to create model", th);
             errorLabel.setText("Не вдалося оновити дані про магістра");
             UiUtils.createErrDialog("Не вдалося оновити дані про магістра").showAndWait();

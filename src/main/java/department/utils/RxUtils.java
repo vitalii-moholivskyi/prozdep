@@ -1,6 +1,5 @@
 package department.utils;
 
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;

@@ -62,7 +62,7 @@
                   <FlowPane prefHeight="86.0" prefWidth="389.0" />
                   <HBox alignment="CENTER">
                      <children>
-                        <ProgressIndicator prefHeight="30.0" prefWidth="30.0" visible="false" />
+                        <ProgressIndicator fx:id="progressIndicator" prefHeight="30.0" prefWidth="30.0" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onCreatePaper" text="Зберегти зміни" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>

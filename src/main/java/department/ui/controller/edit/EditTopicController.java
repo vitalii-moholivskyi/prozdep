@@ -282,6 +282,7 @@ public final class EditTopicController {
                 ((Stage) viewRoot.getScene().getWindow()).close();
             }
         }, th -> {
+            progressIndicator.setVisible(false);
             log.log(Level.SEVERE, "Failed to create model", th);
             UiUtils.createErrDialog("Не вдалося створити наукову тему").showAndWait();
         });

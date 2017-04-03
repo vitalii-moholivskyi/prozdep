@@ -58,6 +58,8 @@ public final class EditTeacherController {
     private ListView<TopicViewModel> topicsListView;
     @FXML
     private ListView<PaperViewModel> paperListView;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private final ITeacherModel teacherModel;
     private final IDepartmentModel departmentModel;
@@ -251,7 +253,9 @@ public final class EditTeacherController {
         form.setDegree(degree);
         form.setPosition(position);
 
+        progressIndicator.setVisible(true);
         teacherModel.update(form, model, () -> {
+            progressIndicator.setVisible(false);
             log.log(Level.INFO, "Model updated");
 
             if (viewRoot.getScene() == null) {
@@ -266,6 +270,7 @@ public final class EditTeacherController {
                 ((Stage) viewRoot.getScene().getWindow()).close();
             }
         }, th -> {
+            progressIndicator.setVisible(false);
             log.log(Level.SEVERE, "Failed to create model", th);
             errorLabel.setText("Не вдалося оновити дані про викладача");
             UiUtils.createErrDialog("Не вдалося оновити дані про викладача").showAndWait();

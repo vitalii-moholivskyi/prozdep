@@ -52,6 +52,8 @@ public final class EditPostgraduateController {
     private Label errorLabel;
     @FXML
     private ListView<PaperViewModel> paperListView;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private final IPostgraduateModel postgraduateModel;
     private final IDepartmentModel departmentModel;
@@ -84,26 +86,34 @@ public final class EditPostgraduateController {
         phoneField.setText(data.getPhone());
 
         topicModel.fetchByScientist(data.getId(), 0, 1)
-                .doOnTerminate(() -> topicComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> {
+                    topicComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
 
-                    if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
-                        topicModel.fetchTopics(newValue, 0, UiConstants.HINT_RESULT)
-                                .doOnSubscribe(topicComboBox::hide)
-                                .subscribe(topics -> {
-                                            topicComboBox.getItems().setAll(topics);
+                        if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                            topicModel.fetchTopics(newValue, 0, UiConstants.HINT_RESULT)
+                                    .doOnTerminate(() -> progressIndicator.setVisible(false))
+                                    .doOnSubscribe(() -> {
+                                        progressIndicator.setVisible(true);
+                                        topicComboBox.hide();
+                                    })
+                                    .subscribe(topics -> {
+                                                topicComboBox.getItems().setAll(topics);
 
-                                            if (!topics.isEmpty()) {
-                                                topicComboBox.show();
-                                            }
-                                        },
-                                        th -> {
-                                            log.log(Level.WARNING, "Failed to fetch topics");
-                                            UiUtils.createErrDialog("Не вдалося завантажити список тем").showAndWait();
-                                        });
-                    }
-                }))
+                                                if (!topics.isEmpty()) {
+                                                    topicComboBox.show();
+                                                }
+                                            },
+                                            th -> {
+                                                log.log(Level.WARNING, "Failed to fetch topics");
+                                                UiUtils.createErrDialog("Не вдалося завантажити список тем").showAndWait();
+                                            });
+                        }
+                    });
+                    progressIndicator.setVisible(false);
+                })
                 .subscribe(m -> {
-                    if(!m.isEmpty()) {
+                    if (!m.isEmpty()) {
                         topicComboBox.setValue(m.iterator().next());
                     }
                 }, th -> {
@@ -112,24 +122,32 @@ public final class EditPostgraduateController {
                 });
 
         teacherModel.fetch(data.getTeacherId())
-                .doOnTerminate(() -> teacherComboBox.getEditor().textProperty()
-                        .addListener((observable, oldValue, newValue) -> {
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> {
+                    teacherComboBox.getEditor().textProperty()
+                            .addListener((observable, oldValue, newValue) -> {
 
-                            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
-                                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
-                                        .doOnSubscribe(teacherComboBox::hide)
-                                        .subscribe(teachers -> {
-                                            teacherComboBox.getItems().setAll(teachers);
+                                if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                                    teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
+                                            .doOnTerminate(() -> progressIndicator.setVisible(false))
+                                            .doOnSubscribe(() -> {
+                                                progressIndicator.setVisible(true);
+                                                teacherComboBox.hide();
+                                            })
+                                            .subscribe(teachers -> {
+                                                teacherComboBox.getItems().setAll(teachers);
 
-                                            if (!teachers.isEmpty()) {
-                                                teacherComboBox.show();
-                                            }
-                                        }, th -> {
-                                            UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
-                                            log.log(Level.WARNING, "Failed to fetch teachers", th);
-                                        });
-                            }
-                        }))
+                                                if (!teachers.isEmpty()) {
+                                                    teacherComboBox.show();
+                                                }
+                                            }, th -> {
+                                                UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
+                                                log.log(Level.WARNING, "Failed to fetch teachers", th);
+                                            });
+                                }
+                            });
+                    progressIndicator.setVisible(false);
+                })
                 .subscribe(teacherComboBox::setValue, th -> {
                     UiUtils.createErrDialog("Не вдалося завантажити список викладача").showAndWait();
                     log.log(Level.WARNING, "Failed to fetch teacher");
@@ -137,6 +155,8 @@ public final class EditPostgraduateController {
 
 
         paperModel.fetchByScientist(data.getId())
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> progressIndicator.setVisible(false))
                 .subscribe(paperListView.getItems()::setAll,
                         th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
@@ -159,7 +179,7 @@ public final class EditPostgraduateController {
                             setGraphic(holder.getView());
                             holder.getView().setOnMouseClicked(event -> {
 
-                                if(event.getClickCount() == 2) {
+                                if (event.getClickCount() == 2) {
                                     Controllers.createPaperEditViewAndShow(item);
                                 }
                             });
@@ -220,6 +240,8 @@ public final class EditPostgraduateController {
         });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> progressIndicator.setVisible(false))
                 .subscribe(departments -> {
 
                             for (val department : departments) {
@@ -295,8 +317,11 @@ public final class EditPostgraduateController {
         form.setEndDate(DateUtils.tryFromLocal(end));
         form.setProtectionDate(DateUtils.tryFromLocal(defence));
 
+        progressIndicator.setVisible(true);
         postgraduateModel.update(form, data, aVoid -> {
             log.log(Level.INFO, "Model updated");
+
+            progressIndicator.setVisible(false);
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())
@@ -310,6 +335,7 @@ public final class EditPostgraduateController {
                 ((Stage) viewRoot.getScene().getWindow()).close();
             }
         }, th -> {
+            progressIndicator.setVisible(false);
             log.log(Level.SEVERE, "Failed to create model", th);
             errorLabel.setText("Не вдалося створити аспіранта");
             UiUtils.createErrDialog("Не вдалося створити аспіранта").showAndWait();

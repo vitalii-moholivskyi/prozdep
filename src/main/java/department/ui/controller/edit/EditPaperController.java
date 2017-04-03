@@ -1,6 +1,8 @@
 package department.ui.controller.edit;
 
-import department.model.*;
+import department.model.IPaperModel;
+import department.model.IScientistModel;
+import department.model.ITeacherModel;
 import department.model.form.PaperUpdateForm;
 import department.ui.controller.model.PaperViewModel;
 import department.ui.utils.UiUtils;
@@ -10,6 +12,7 @@ import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
@@ -41,6 +44,8 @@ public final class EditPaperController {
     private Label executorLabel;
     @FXML
     private Label errorLabel;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private final IPaperModel paperModel;
     private final ITeacherModel teacherModel;
@@ -123,7 +128,9 @@ public final class EditPaperController {
         form.setName(name);
         form.setYear(year);
 
+        progressIndicator.setVisible(true);
         paperModel.update(form, paper, () -> {
+            progressIndicator.setVisible(false);
             log.log(Level.INFO, "Model updated");
 
             if (viewRoot.getScene() == null) {
@@ -138,6 +145,7 @@ public final class EditPaperController {
                 ((Stage) viewRoot.getScene().getWindow()).close();
             }
         }, th -> {
+            progressIndicator.setVisible(false);
             log.log(Level.SEVERE, "Failed to create model", th);
             UiUtils.createErrDialog("Не вдалося створити наукову роботу").showAndWait();
         });
