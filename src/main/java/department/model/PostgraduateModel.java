@@ -117,7 +117,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
 						.phone(form.getPhone()).endDate(form.getEndDate()).build();
 				postgraduateDao.update(postgraduate);
-				sub.onNext(postgraduate);
+				sub.onNext(postgraduateDao.find(postgraduate.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

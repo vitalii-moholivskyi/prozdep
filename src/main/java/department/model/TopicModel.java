@@ -115,7 +115,7 @@ public class TopicModel implements ITopicModel {
 
 						.build();
 				topicDao.update(topic);
-				sub.onNext(topic);
+				sub.onNext(topicDao.find(topic.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

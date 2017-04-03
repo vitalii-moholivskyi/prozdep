@@ -113,7 +113,7 @@ public class MasterModel implements IMasterModel {
 						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
 						.phone(form.getPhone()).build();
 				masterDao.update(master);
-				sub.onNext(master);
+				sub.onNext(masterDao.find(master.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

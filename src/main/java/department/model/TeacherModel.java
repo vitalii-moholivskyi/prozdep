@@ -142,7 +142,7 @@ public class TeacherModel implements ITeacherModel {
 						.startDate(form.getStartDate()).name(form.getName()).phone(form.getPhone())
 						.position(form.getPosition()).build();
 				teacherDao.update(teacher);
-				sub.onNext(teacher);
+				sub.onNext(teacherDao.find(teacher.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

@@ -120,7 +120,7 @@ public class PaperModel implements IPaperModel {
 				val paper = Paper.builder().id(form.getId()).type(form.getType()).name(form.getName())
 						.year(form.getYear()).build();
 				paperDao.update(paper);
-				sub.onNext(paper);
+				sub.onNext(paperDao.find(paper.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
