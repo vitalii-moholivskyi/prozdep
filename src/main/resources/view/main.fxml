@@ -1,34 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
+<BorderPane fx:id="viewRoot" prefHeight="401.0" prefWidth="707.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.MainController">
    <top>
       <ToolBar minHeight="40.0" minWidth="640.0" prefHeight="77.0" prefWidth="707.0" BorderPane.alignment="CENTER">
         <items>
             <HBox>
                <children>
-                  <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" onMouseClicked="#onViewMaster">
+                  <VBox alignment="CENTER" maxWidth="1.7976931348623157E308">
                      <children>
-                        <MenuBar maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="38.0" VBox.vgrow="ALWAYS">
+                        <MenuBar maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="38.0" stylesheets="@style.css" VBox.vgrow="ALWAYS">
                           <menus>
                             <Menu mnemonicParsing="false">
                               <items>

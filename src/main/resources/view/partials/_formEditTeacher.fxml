@@ -8,7 +8,7 @@
 
 <TabPane fx:id="viewRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTeacherController">
    <tabs>
-      <Tab text="Редагувати">
+      <Tab closable="false" text="Редагувати">
          <content>
                 <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308">
                     <children>
@@ -131,7 +131,7 @@
                 </VBox>
          </content>
       </Tab>
-      <Tab text="Наукові теми">
+      <Tab closable="false" text="Наукові теми">
         <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -145,7 +145,7 @@
             </AnchorPane>
         </content>
       </Tab>
-      <Tab text="Наукові праці">
+      <Tab closable="false" text="Наукові праці">
           <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                  <children>

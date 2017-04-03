@@ -22,7 +22,7 @@
 
 <TabPane fx:id="viewRoot" prefHeight="384.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditTopicController">
    <tabs>
-      <Tab text="Редагувати">
+      <Tab closable="false" text="Редагувати">
          <content>
             <VBox fx:id="progressBar" maxWidth="1.7976931348623157E308">
                <children>
@@ -95,7 +95,7 @@
             </VBox>
          </content>
       </Tab>
-      <Tab text="Перелік наукових праць">
+      <Tab closable="false" text="Перелік наукових праць">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

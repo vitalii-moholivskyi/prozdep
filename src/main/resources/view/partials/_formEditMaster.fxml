@@ -10,7 +10,7 @@
    <children>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <tabs>
-            <Tab text="Редагування">
+            <Tab closable="false" text="Редагування">
                <content>
                       <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308">
                           <children>
@@ -127,7 +127,7 @@
                       </VBox>
                </content>
             </Tab>
-            <Tab text="Список робіт">
+            <Tab closable="false" text="Список робіт">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0">
                    <children>

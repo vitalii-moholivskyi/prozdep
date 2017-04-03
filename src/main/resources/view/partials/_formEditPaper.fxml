@@ -8,7 +8,7 @@
 
 <TabPane fx:id="viewRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.edit.EditPaperController">
    <tabs>
-      <Tab text="Редагування роботи">
+      <Tab closable="false" text="Редагування роботи">
          <content>
             <VBox>
                <children>
@@ -56,9 +56,11 @@
                      </VBox.margin>
                   </HBox>
                   <Label text="Виконавець" />
-                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" />
+                  <Label fx:id="executorLabel" />
+                  <ComboBox fx:id="executorBox" disable="true" editable="true" maxWidth="1.7976931348623157E308" opacity="0.0" />
                   <Label text="Керівник" />
-                  <ComboBox fx:id="supervisorBox" editable="true" layoutX="35.0" layoutY="185.0" maxWidth="1.7976931348623157E308" />
+                  <Label fx:id="supervisorLabel" />
+                  <ComboBox fx:id="supervisorBox" disable="true" editable="true" layoutX="35.0" layoutY="185.0" maxWidth="1.7976931348623157E308" opacity="0.0" />
                   <FlowPane prefHeight="86.0" prefWidth="389.0" />
                   <HBox alignment="CENTER">
                      <children>
