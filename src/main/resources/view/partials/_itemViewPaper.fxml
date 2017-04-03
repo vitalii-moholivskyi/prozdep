@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      fx:controller="department.ui.controller.view.ItemViewPaperController" prefHeight="60.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.view.ItemViewPaperController">
     <children>
-        <VBox minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0">
+        <VBox maxWidth="1.7976931348623157E308" minWidth="-Infinity" HBox.hgrow="ALWAYS">
             <children>
-                <HBox minWidth="25.0" prefWidth="25.0">
-                    <children>
-                        <Label text="Назва:"/>
-                        <Label fx:id="title" layoutX="10.0" layoutY="10.0" text="..."/>
-                    </children>
-                </HBox>
-                <Separator prefWidth="200.0"/>
                 <HBox>
                     <children>
-                        <Label layoutX="10.0" layoutY="10.0" text="Керівник:"/>
-                        <Label fx:id="supervisor" layoutX="10.0" layoutY="10.0" text="..."/>
+                        <Label layoutX="10.0" layoutY="10.0" text="Тип роботи:  ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                        <Label fx:id="supervisor" layoutX="10.0" layoutY="10.0" text="..." />
                     </children>
                 </HBox>
+                <HBox minWidth="25.0" prefWidth="25.0" />
+                <Separator prefWidth="200.0" />
+                  <Label text="Назва:">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+                  <Label fx:id="title" text="..." />
             </children>
+         <HBox.margin>
+            <Insets left="2.0" right="2.0" />
+         </HBox.margin>
         </VBox>
-        <VBox prefHeight="50.0" prefWidth="100.0">
+        <VBox prefHeight="15.0" prefWidth="57.0">
             <children>
                 <HBox>
                     <children>
                         <Label text="Рік:">
                             <HBox.margin>
-                                <Insets left="10.0"/>
+                                <Insets left="10.0" />
                             </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
                         </Label>
-                        <Label fx:id="year" layoutX="10.0" layoutY="10.0" text="2017"/>
+                        <Label fx:id="year" layoutX="10.0" layoutY="10.0" text="2017" />
                     </children>
                 </HBox>
             </children>
