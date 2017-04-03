@@ -92,7 +92,24 @@ public final class EditTopicController {
                 );
 
         teacherModel.fetchTeachersByTopicId(model.getId())
-                .doOnCompleted(teacherComboBox::show)
+                .doOnTerminate(() -> teacherComboBox.getEditor().textProperty()
+                        .addListener((observable, oldValue, newValue) -> {
+
+                            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
+                                        .doOnSubscribe(teacherComboBox::hide)
+                                        .subscribe(teachers -> {
+                                            teacherComboBox.getItems().setAll(teachers);
+
+                                            if(!teachers.isEmpty()) {
+                                                teacherComboBox.show();
+                                            }
+                                        }, th -> {
+                                            UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
+                                            log.log(Level.WARNING, "Failed to fetch teachers", th);
+                                        });
+                            }
+                        }))
                 .subscribe(teacherViewModels -> {
                     if (!teacherViewModels.isEmpty()) {
                         teacherComboBox.setValue(teacherViewModels.iterator().next());
@@ -147,19 +164,6 @@ public final class EditTopicController {
                         }
                 );
 
-        teacherComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
-                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
-                        .doOnCompleted(teacherComboBox::show)
-                        .subscribe(teacherComboBox.getItems()::setAll,
-                                th -> {
-                                    UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
-                                    log.log(Level.WARNING, "Failed to fetch teachers");
-                                });
-            }
-        });
-
         paperListView.setCellFactory(new Callback<ListView<PaperViewModel>, ListCell<PaperViewModel>>() {
             @Override
             public ListCell<PaperViewModel> call(ListView<PaperViewModel> param) {
@@ -175,7 +179,7 @@ public final class EditTopicController {
                             setGraphic(holder.getView());
                             holder.getView().setOnMouseClicked(event -> {
 
-                                if(event.getClickCount() == 2) {
+                                if (event.getClickCount() == 2) {
                                     Controllers.createPaperEditViewAndShow(item);
                                 }
                             });

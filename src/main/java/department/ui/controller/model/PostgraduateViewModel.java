@@ -25,6 +25,7 @@ public class PostgraduateViewModel {
     BehaviorSubject<Date> endDate;
     BehaviorSubject<Date> protectionDate;
     BehaviorSubject<String> topic;
+    BehaviorSubject<Integer> department;
 
     @Getter
     @Value
@@ -39,6 +40,7 @@ public class PostgraduateViewModel {
         @NonFinal Date endDate;
         @NonFinal Date protectionDate;
         @NonFinal String topic;
+        @NonFinal Integer departmentId;
 
         public Builder(int id, String firstName, Date startDate) {
             Preconditions.checkArgument(id > 0, "id > 0");
@@ -72,6 +74,11 @@ public class PostgraduateViewModel {
             return this;
         }
 
+        public Builder setDepartmentId(Integer departmentId) {
+            this.departmentId = departmentId;
+            return this;
+        }
+
         public PostgraduateViewModel build() {
             return new PostgraduateViewModel(this);
         }
@@ -87,6 +94,7 @@ public class PostgraduateViewModel {
         this.endDate = BehaviorSubject.create(builder.getEndDate());
         this.topic = BehaviorSubject.create(builder.getTopic());
         this.protectionDate = BehaviorSubject.create(builder.getProtectionDate());
+        this.department = BehaviorSubject.create(builder.getDepartmentId());
     }
 
     public int getId() {
@@ -171,6 +179,14 @@ public class PostgraduateViewModel {
 
     public Observable<String> getTopicObs() {
         return topic.asObservable();
+    }
+
+    public Observable<Integer> getDepartmentObs() {
+        return department.asObservable();
+    }
+
+    public Integer getDepartment() {
+        return department.getValue();
     }
 
 }

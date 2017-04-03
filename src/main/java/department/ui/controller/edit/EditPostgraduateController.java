@@ -77,12 +77,64 @@ public final class EditPostgraduateController {
     public void setData(PostgraduateViewModel data) {
         this.data = data;
 
-
         fullNameField.setText(data.getFirstName());
         startDatePicker.setValue(DateUtils.tryToLocal(data.getStartDate()));
         endDatePicker.setValue(DateUtils.tryToLocal(data.getEndDate()));
         defenceDatePicker.setValue(DateUtils.tryToLocal(data.getProtectionDate()));
         phoneField.setText(data.getPhone());
+
+        topicModel.fetchByScientist(data.getId(), 0, 1)
+                .doOnTerminate(() -> topicComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+
+                    if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                        topicModel.fetchTopics(newValue, 0, UiConstants.HINT_RESULT)
+                                .doOnSubscribe(topicComboBox::hide)
+                                .subscribe(topics -> {
+                                            topicComboBox.getItems().setAll(topics);
+
+                                            if (!topics.isEmpty()) {
+                                                topicComboBox.show();
+                                            }
+                                        },
+                                        th -> {
+                                            log.log(Level.WARNING, "Failed to fetch topics");
+                                            UiUtils.createErrDialog("Не вдалося завантажити список тем").showAndWait();
+                                        });
+                    }
+                }))
+                .subscribe(m -> {
+                    if(!m.isEmpty()) {
+                        topicComboBox.setValue(m.iterator().next());
+                    }
+                }, th -> {
+                    UiUtils.createErrDialog("Не вдалося завантажити список викладача").showAndWait();
+                    log.log(Level.WARNING, "Failed to fetch teacher");
+                });
+
+        teacherModel.fetch(data.getTeacherId())
+                .doOnTerminate(() -> teacherComboBox.getEditor().textProperty()
+                        .addListener((observable, oldValue, newValue) -> {
+
+                            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
+                                        .doOnSubscribe(teacherComboBox::hide)
+                                        .subscribe(teachers -> {
+                                            teacherComboBox.getItems().setAll(teachers);
+
+                                            if (!teachers.isEmpty()) {
+                                                teacherComboBox.show();
+                                            }
+                                        }, th -> {
+                                            UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
+                                            log.log(Level.WARNING, "Failed to fetch teachers", th);
+                                        });
+                            }
+                        }))
+                .subscribe(teacherComboBox::setValue, th -> {
+                    UiUtils.createErrDialog("Не вдалося завантажити список викладача").showAndWait();
+                    log.log(Level.WARNING, "Failed to fetch teacher");
+                });
+
 
         paperModel.fetchByScientist(data.getId())
                 .subscribe(paperListView.getItems()::setAll,
@@ -168,36 +220,20 @@ public final class EditPostgraduateController {
         });
 
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
-                .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
-                        , th -> {
+                .subscribe(departments -> {
+
+                            for (val department : departments) {
+                                departmentComboBox.getItems().add(department);
+                                if (data.getDepartment() != null && department.getId() == data.getDepartment()) {
+                                    departmentComboBox.getSelectionModel().select(department);
+                                }
+                            }
+                        }, th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список кафедр").showAndWait();
                             errorLabel.setText("Не вдалося завантажити список кафедр");
                             log.log(Level.WARNING, "Failed to fetch departments", th);
                         }
                 );
-
-        teacherComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
-                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
-                        .doOnCompleted(teacherComboBox::show)
-                        .subscribe(teacherComboBox.getItems()::setAll,
-                                th -> log.log(Level.WARNING, "Failed to fetch teachers"));
-            }
-        });
-
-        topicComboBox.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
-                topicModel.fetchTopics(newValue, 0, UiConstants.HINT_RESULT)
-                        .doOnCompleted(topicComboBox::show)
-                        .subscribe(topicComboBox.getItems()::setAll,
-                                th -> {
-                                    log.log(Level.WARNING, "Failed to fetch topics");
-                                    UiUtils.createErrDialog("Не вдалося завантажити список тем").showAndWait();
-                                });
-            }
-        });
 
     }
 
