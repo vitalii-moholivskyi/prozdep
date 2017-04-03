@@ -61,6 +61,12 @@ public abstract class ListTabController<T> {
         onSearch(searchField.getText());
     }
 
+    @FXML
+    private void onClearSearch() {
+        searchField.setText(null);
+        onSearch(null);
+    }
+
     protected void onSearch(String query) {}
 
     protected final void setTableContent(Collection<? extends T> data) {

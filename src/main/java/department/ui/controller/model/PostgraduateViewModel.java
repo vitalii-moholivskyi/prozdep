@@ -197,6 +197,10 @@ public class PostgraduateViewModel {
         return department.getValue();
     }
 
+    public void setDepartmentName(String name) {
+        departmentName.onNext(name);
+    }
+
     public Observable<String> getDepartmentNameObs() {
         return departmentName.asObservable();
     }

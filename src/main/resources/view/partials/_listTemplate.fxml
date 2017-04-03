@@ -22,7 +22,7 @@
                   </VBox>
                   <VBox fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <Button fx:id="reset" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onRefresh" text="Очистити результати пошуку">
+                        <Button fx:id="reset" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onClearSearch" text="Очистити результати пошуку">
                            <VBox.margin>
                               <Insets left="3.0" right="3.0" />
                            </VBox.margin>

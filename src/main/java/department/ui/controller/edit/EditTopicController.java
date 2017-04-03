@@ -57,6 +57,8 @@ public final class EditTopicController {
     private ComboBox<TeacherViewModel> teacherComboBox;
     @FXML
     private ListView<PaperViewModel> paperListView;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     private final IDepartmentModel departmentModel;
     private final ITopicModel topicModel;
@@ -85,6 +87,8 @@ public final class EditTopicController {
         endDatePicker.setValue(DateUtils.tryToLocal(model.getEndDate()));
 
         departmentModel.fetchDepartmentByTopicId(model.getId())
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> progressIndicator.setVisible(false))
                 .subscribe(departmentComboBox::setValue, th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити кафедру").showAndWait();
                             log.log(Level.WARNING, "Failed to fetch department", th);
@@ -92,24 +96,32 @@ public final class EditTopicController {
                 );
 
         teacherModel.fetchTeachersByTopicId(model.getId())
-                .doOnTerminate(() -> teacherComboBox.getEditor().textProperty()
-                        .addListener((observable, oldValue, newValue) -> {
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> {
+                    teacherComboBox.getEditor().textProperty()
+                            .addListener((observable, oldValue, newValue) -> {
 
-                            if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
-                                teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
-                                        .doOnSubscribe(teacherComboBox::hide)
-                                        .subscribe(teachers -> {
-                                            teacherComboBox.getItems().setAll(teachers);
+                                if (!TextUtils.isEmpty(newValue) && newValue.length() >= 3) {
+                                    teacherModel.fetchTeachers(newValue, 0, UiConstants.HINT_RESULT)
+                                            .doOnSubscribe(() -> {
+                                                progressIndicator.setVisible(true);
+                                                teacherComboBox.hide();
+                                            })
+                                            .doOnTerminate(() -> progressIndicator.setVisible(false))
+                                            .subscribe(teachers -> {
+                                                teacherComboBox.getItems().setAll(teachers);
 
-                                            if(!teachers.isEmpty()) {
-                                                teacherComboBox.show();
-                                            }
-                                        }, th -> {
-                                            UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
-                                            log.log(Level.WARNING, "Failed to fetch teachers", th);
-                                        });
-                            }
-                        }))
+                                                if (!teachers.isEmpty()) {
+                                                    teacherComboBox.show();
+                                                }
+                                            }, th -> {
+                                                UiUtils.createErrDialog("Не вдалося завантажити список викладачів").showAndWait();
+                                                log.log(Level.WARNING, "Failed to fetch teachers", th);
+                                            });
+                                }
+                            });
+                    progressIndicator.setVisible(false);
+                })
                 .subscribe(teacherViewModels -> {
                     if (!teacherViewModels.isEmpty()) {
                         teacherComboBox.setValue(teacherViewModels.iterator().next());
@@ -122,6 +134,8 @@ public final class EditTopicController {
         titleField.setText(model.getName());
         clientField.setText(model.getClient());
         paperModel.fetchByTopic(model.getId(), 0, UiConstants.RESULTS_PER_PAGE)
+                .doOnSubscribe(() -> progressIndicator.setVisible(true))
+                .doOnTerminate(() -> progressIndicator.setVisible(false))
                 .subscribe(paperListView.getItems()::setAll,
                         th -> {
                             UiUtils.createErrDialog("Не вдалося завантажити список наукових робіт").showAndWait();
@@ -251,8 +265,10 @@ public final class EditTopicController {
         form.setEndDate(Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         form.setChiefScientist(chief.getId());
 
+        progressIndicator.setVisible(true);
         topicModel.update(form, model, () -> {
             log.log(Level.INFO, "Model updated");
+            progressIndicator.setVisible(false);
 
             if (viewRoot.getScene() == null) {
                 RxUtils.fromProperty(viewRoot.sceneProperty())

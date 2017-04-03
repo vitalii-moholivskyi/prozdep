@@ -80,7 +80,7 @@
                   </VBox>
                   <HBox alignment="CENTER">
                      <children>
-                        <ProgressIndicator minHeight="30.0" prefWidth="30.0" stylesheets="@../style.css" visible="false" />
+                        <ProgressIndicator fx:id="progressIndicator" minHeight="30.0" prefWidth="30.0" stylesheets="@../style.css" visible="false" />
                         <Button mnemonicParsing="false" onAction="#onCreateTopic" text="Зберегти" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>

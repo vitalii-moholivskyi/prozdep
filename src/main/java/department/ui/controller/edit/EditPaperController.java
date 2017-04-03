@@ -75,13 +75,13 @@ public final class EditPaperController {
                     }
                 }, th -> {
                     UiUtils.createErrDialog("Не вдалося завантажити виконавця").showAndWait();
-                    log.log(Level.WARNING, "Failed to fetch scientists");
+                    log.log(Level.WARNING, "Failed to fetch scientists", th);
                 });
 
         teacherModel.fetchChiefTeacherByPaperId(paper.getId())
                 .subscribe(v -> supervisorLabel.setText(v.getFirstName()), th -> {
-                    UiUtils.createErrDialog("Не вдалося завантажити виконавця").showAndWait();
-                    log.log(Level.WARNING, "Failed to fetch scientists");
+                    UiUtils.createErrDialog("Не вдалося завантажити викладача").showAndWait();
+                    log.log(Level.WARNING, "Failed to fetch scientists", th);
                 });
     }
 

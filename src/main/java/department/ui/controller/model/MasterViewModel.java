@@ -181,6 +181,10 @@ public class MasterViewModel {
         this.department.onNext(id);
     }
 
+    public void setDepartmentName(String name) {
+        departmentName.onNext(name);
+    }
+
     public Observable<String> getDepartmentNameObs() {
         return departmentName.asObservable();
     }
