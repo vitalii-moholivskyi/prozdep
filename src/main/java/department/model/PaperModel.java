@@ -54,7 +54,7 @@ public class PaperModel implements IPaperModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(paperDao.findAll(limit, offset));
+				sub.onNext(paperDao.findAll("",limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

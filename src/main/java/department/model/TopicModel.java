@@ -56,7 +56,7 @@ public class TopicModel implements ITopicModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(topicDao.findAll(limit, offset));
+				sub.onNext(topicDao.findAll("",limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

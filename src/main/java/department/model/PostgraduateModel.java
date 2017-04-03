@@ -58,7 +58,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 
 					sub.onStart();
 					try {
-						sub.onNext(postgraduateDao.findAll(limit, offset));
+						sub.onNext(postgraduateDao.findAll("",limit, offset,true));
 					} catch (Exception e) {
 						sub.onError(e);
 					} finally {

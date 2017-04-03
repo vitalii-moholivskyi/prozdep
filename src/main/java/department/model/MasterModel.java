@@ -49,7 +49,7 @@ public class MasterModel implements IMasterModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(masterDao.findAll(limit, offset));
+				sub.onNext(masterDao.findAll("", limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

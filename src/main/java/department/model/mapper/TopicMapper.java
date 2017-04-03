@@ -25,6 +25,7 @@ public final class TopicMapper {
 		Preconditions.notNull(topic);
 		val teacher = topic.getChiefScientist();
 		val department = topic.getDepartment();
+		System.out.println(department.getName()+"+"+teacher.getName());
 		return new TopicViewModel.Builder(topic.getId(), topic.getClient(), topic.getStartDate(),
 				topic.getEndDate(), department.getId(), teacher.getId(), topic.getName())
 				.setChiefScientistName(teacher!=null?teacher.getName():null)

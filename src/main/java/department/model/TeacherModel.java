@@ -54,7 +54,7 @@ public class TeacherModel implements ITeacherModel {
 
 			sub.onStart();
 			try {
-				sub.onNext(teacherDao.findAll(limit, offset));
+				sub.onNext(teacherDao.findAll("",limit, offset,true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
