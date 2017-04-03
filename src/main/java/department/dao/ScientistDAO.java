@@ -78,6 +78,11 @@ public class ScientistDAO implements IScientistDAO{
     }
 
     @Override
+    public List<Scientist> findAll(String name, long limit, long offset, boolean isEager) {
+        return jdbcTemplate.query(FIND_ALL_WITH_NAME_LIKE_WITH_PAGINATION, new Object[] {name, limit, offset }, scientistMapper);
+    }
+
+    @Override
     public Scientist find(int id) {
         List<Scientist> scientists = jdbcTemplate.query(FIND, new Object[]{id}, scientistMapper);
         return (scientists.isEmpty()) ? null : scientists.get(0);
