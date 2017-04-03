@@ -142,7 +142,7 @@ public class TeacherModel implements ITeacherModel {
 						.startDate(form.getStartDate()).name(form.getName()).phone(form.getPhone())
 						.position(form.getPosition()).build();
 				teacherDao.update(teacher);
-				sub.onNext(teacher);
+				sub.onNext(teacherDao.find(teacher.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -155,8 +155,11 @@ public class TeacherModel implements ITeacherModel {
 					model.setStartDate(result.getStartDate());
 					model.setPhone(result.getPhone());
 					model.setDegree(result.getDegree());
-					model.setDepartment(result.getDepartment().getId());
+					model.setDepartment(result.getDepartment()!=null?result.getDepartment().getId():null);
 					model.setPosition(result.getPosition());
+					model.setDepartmentName(result.getDepartment()!=null?result.getDepartment().getName():null);
+					
+					
 				}, errCallback::call);
 	}
 

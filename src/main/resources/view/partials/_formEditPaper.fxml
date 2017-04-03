@@ -56,9 +56,11 @@
                      </VBox.margin>
                   </HBox>
                   <Label text="Виконавець" />
-                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" />
+                  <Label fx:id="executorLabel" />
+                  <ComboBox fx:id="executorBox" editable="true" maxWidth="1.7976931348623157E308" visible="false" />
                   <Label text="Керівник" />
-                  <ComboBox fx:id="supervisorBox" editable="true" layoutX="35.0" layoutY="185.0" maxWidth="1.7976931348623157E308" />
+                  <Label fx:id="supervisorLabel" />
+                  <ComboBox fx:id="supervisorBox" editable="true" layoutX="35.0" layoutY="185.0" maxWidth="1.7976931348623157E308" visible="false" />
                   <FlowPane prefHeight="86.0" prefWidth="389.0" />
                   <HBox alignment="CENTER">
                      <children>

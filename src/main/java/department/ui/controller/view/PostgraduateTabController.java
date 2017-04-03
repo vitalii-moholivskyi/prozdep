@@ -63,7 +63,7 @@ public final class PostgraduateTabController extends ListTabController<Postgradu
         protectionDateCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getProtectionDateObs()
                 .map(DATE_FLD_MAPPER)));
         // setup table columns and content
-        tableView.getColumns().addAll(firstNameCol, phoneCol, topicCol, startDateCol, endDateCol, protectionDateCol);
+        tableView.getColumns().addAll(firstNameCol,departmentCol, phoneCol, topicCol, startDateCol, endDateCol, protectionDateCol);
 
         tableView.setRowFactory(tv -> {
             TableRow<PostgraduateViewModel> row = new TableRow<>();

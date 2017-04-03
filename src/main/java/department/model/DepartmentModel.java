@@ -150,7 +150,7 @@ public class DepartmentModel implements IDepartmentModel {
 				val department = Department.builder().id(form.getId()).phone(form.getPhone()).name(form.getName())
 						.build();
 				departmentDao.update(department);
-				sub.onNext(department);
+				sub.onNext(departmentDao.find(department.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {

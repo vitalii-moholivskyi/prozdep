@@ -117,7 +117,7 @@ public class PostgraduateModel implements IPostgraduateModel {
 						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
 						.phone(form.getPhone()).endDate(form.getEndDate()).build();
 				postgraduateDao.update(postgraduate);
-				sub.onNext(postgraduate);
+				sub.onNext(postgraduateDao.find(postgraduate.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -131,6 +131,8 @@ public class PostgraduateModel implements IPostgraduateModel {
 			model.setProtectionDate(result.getProtectionDate());
 			model.setTopic(result.getTopic());
 			model.setTeacherId(result.getTeacher().getId());
+			model.setDepartmentName(result.getDepartment()!=null?result.getDepartment().getName():null);
+			
 			callback.call(null);
 		} , errCallback::call);
 	}

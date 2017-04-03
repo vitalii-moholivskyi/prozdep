@@ -62,7 +62,7 @@ public final class TeacherTabController extends ListTabController<TeacherViewMod
         degreeCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDegreeObs().map(NULLABLE_FLD_MAPPER)));
         depCol.setCellValueFactory(param -> RxUtils.fromRx(param.getValue().getDepartmentNameObs().map(NULLABLE_FLD_MAPPER)));
         // setup table columns and content
-        tableView.getColumns().addAll(firstNameCol, phoneCol, startDateCol, positionCol, degreeCol);
+        tableView.getColumns().addAll(firstNameCol,depCol,phoneCol, startDateCol, positionCol, degreeCol);
 
         tableView.setRowFactory(tv -> {
             TableRow<TeacherViewModel> row = new TableRow<>();

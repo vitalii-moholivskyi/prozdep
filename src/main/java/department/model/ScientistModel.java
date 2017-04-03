@@ -124,7 +124,7 @@ public class ScientistModel implements IScientistModel {
 				val scientist = Scientist.builder().id(form.getId()).phone(form.getPhone()).name(form.getName())
 						.build();
 				scientistDao.update(scientist);
-				sub.onNext(scientist);
+				sub.onNext(scientistDao.find(scientist.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
@@ -133,6 +133,7 @@ public class ScientistModel implements IScientistModel {
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
 			model.setFirstName(result.getName());
 			model.setPhone(result.getPhone());
+			
 		} , errCallback::call);
 	}
 

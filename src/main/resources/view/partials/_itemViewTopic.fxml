@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="1.7976931348623157E308" fx:controller="department.ui.controller.view.ItemViewTopicController" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="department.ui.controller.view.ItemViewTopicController">
    <children>
-      <VBox minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="50.0" HBox.hgrow="ALWAYS">
          <children>
-            <HBox minWidth="25.0" prefWidth="25.0">
+            <HBox minWidth="25.0">
                <children>
-                  <Label text="Назва:" />
+                  <Label text="Назва:  ">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <Label fx:id="topic" layoutX="10.0" layoutY="10.0" text="..." />
                </children>
             </HBox>
-            <Separator prefWidth="200.0" />
-            <HBox>
+            <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label layoutX="10.0" layoutY="10.0" text="Дата:" />
+                  <Label layoutX="10.0" layoutY="10.0" text="Дата:  ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <Label fx:id="date" layoutX="10.0" layoutY="10.0" text="..." />
                </children>
             </HBox>

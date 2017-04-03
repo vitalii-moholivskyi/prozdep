@@ -113,20 +113,23 @@ public class MasterModel implements IMasterModel {
 						.startDate(form.getStartDate()).topic(form.getTopic()).name(form.getName())
 						.phone(form.getPhone()).build();
 				masterDao.update(master);
-				sub.onNext(master);
+				sub.onNext(masterDao.find(master.getId(),true));
 			} catch (Exception e) {
 				sub.onError(e);
 			} finally {
 				sub.onCompleted();
 			}
 		})).observeOn(FxSchedulers.platform()).subscribeOn(Schedulers.newThread()).subscribe(result -> {
-			model.setTeacherId(result.getTeacher().getId());
+			model.setTeacherId(result.getTeacher()!=null?result.getTeacher().getId():null);
 			model.setFirstName(result.getName());
 			model.setPhone(result.getPhone());
 			model.setTopic(result.getTopic());
-			model.setDepartment(result.getDepartment().getId());
+			model.setDepartment(result.getDepartment()!=null?result.getDepartment().getId():null);
 			model.setEndDate(result.getEndDate());
 			model.setStartDate(result.getStartDate());
+			model.setDepartmentName(result.getDepartment()!=null?result.getDepartment().getName():null);
+			
+			
 			finishCallback.call(null);
 		} , errCallback::call);
 	}
