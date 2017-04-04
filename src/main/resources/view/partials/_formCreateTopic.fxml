@@ -66,7 +66,7 @@
                </VBox.margin>
             </HBox>
             <Label text="Кафедра" />
-            <ComboBox fx:id="departmentComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
+            <ComboBox fx:id="departmentComboBox" maxWidth="1.7976931348623157E308" promptText="Кафедра" />
             <Label text="Керівник" />
             <ComboBox fx:id="teacherComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Керівник" />
             <FlowPane prefHeight="62.0" prefWidth="389.0">
