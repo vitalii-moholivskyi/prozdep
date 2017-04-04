@@ -14,18 +14,22 @@ import department.utils.TextUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 
+import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
 import static department.ui.utils.UiUtils.endDayFactory;
 import static department.ui.utils.UiUtils.startDayFactory;
 
@@ -61,7 +65,20 @@ public final class CreateTopicController {
         startDatePicker.setEditable(false);
         endDatePicker.setEditable(false);
         startDatePicker.setDayCellFactory(startDayFactory(endDatePicker));
-        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker));
+        endDatePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val startDate = startDatePicker.getValue();
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED)
+                                || (startDate != null && (item.isBefore(startDate) || item.isEqual(startDate))));
+                    }
+                };
+            }
+        });
 
         startDatePicker.dayCellFactoryProperty()
                 .addListener((observable, oldValue, newValue) -> endDatePicker.setDayCellFactory(endDayFactory(startDatePicker)));
@@ -71,7 +88,7 @@ public final class CreateTopicController {
         departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
             @Override
             public String toString(DepartmentViewModel object) {
-                return object == null ? "" : String.format("%d %s", object.getId(), object.getName());
+                return object == null ? "" : object.getName();
             }
         });
 

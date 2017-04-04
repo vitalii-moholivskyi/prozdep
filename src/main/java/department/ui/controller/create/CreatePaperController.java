@@ -90,14 +90,14 @@ public final class CreatePaperController {
         supervisorBox.setConverter(new DefaultStringConverter<TeacherViewModel>() {
             @Override
             public String toString(TeacherViewModel object) {
-                return object == null ? "" : String.format("%d %s", object.getId(), object.getFirstName());
+                return object == null ? "" : object.getFirstName();
             }
         });
 
         executorBox.setConverter(new DefaultStringConverter<Executor>() {
             @Override
             public String toString(Executor object) {
-                return object == null ? "" : String.format("%d %s", object.id, object.message);
+                return object == null ? "" : object.message;
             }
         });
 

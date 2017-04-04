@@ -61,7 +61,7 @@
                               <Insets top="3.0" />
                            </VBox.margin>
                         </Label>
-                              <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308">
+                              <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -81,7 +81,7 @@
                               <Insets top="3.0" />
                            </VBox.margin>
                         </Label>
-                              <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308">
+                              <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>

@@ -117,7 +117,7 @@ public final class EditPostgraduateController {
                         topicComboBox.setValue(m.iterator().next());
                     }
                 }, th -> {
-                    UiUtils.createErrDialog("Не вдалося завантажити список викладача").showAndWait();
+                    UiUtils.createErrDialog("Не вдалося завантажити список тем").showAndWait();
                     log.log(Level.WARNING, "Failed to fetch teacher");
                 });
 

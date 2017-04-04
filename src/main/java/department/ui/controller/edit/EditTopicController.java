@@ -27,10 +27,12 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 
+import static department.ui.utils.UiConstants.MIN_DATE_ALLOWED;
 import static department.ui.utils.UiUtils.endDayFactory;
 import static department.ui.utils.UiUtils.startDayFactory;
 
@@ -149,7 +151,20 @@ public final class EditTopicController {
         startDatePicker.setEditable(false);
         endDatePicker.setEditable(false);
         startDatePicker.setDayCellFactory(startDayFactory(endDatePicker));
-        endDatePicker.setDayCellFactory(endDayFactory(startDatePicker));
+        endDatePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        val startDate = startDatePicker.getValue();
+                        setDisable(item.isBefore(MIN_DATE_ALLOWED)
+                                || (startDate != null && (item.isBefore(startDate) || item.isEqual(startDate))));
+                    }
+                };
+            }
+        });
 
         startDatePicker.dayCellFactoryProperty()
                 .addListener((observable, oldValue, newValue) -> endDatePicker.setDayCellFactory(endDayFactory(startDatePicker)));

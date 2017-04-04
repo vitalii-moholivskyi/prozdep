@@ -8,6 +8,7 @@ import department.model.form.PostgraduateCreateForm;
 import department.ui.controller.model.DepartmentViewModel;
 import department.ui.controller.model.TeacherViewModel;
 import department.ui.controller.model.TopicViewModel;
+import department.ui.utils.DefaultStringConverter;
 import department.ui.utils.UiConstants;
 import department.ui.utils.UiUtils;
 import department.utils.DateUtils;
@@ -25,9 +26,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.logging.Level;
 
-import static department.ui.utils.UiUtils.defenceDayFactory;
-import static department.ui.utils.UiUtils.endDayFactory;
-import static department.ui.utils.UiUtils.startDayFactory;
+import static department.ui.utils.UiUtils.*;
 
 /**
  * Created by Максим on 2/19/2017.
@@ -95,6 +94,14 @@ public final class CreatePostgraduateController {
                     endDatePicker.setDayCellFactory(endDayFactory(startDatePicker, defenceDatePicker));
                 });
 
+        departmentComboBox.setConverter(new DefaultStringConverter<DepartmentViewModel>() {
+            @Override
+            public String toString(DepartmentViewModel object) {
+                return object == null ? "Кафедра" : String.format("%d %s", object.getId(), object.getName());
+            }
+
+        });
+
         departmentModel.fetchDepartments(0, Integer.MAX_VALUE)
                 .subscribe(departments -> departmentComboBox.getItems().addAll(departments)
                         , th -> {
@@ -110,6 +117,20 @@ public final class CreatePostgraduateController {
                         .doOnCompleted(teacherComboBox::show)
                         .subscribe(teacherComboBox.getItems()::setAll,
                                 th -> log.log(Level.WARNING, "Failed to fetch teachers"));
+            }
+        });
+
+        topicComboBox.setConverter(new DefaultStringConverter<TopicViewModel>() {
+            @Override
+            public String toString(TopicViewModel object) {
+                return object == null ? "Тема" : object.getName();
+            }
+        });
+
+        teacherComboBox.setConverter(new DefaultStringConverter<TeacherViewModel>() {
+            @Override
+            public String toString(TeacherViewModel object) {
+                return object == null ? "" : object.getFirstName();
             }
         });
 
