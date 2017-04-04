@@ -73,7 +73,7 @@
                               <Insets top="3.0" />
                            </VBox.margin>
                         </Label>
-                              <DatePicker fx:id="endDatePicker" minWidth="200.0">
+                              <DatePicker fx:id="startDatePicker" minWidth="200.0">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -93,7 +93,7 @@
                               <Insets top="3.0" />
                            </VBox.margin>
                         </Label>
-                              <DatePicker fx:id="startDatePicker" minWidth="200.0">
+                              <DatePicker fx:id="endDatePicker" minWidth="200.0">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>

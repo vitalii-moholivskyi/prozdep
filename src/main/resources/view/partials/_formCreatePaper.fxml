@@ -21,7 +21,7 @@
             <VBox layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
                   <Label text="Тема роботи" />
-                  <TextField fx:id="titleField" editable="false" />
+                  <TextField fx:id="titleField" />
                   <HBox maxWidth="1.7976931348623157E308">
                      <children>
                         <VBox maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="205.0">
