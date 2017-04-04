@@ -124,8 +124,8 @@ public final class CreatePaperController {
                         (Func2<Collection<? extends MasterViewModel>, Collection<? extends PostgraduateViewModel>, Collection<Executor>>) (masterViewModels, postgraduateViewModels) -> {
                             val result = new ArrayList<Executor>(masterViewModels.size() + postgraduateViewModels.size());
 
-                            for (val m : masterViewModels) result.add(new Executor(m, String.format("%s - магістр", m.getFirstName())));
-                            for (val m : postgraduateViewModels) result.add(new Executor(m, String.format("%s - аспірант", m.getFirstName())));
+                            for (val m : masterViewModels) result.add(new Executor(m, m.getFirstName()));
+                            for (val m : postgraduateViewModels) result.add(new Executor(m, m.getFirstName()));
                             return result;
                         })
                         .doOnCompleted(executorBox::show)
